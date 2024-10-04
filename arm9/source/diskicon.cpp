@@ -23,7 +23,7 @@
 #include "inifile.h"
 #include "systemfilenames.h"
 #include "../../share/memtool.h"
-#include "../../share/timetool.h"
+#include "timetool.h"
 #include "globalsettings.h"
 
 using namespace akui;

@@ -44,7 +44,7 @@ public:
 
     bool process( const cMessage & msg );
 
-    // 返回选中的项
+    // 杩斿洖閫変腑鐨勯」
     void popup();
 
     void addItem( size_t index, const std::string & itemText );

@@ -60,14 +60,10 @@ public:
     void updateSafeMode(void);
     static u32 CopyBufferSize(void);
     void nextBrightness(void);
-#if defined(_STORAGE_r4)
     void setBrightness(u32 level);
-#endif
 public:
     u8          fontHeight;
-#if defined(_STORAGE_r4)
     u8          brightness;
-#endif
     u8          language;
     u8          fileListType;
     u8          romTrim;

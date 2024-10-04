@@ -60,7 +60,7 @@ protected:
 
     u32 _pitch;
 
-    u32 * _buffer;    // °´ 32 Î»µØÖ·¶ÔÆë£¬¿ÉÒÔÔÚ bitblt µÄÊ±ºò¼Ó¿ìËÙ¶È
+    u32 * _buffer;    // æŒ‰ 32 ä½åœ°å€å¯¹é½ï¼Œå¯ä»¥åœ¨ bitblt çš„æ—¶å€™åŠ å¿«é€Ÿåº¦
 };
 
 cBMP15 createBMP15( u32 width, u32 height );

@@ -19,7 +19,7 @@
 */
 
 #include "bigclock.h"
-#include "../../share/stringtool.h"
+#include "stringtool.h"
 #include "systemfilenames.h"
 #include "windowmanager.h"
 #include "inifile.h"

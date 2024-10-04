@@ -18,5 +18,5 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define AKMENU_VRESION_MAIN "1"
-#define AKMENU_VRESION_SUB "25"
+#define AKMENU_VERSION_MAIN "1"
+#define AKMENU_VERSION_SUB "25"

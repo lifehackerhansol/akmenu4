@@ -175,7 +175,7 @@ void cButtonDesc::draw( const cRect & area, GRAPHICS_ENGINE engine ) const
             _background.width(), height, _button->selectedEngine() );
     }
 
-    // °´°ë½Ç×ÖÀ´Ëã
+    // æŒ‰åŠè§’å­—æ¥ç®—
     u32 textPixels = font().getStringScreenWidth( _button->text().c_str(), _button->text().size() );
     u32 textX = 0, textY = area.position().y + (( area.size().y - SYSTEM_FONT_HEIGHT ) >> 1 ) + 1;
     switch(_button->alignment())

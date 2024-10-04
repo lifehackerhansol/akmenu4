@@ -18,7 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//à
+//ï¿½
 
 #include <list>
 #include <string>
@@ -34,7 +34,7 @@ cBMP15::cBMP15( u32 width, u32 height ) : _width(0), _height(0), _pitch(0), _buf
     _width = width;
     _height = height;
     _pitch = (width + (width & 1)) << 1;
-    //u32 pitch = (((width*16)+31)>>5)<<2;            // Í¨ÓÃËã·¨£¿
+    //u32 pitch = (((width*16)+31)>>5)<<2;            // é€šç”¨ç®—æ³•ï¼Ÿ
 }
 
 cBMP15::~cBMP15()
@@ -46,12 +46,12 @@ cBMP15 createBMP15( u32 width, u32 height )
 {
     cBMP15 bmp( width, height );
 
-    u32 pitch = bmp.pitch();           // 15bit bmp pitch Ëã·¨
+    u32 pitch = bmp.pitch();           // 15bit bmp pitch ç®—æ³•
     //dbg_printf( "pitch: %d bytes\n", pitch );
     //dbg_printf( "buffer %08x\n", bmp.buffer() );
 
     u32 bufferSize = height * pitch;
-    if( bufferSize & 3 ) // Èç¹û bufferSize ²»ÊÇ°´4×Ö½Ú¶ÔÆë£¬¾Í°ÑËûµ÷Õûµ½¶ÔÆë
+    if( bufferSize & 3 ) // å¦‚æœ bufferSize ä¸æ˜¯æŒ‰4å­—èŠ‚å¯¹é½ï¼Œå°±æŠŠä»–è°ƒæ•´åˆ°å¯¹é½
         bufferSize += 4 - (bufferSize & 3);
     bmp._buffer = new u32[bufferSize>>2];
     return bmp;
@@ -85,7 +85,7 @@ cBMP15 createBMP15FromFile( const std::string & filename )
         return cBMP15();
     }
 
-    // ¶ÁÈ¡ÎÄ¼ş³¤¶È
+    // è¯»å–æ–‡ä»¶é•¿åº¦
     fseek( f, 0, SEEK_END );
     int fileSize = ftell( f );
 
@@ -103,7 +103,7 @@ cBMP15 createBMP15FromFile( const std::string & filename )
         return cBMP15();
     }
 
-    // ÕÒ³öbmp¸ßºÍ¿í
+    // æ‰¾å‡ºbmpé«˜å’Œå®½
     u32 width = 0;
     u32 height = 0;
     fseek( f, 0x12, SEEK_SET );

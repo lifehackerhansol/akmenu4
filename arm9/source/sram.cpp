@@ -23,7 +23,7 @@
 #include <string.h>
 #include "progresswnd.h"
 #include "language.h"
-#include <elm.h>
+#include <fat.h>
 
 bool cSram::SaveFileName(const char* romName,char* saveName)
 {
@@ -120,7 +120,6 @@ void cSram::SaveSramToFile(const char* romName,u16 aStartPage)
     saveFile=NULL;
   }
   NormalizeSize(saveInfo);
-  NandFast();
   saveFile=fopen(saveName,"wb");
   if(saveFile)
   {
@@ -138,7 +137,6 @@ void cSram::SaveSramToFile(const char* romName,u16 aStartPage)
     progressWnd().hide();
     fclose(saveFile);
   }
-  NandFlush();
 }
 
 u8* cSram::SaveSramToMemory(u16 aStartPage,sSaveInfo& aSaveInfo,bool aShowProgress)
@@ -179,14 +177,12 @@ void cSram::CreateDefaultFile(const char* romName,u32 size)
   }
   else
   {
-    NandFast();
     FILE* saveFile=fopen(saveName,"wb");
     if(saveFile)
     {
       fwrite(&saveInfo,sizeof(saveInfo),1,saveFile);
       fclose(saveFile);
     }
-    NandFlush();
   }
 }
 

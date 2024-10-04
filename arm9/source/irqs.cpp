@@ -28,7 +28,6 @@
 #include "bigclock.h"
 #include "timer.h"
 #include "animation.h"
-#include "files.h"
 #include "userwnd.h"
 
 using namespace akui;
@@ -63,17 +62,6 @@ void cIRQ::vBlank()
 {
     if( !_vblankStarted )
         return;
-
-    // get inputs when file copying because the main route
-    // can't do any thing at that time
-    if( true == copyingFile) {
-        if( false == stopCopying ) {
-            INPUT & input = updateInput();
-            if( (input.keysDown & KEY_B) ) {
-                stopCopying = true;
-            }
-        }
-    }
 
     timer().updateTimer();
 

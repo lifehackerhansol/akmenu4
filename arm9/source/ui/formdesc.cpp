@@ -27,9 +27,9 @@
 namespace akui
 {
 
-// 边框颜色：b5c71f
+// 杈规棰滆壊锛歜5c71f
 //    23, 25, 4
-// 框内背景色：eeebae
+// 妗嗗唴鑳屾櫙鑹诧細eeebae
 // 30, 29, 22
 
 cFormDesc::cFormDesc()

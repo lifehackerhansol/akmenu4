@@ -59,8 +59,6 @@ public:
 
 protected:
 
-    void setDiskInfo(void);
-
     void pressFlash(void);
 
     void pressSaveType(void);
@@ -68,8 +66,6 @@ protected:
     void pressCopy(void);
 
     void pressCheats(void);
-
-    void pressCopySlot(void);
 
     bool processKeyMessage( const akui::cKeyMessage & msg );
 

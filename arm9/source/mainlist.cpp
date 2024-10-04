@@ -21,16 +21,14 @@
 //�
 
 #include <sys/dir.h>
-#include <elm.h>
-#define ATTRIB_HID 0x02
+#include <fat.h>
 #include "mainlist.h"
-#include "files.h"
 #include "dbgtool.h"
 #include "startmenu.h"
 #include "systemfilenames.h"
 #include "romloader.h"
 #include "windowmanager.h"
-#include "../../share/timetool.h"
+#include "timetool.h"
 #include "../../share/memtool.h"
 #include "inifile.h"
 #include "unknown_banner_bin.h"
@@ -47,11 +45,7 @@ using namespace akui;
 
 cMainList::cMainList( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text )
 : cListView( x, y, w, h, parent, text ),_showAllFiles(false),
-#if defined(_STORAGE_rpg)
-_topCount(4),_topuSD(1),_topSlot2(2),_topFavorites(3)
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
 _topCount(3),_topuSD(0),_topSlot2(1),_topFavorites(2)
-#endif
 {
     _viewMode = VM_LIST;
     _activeIconScale = 1;
@@ -59,7 +53,6 @@ _topCount(3),_topuSD(0),_topSlot2(1),_topFavorites(2)
     _activeIcon.update();
     animationManager().addAnimation( &_activeIcon );
     dbg_printf("_activeIcon.init\n");
-#if defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
   fifoSendValue32(FIFO_USER_01,MENU_MSG_SYSTEM);
   while(!fifoCheckValue32(FIFO_USER_02));
   u32 system=fifoGetValue32(FIFO_USER_02);
@@ -69,7 +62,6 @@ _topCount(3),_topuSD(0),_topSlot2(1),_topFavorites(2)
     _topSlot2=2;
     _topFavorites=1;
   }
-#endif
 }
 
 cMainList::~cMainList()
@@ -144,15 +136,6 @@ bool cMainList::enterDir( const std::string & dirName )
             std::vector< std::string > a_row;
             a_row.push_back( "" ); // make a space for icon
             DSRomInfo rominfo;
-#if defined(_STORAGE_rpg)
-            if( 0 == i ) {
-                a_row.push_back( LANG("mainlist","flash memory") );
-                a_row.push_back( "" );
-                a_row.push_back( "fat0:/" );
-                rominfo.setBanner("nand",nand_banner_bin);
-            }
-            else
-#endif
             if( _topuSD == i ) {
                 a_row.push_back( LANG("mainlist","microsd card") );
                 a_row.push_back( "" );
@@ -184,11 +167,12 @@ bool cMainList::enterDir( const std::string & dirName )
     }
 
     bool favorites=("favorites:/"==dirName);
-    DIR_ITER* dir=NULL;
+    DIR* dir=NULL;
+    struct dirent *entry;
 
     if(!favorites)
     {
-      dir = diropen( dirName.c_str() );
+      dir = opendir( dirName.c_str() );
 
       if (dir == NULL) {
           if( SD_ROOT == dirName ) {
@@ -217,10 +201,7 @@ bool cMainList::enterDir( const std::string & dirName )
     savNames.push_back( ".sav" );
 
     // insert 一堆文件, 两列，一列作为显示，一列作为真实文件名
-    struct stat st;
-    char longFilename[MAX_FILENAME_LENGTH];
     std::string extName;
-    u8 attr=0;
 
     // list dir
     {
@@ -257,21 +238,20 @@ bool cMainList::enterDir( const std::string & dirName )
         }
         else if(dir)
         {
-          while(dirnext(dir,longFilename,&st)==0)
+          while((entry=readdir(dir))!=NULL)
           {
-              attr=st.st_spare1;
-              std::string lfn( longFilename );
+              std::string lfn( entry->d_name );
 
-              // st.st_mode & S_IFDIR indicates a directory
+              // entry->d_type == DT_DIR indicates a directory
               size_t lastDotPos = lfn.find_last_of( '.' );
               if( lfn.npos != lastDotPos )
                   extName = lfn.substr( lastDotPos );
               else
                   extName = "";
 
-              dbg_printf( "%s: %s %s\n", (st.st_mode & S_IFDIR ? " DIR" : "FILE"), longFilename, extName.c_str() );
-              bool showThis=(st.st_mode & S_IFDIR)?(strcmp(longFilename,".")&&strcmp(longFilename,"..")):extnameFilter( extNames, extName );
-              showThis=showThis&&(_showAllFiles||gs().showHiddenFiles||!(attr&ATTRIB_HID));
+              dbg_printf( "%s: %s %s\n", (entry->d_type == DT_DIR ? " DIR" : "FILE"), entry->d_name, extName.c_str() );
+              bool showThis=(entry->d_type == DT_DIR)?(strcmp(entry->d_name,".")&&strcmp(entry->d_name,"..")):extnameFilter( extNames, extName );
+              showThis=showThis&&(_showAllFiles||gs().showHiddenFiles||!(FAT_getAttr(entry->d_name) & ATTR_HIDDEN));
 
               // 如果有后缀名，或者是个目录，就push进去
               if(showThis) {
@@ -282,7 +262,7 @@ bool cMainList::enterDir( const std::string & dirName )
                   a_row.push_back( "" ); // make a space for internal name
 
                   a_row.push_back(dirName+lfn); //real name
-                  if( st.st_mode & S_IFDIR ) {
+                  if( entry->d_type == DT_DIR ) {
                       a_row[SHOWNAME_COLUMN] += "/";
                       a_row[REALNAME_COLUMN] += "/";
                   }
@@ -297,7 +277,7 @@ bool cMainList::enterDir( const std::string & dirName )
                 _saves.push_back(dirName+lfn);
               }
           }
-          dirclose( dir );
+          closedir( dir );
         }
         std::sort( _rows.begin(), _rows.end(), itemSortComp );
         std::sort(_saves.begin(),_saves.end(),stringComp);
@@ -379,7 +359,7 @@ void cMainList::backParentDir()
         return;
 
     bool fat1=(SD_ROOT==_currentDir),favorites=("favorites:/"==_currentDir);
-    if( "fat0:/" == _currentDir || fat1 || favorites || "/" == _currentDir ) {
+    if( "fat:/" == _currentDir || fat1 || favorites || "/" == _currentDir ) {
         enterDir( "..." );
         if(fat1) selectRow(_topuSD);
         if(favorites) selectRow(_topFavorites);

@@ -18,7 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//à
+//ï¿½
 
 #include "ui.h"
 #include "popmenu.h"
@@ -92,7 +92,7 @@ void cPopMenu::draw()
 
 void cPopMenu::drawItems()
 {
-    // Ñ­»·»æÖÆitemÎÄ×Ö£¬Óö¼û selected ÎÄ×Ö¾ÍÏÈ»æÖÆÑ¡ÔñÌõ
+    // å¾ªç¯ç»˜åˆ¶itemæ–‡å­—ï¼Œé‡è§ selected æ–‡å­—å°±å…ˆç»˜åˆ¶é€‰æ‹©æ¡
     for( size_t i = 0; i < _items.size(); ++i )
     {
         s16 itemX = _position.x + _itemTopLeftPoint.x;
@@ -197,7 +197,7 @@ bool cPopMenu::processTouchMessage( const cTouchMessage & msg )
     return ret;
 }
 
-u32 cPopMenu::itemBelowPoint( const cPoint & pt )
+size_t cPopMenu::itemBelowPoint( const cPoint & pt )
 {
     cPoint menuPos(position().x + _barLeft, position().y + _itemTopLeftPoint.y - 2); cSize menuSize(barWidth(), _itemHeight * _items.size());
     cRect rect(menuPos, menuPos + menuSize);

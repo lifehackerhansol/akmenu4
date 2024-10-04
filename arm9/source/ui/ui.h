@@ -22,12 +22,11 @@
 #define _AKUI_H_
 
 #include <nds.h>
-#include "files.h"
 #include "gdi.h"
 #include "dbgtool.h"
 #include "../../share/memtool.h"
-#include "../../share/stringtool.h"
-#include "../../share/timetool.h"
+#include "stringtool.h"
+#include "timetool.h"
 
 #include "sigslot.h"
 

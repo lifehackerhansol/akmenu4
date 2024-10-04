@@ -21,12 +21,9 @@
 #ifndef _ROMLOADER_H_
 #define _ROMLOADER_H_
 
+#include <nds/ndstypes.h>
 #include <string>
 
-#if defined(_STORAGE_rpg)
-bool loadRom( const std::string & filename, u32 flags, long cheatOffset,size_t cheatSize );
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
 bool loadRom( const std::string & filename, const std::string & savename, u32 flags, long cheatOffset,size_t cheatSize );
-#endif
 
 #endif//_ROMLOADER_H_

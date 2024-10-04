@@ -22,7 +22,7 @@
 #include "icons.h"
 #include "globalsettings.h"
 #include <sys/dir.h>
-#include <elm.h>
+#include <fat.h>
 
 cFileIconItem::cFileIconItem(const std::string& aFolderName,const std::string& aFileName):_loaded(false),_foldername(aFolderName),_filename(aFileName)
 {
@@ -67,28 +67,25 @@ cFileIcons::cFileIcons()
 
 void cFileIcons::LoadFolder(cIconPaths& aPaths,const std::string& aFolder)
 {
-  DIR_ITER* dir=diropen(aFolder.c_str());
-  if(NULL!=dir)
-  {
-    struct stat st;
-    char longFilename[MAX_FILENAME_LENGTH];
-    while(dirnext(dir,longFilename,&st)==0)
-    {
-      if((st.st_mode&S_IFDIR)==0)
-      {
-        size_t len=strlen(longFilename);
+  DIR *dir=opendir(aFolder.c_str());
+  struct dirent *entry;
+
+  if (NULL!=dir){
+    while ((entry=readdir(dir))!=NULL) {
+      if(entry->d_type != DT_DIR) {
+        size_t len=strlen(entry->d_name);
         if(len>4)
         {
-          char* extName=longFilename+len-4;
+          char* extName=entry->d_name+len-4;
           if(strcasecmp(extName,".bmp")==0)
           {
             *extName=0;
-            aPaths.insert(cFileIconItem(aFolder,longFilename));
+            aPaths.insert(cFileIconItem(aFolder,entry->d_name));
           }
         }
       }
     }
-    dirclose(dir);
+    closedir(dir);
   }
 }
 

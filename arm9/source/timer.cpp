@@ -74,7 +74,7 @@ vu64 cTimer::getTick()
     static vu64 lastTick = 0;
     vu64 tick = _overFlow + TIMER0_DATA;
     if( tick < lastTick )
-        tick += 65536;// ÓÐÊ±ºò TIMER0_DATA ÒÑ¾­¹é0£¬µ«overflow »¹Ã»ÓÐ¼ÓÉÏ£¬Õâ¸öÊ±ºòÐèÒª¼ÓÉÏ65536
+        tick += 65536;// æœ‰æ—¶å€™ TIMER0_DATA å·²ç»å½’0ï¼Œä½†overflow è¿˜æ²¡æœ‰åŠ ä¸Šï¼Œè¿™ä¸ªæ—¶å€™éœ€è¦åŠ ä¸Š65536
     lastTick = tick;
     irqEnable( IRQ_TIMER0 );
     return tick;

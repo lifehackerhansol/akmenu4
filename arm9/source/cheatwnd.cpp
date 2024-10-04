@@ -23,9 +23,9 @@
 #include "windowmanager.h"
 #include "language.h"
 #include "msgbox.h"
-#include "../../share/gamecode.h"
+#include "gamecode.h"
 #include <sys/stat.h>
-#include <elm.h>
+#include <fat.h>
 
 using namespace akui;
 
@@ -272,7 +272,6 @@ static void updateDB(u8 value,u32 offset,FILE* db)
 
 void cCheatWnd::onGenerate(void)
 {
-  NandFast();
   FILE* db=fopen(SFN_CHEATS,"r+b");
   if(db)
   {
@@ -284,7 +283,6 @@ void cCheatWnd::onGenerate(void)
     }
     fclose(db);
   }
-  NandFlush();
   cForm::onOK();
 }
 

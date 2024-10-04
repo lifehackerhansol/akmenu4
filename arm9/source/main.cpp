@@ -24,7 +24,7 @@
 #include <map>
 #include <list>
 
-#include <elm.h>
+#include <fat.h>
 
 #include "dbgtool.h"
 #include "gdi.h"
@@ -91,8 +91,7 @@ int main(void)
 
     //wait_press_b();
     // init fat
-    //bool succ = fatInitDefault();
-    bool succ = (ELM_Mount()&1)?false:true;
+    bool succ = fatInitDefault();
     if( !succ )
         dbg_printf( "init fat %d\n", succ );
 
@@ -172,25 +171,7 @@ int main(void)
     }
 
     { //backup save data from chip to flash. pressing LShift+Up aborts backup.
-#if defined(_STORAGE_rpg)
-      INPUT & inputs = updateInput();
-      if((inputs.keysHeld&(KEY_UP|KEY_L))==(KEY_UP|KEY_L))
-      {
-        u32 ret = messageBox( NULL, LANG("abort save", "title"), LANG("abort save", "text"), MB_YES | MB_NO );
-        if(ret==ID_YES)
-        {
-          saveManager().clearLastInfo();
-          saveManager().clearSaveBlocks();
-        }
-        else saveManager().backupSaveData();
-      }
-      else
-      {
-        saveManager().backupSaveData();
-      }
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
       saveManager().clearLastInfo();
-#endif
       //backup gba sram save date to flash.
       if(gs().gbaAutoSave&&expansion().IsValid())
       {

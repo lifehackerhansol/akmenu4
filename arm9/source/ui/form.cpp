@@ -21,7 +21,6 @@
 #include "ui.h"
 #include "form.h"
 #include "timer.h"
-//#include "files.h"
 //#include "dbgtool.h"
 //#include "windowmanager.h"
 
@@ -165,7 +164,7 @@ bool cForm::processKeyMessage( const cKeyMessage & msg )
 
 cWindow* cForm::windowBelow(const cPoint& p)
 {
-    cWindow* ret = cWindow::windowBelow(p); // 先看自己在不在点下面
+    cWindow* ret = cWindow::windowBelow(p); // 鍏堢湅鑷繁鍦ㄤ笉鍦ㄧ偣涓嬮潰
 
     if(ret != 0)
     {

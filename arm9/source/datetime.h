@@ -24,7 +24,7 @@
 #include <nds.h>
 #include <time.h>
 #include "singleton.h"
-#include "../../share/stringtool.h"
+#include "stringtool.h"
 
 class cDateTime
 {

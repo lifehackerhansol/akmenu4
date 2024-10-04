@@ -26,7 +26,7 @@
 #include "unknown_nds_banner_bin.h"
 #include "gbarom_banner_bin.h"
 #include "icon_bg_bin.h"
-#include "../../share/gamecode.h"
+#include "gamecode.h"
 #include "fileicons.h"
 
 DSRomInfo & DSRomInfo::operator =( const DSRomInfo & src )
@@ -47,14 +47,14 @@ bool DSRomInfo::loadDSRomInfo( const std::string & filename, bool loadBanner )
     _isDSRom = EFalse;
     _isHomebrew = EFalse;
     FILE * f = fopen( filename.c_str(), "rb" );
-    if( NULL == f )// ���ļ�ʧ��
+    if( NULL == f )// 锟斤拷锟侥硷拷失锟斤拷
     {
         return false;
     }
 
 
     tNDSHeader header;
-    if( 512 != fread( &header, 1, 512, f ) ) // ���ļ�ͷʧ��
+    if( 512 != fread( &header, 1, 512, f ) ) // 锟斤拷锟侥硷拷头失锟斤拷
     {
         dbg_printf( "read rom header fail\n" );
         memcpy( &_banner, unknown_nds_banner_bin, sizeof(_banner) );
@@ -64,7 +64,7 @@ bool DSRomInfo::loadDSRomInfo( const std::string & filename, bool loadBanner )
 
     ///////// ROM Header /////////
     u16 crc = swiCRC16( 0xFFFF, &header, 0x15E );
-    if( crc != header.headerCRC16 ) // �ļ�ͷ CRC ���󣬲���nds��Ϸ
+    if( crc != header.headerCRC16 ) // 锟侥硷拷头 CRC 锟斤拷锟襟，诧拷锟斤拷nds锟斤拷戏
     {
         dbg_printf( "%s rom header crc error\n", filename.c_str() );
         memcpy( &_banner, unknown_nds_banner_bin, sizeof(_banner) );
@@ -72,7 +72,7 @@ bool DSRomInfo::loadDSRomInfo( const std::string & filename, bool loadBanner )
         return true;
     } else {
         _isDSRom = ETrue;
-        if( header.arm7destination >= 0x037F8000 || 0x23232323 == gamecode(header.gameCode) ) {//23->'#'
+        if( (u32)(header.arm7destination) >= 0x037F8000 || 0x23232323 == gamecode(header.gameCode) ) {//23->'#'
             _isHomebrew = ETrue;
         }
 

@@ -109,10 +109,10 @@ cMessageBox::cMessageBox( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const st
     s16 nextButtonX = size().x;
     s16 buttonPitch = 60;
     s16 buttonY = size().y - _buttonNO->size().y - 4;
-    // ÏÂÒ»¸öÒª»­µÄ°´Å¥µÄÎ»ÖÃ
+    // ä¸‹ä¸€ä¸ªè¦ç”»çš„æŒ‰é’®çš„ä½ç½®
     if( _style & MB_NO ) {
-        // ÔÚnextButtonXÎ»ÖÃ»­ NO °´Å¥
-        // nextButtonX -= °´Å¥¿í¶È + ¿Õ°×Çø¿í¶È
+        // åœ¨nextButtonXä½ç½®ç”» NO æŒ‰é’®
+        // nextButtonX -= æŒ‰é’®å®½åº¦ + ç©ºç™½åŒºå®½åº¦
         buttonPitch = _buttonNO->size().x + 8;
         nextButtonX -= buttonPitch;
         _buttonNO->setRelativePosition( cPoint(nextButtonX, buttonY) );
@@ -121,8 +121,8 @@ cMessageBox::cMessageBox( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const st
 
 
     if( _style & MB_YES ) {
-        // ÔÚnextButtonXÎ»ÖÃ»­ YES °´Å¥
-        // nextButtonX -= °´Å¥¿í¶È + ¿Õ°×Çø¿í¶È
+        // åœ¨nextButtonXä½ç½®ç”» YES æŒ‰é’®
+        // nextButtonX -= æŒ‰é’®å®½åº¦ + ç©ºç™½åŒºå®½åº¦
         buttonPitch = _buttonYES->size().x + 8;
         nextButtonX -= buttonPitch;
         _buttonYES->setRelativePosition( cPoint(nextButtonX, buttonY) );
@@ -131,8 +131,8 @@ cMessageBox::cMessageBox( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const st
 
 
     if( _style & MB_CANCEL ) {
-        // ÔÚnextButtonXÎ»ÖÃ»­ CANCEL °´Å¥
-        // nextButtonX -= °´Å¥¿í¶È + ¿Õ°×Çø¿í¶È
+        // åœ¨nextButtonXä½ç½®ç”» CANCEL æŒ‰é’®
+        // nextButtonX -= æŒ‰é’®å®½åº¦ + ç©ºç™½åŒºå®½åº¦
         buttonPitch = _buttonCANCEL->size().x + 8;
         nextButtonX -= buttonPitch;
         _buttonCANCEL->setRelativePosition( cPoint(nextButtonX, buttonY) );
@@ -140,8 +140,8 @@ cMessageBox::cMessageBox( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const st
     }
 
     if( _style & MB_OK ) {
-        // ÔÚnextButtonXÎ»ÖÃ»­ OK °´Å¥
-        // nextButtonX -= °´Å¥¿í¶È + ¿Õ°×Çø¿í¶È
+        // åœ¨nextButtonXä½ç½®ç”» OK æŒ‰é’®
+        // nextButtonX -= æŒ‰é’®å®½åº¦ + ç©ºç™½åŒºå®½åº¦
         buttonPitch = _buttonOK->size().x + 8;
         nextButtonX -= buttonPitch;
         _buttonOK->setRelativePosition( cPoint(nextButtonX, buttonY) );
@@ -238,7 +238,7 @@ cWindow& cMessageBox::loadAppearance(const std::string& aFileName )
 
 u32 messageBox( cWindow * parent, const std::string & title, const std::string & msg, u32 style )
 {
-    // check point Èç¹û³öÏÖÆæ¹ÖµÄ¶Ô»°¿òÏûÊ§ÎÊÌâ¾Í¼ì²éÕâÀï
+    // check point å¦‚æœå‡ºç°å¥‡æ€ªçš„å¯¹è¯æ¡†æ¶ˆå¤±é—®é¢˜å°±æ£€æŸ¥è¿™é‡Œ
     cMessageBox msgbox( 12, 36, 232, 120, parent, title, msg, style );
     //cMessageBox msgbox( 0, 0, 256, 192, parent, text, style );
 

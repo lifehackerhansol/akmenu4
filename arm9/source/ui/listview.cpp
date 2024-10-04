@@ -18,12 +18,11 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//à
+//ï¿½
 
 #include "ui.h"
 #include "listview.h"
 //#include "gdi.h"
-//#include "files.h"
 //#include "dbgtool.h"
 
 namespace akui {
@@ -99,7 +98,7 @@ bool cListView::insertRow( size_t index, const std::vector< std::string > & text
     {
         std::string itemText;
         if( col >= texts.size() )
-            itemText = "Empty"; // Ä¬ÈÏ×Ö·û´®
+            itemText = "Empty"; // é»˜è®¤å­—ç¬¦ä¸²
         else
             itemText = texts[col];
 

@@ -18,7 +18,6 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "iocmn.h"
 #include "helpwnd.h"
 #include "msgbox.h"
 #include "windowmanager.h"
@@ -61,9 +60,8 @@ _buttonOK(0,0,46,18,this,"\x01 OK")
 
     //u8 nandDriverVer = getNandDriverVer();
     _helpText += '\n';
-    _helpText += formatString( "wood akmenu %s.%s ", AKMENU_VRESION_MAIN, AKMENU_VRESION_SUB );
-    _helpText += formatString( "HW: %02x", ioVersion() );
-    _helpText += formatString( "\nfont: %dk size: %x", font().FontRAM()/1024, ioSize() );
+    _helpText += formatString( "wood akmenu %s.%s ", AKMENU_VERSION_MAIN, AKMENU_VERSION_SUB );
+    _helpText += formatString( "\nfont: %dk", font().FontRAM()/1024 );
 }
 
 cHelpWnd::~cHelpWnd()

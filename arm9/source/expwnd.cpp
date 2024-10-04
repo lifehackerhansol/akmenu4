@@ -26,7 +26,7 @@
 #include "datetime.h"
 #include "progresswnd.h"
 #include "fontfactory.h"
-#include <elm.h>
+#include <fat.h>
 
 using namespace akui;
 
@@ -214,9 +214,8 @@ void cExpWnd::onRAM()
 
 void cExpWnd::onSRAM()
 {
-    std::string saveName="fat0:/sram-"+datetime().getTimeStampString()+".sav";
+    std::string saveName="fat:/sram-"+datetime().getTimeStampString()+".sav";
     const u32 size=4096*128,page=4096,pages=128;
-    NandFast();
     FILE* saveFile=fopen(saveName.c_str(),"wb");
     if(saveFile)
     {
@@ -241,7 +240,6 @@ void cExpWnd::onSRAM()
       }
       fclose(saveFile);
     }
-    NandFlush();
     cForm::onOK();
 }
 

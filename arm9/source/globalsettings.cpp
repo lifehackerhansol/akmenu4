@@ -28,9 +28,7 @@
 cGlobalSettings::cGlobalSettings()
 {
     fontHeight=12;
-#if defined(_STORAGE_r4)
     brightness=1;
-#endif
     language=1;
     langDirectory="English";
     uiName="zelda";
@@ -98,11 +96,9 @@ void cGlobalSettings::loadSettings()
     struct stat st;
     if(0==stat(SFN_CHEATS,&st)) cheatDB=true;
 
-#if defined(_STORAGE_r4)
     CIniFile iniBacklight(SFN_BACKLIGHT);
     brightness=iniBacklight.GetInt("brightness","brightness",brightness);
     setBrightness(brightness);
-#endif
     updateSafeMode();
 }
 
@@ -154,9 +150,6 @@ u32 cGlobalSettings::CopyBufferSize(void)
 
 void cGlobalSettings::nextBrightness(void)
 {
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
-  fifoSendValue32(FIFO_USER_01,MENU_MSG_BRIGHTNESS_NEXT);
-#elif defined(_STORAGE_r4)
   fifoSendValue32(FIFO_USER_01,MENU_MSG_BRIGHTNESS_GET);
   while(!fifoCheckValue32(FIFO_USER_01));
   u32 currentLevel=fifoGetValue32(FIFO_USER_01);
@@ -166,12 +159,9 @@ void cGlobalSettings::nextBrightness(void)
   CIniFile ini(SFN_BACKLIGHT);
   ini.SetInt("brightness","brightness",brightness);
   ini.SaveIniFile(SFN_BACKLIGHT);
-#endif
 }
 
-#if defined(_STORAGE_r4)
 void cGlobalSettings::setBrightness(u32 level)
 {
   fifoSendValue32(FIFO_USER_01,MENU_MSG_BRIGHTNESS_SET0+(brightness&3));
 }
-#endif

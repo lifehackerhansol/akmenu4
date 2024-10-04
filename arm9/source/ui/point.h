@@ -43,14 +43,14 @@ namespace akui
         t_point& operator+=(const t_point &p) { x+=p.x,y+=p.y; return *this; }
         t_point& operator-=(const t_point &p) { x-=p.x,y-=p.y; return *this; }
         t_point& operator=(const t_point &p) { x=p.x,y=p.y; return *this; }
-        //µ±Ç°µãÊÇ·ñÔÚpµÄ×ó²à
-        bool is_left(const t_point &p) const { return x<p.x; }                            // ÊÇ·ñÔÚµãµÄ×ó±ß
-        //µ±Ç°µãÊÇ·ñÔÚpµÄÓÒ²à
-        bool is_right(const t_point &p) const { return x>p.x; }                            // ÊÇ·ñÔÚµãµÄÓÒ±ß
-        //µ±Ç°µãÊÇ·ñÔÚpµÄÉÏ·½
-        bool is_up(const t_point &p) const { return y<p.y; }                                // ÊÇ·ñÔÚµãµÄÉÏ±ß
-        //µ±Ç°µãÊÇ·ñÔÚpµÄÏÂ·½
-        bool is_down(const t_point &p) const { return y>p.y; }                            // ÊÇ·ñÔÚµãµÄÏÂ±ß
+        //å½“å‰ç‚¹æ˜¯å¦åœ¨pçš„å·¦ä¾§
+        bool is_left(const t_point &p) const { return x<p.x; }                            // æ˜¯å¦åœ¨ç‚¹çš„å·¦è¾¹
+        //å½“å‰ç‚¹æ˜¯å¦åœ¨pçš„å³ä¾§
+        bool is_right(const t_point &p) const { return x>p.x; }                            // æ˜¯å¦åœ¨ç‚¹çš„å³è¾¹
+        //å½“å‰ç‚¹æ˜¯å¦åœ¨pçš„ä¸Šæ–¹
+        bool is_up(const t_point &p) const { return y<p.y; }                                // æ˜¯å¦åœ¨ç‚¹çš„ä¸Šè¾¹
+        //å½“å‰ç‚¹æ˜¯å¦åœ¨pçš„ä¸‹æ–¹
+        bool is_down(const t_point &p) const { return y>p.y; }                            // æ˜¯å¦åœ¨ç‚¹çš„ä¸‹è¾¹
         t_point& operator () (value_type x_,value_type y_){x=x_;y=y_;return *this;}
     };
 

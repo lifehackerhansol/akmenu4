@@ -27,7 +27,6 @@
 #include "uisettings.h"
 #include "language.h"
 #include "unicode.h"
-#include "files.h"
 #include "gbaloader.h"
 #include "cheatwnd.h"
 #include "ui/binaryfind.h"
@@ -229,21 +228,6 @@ static std::string getFriendlyFileSizeString( u64 size )
   return fileSize+sizeUnit;
 }
 
-void cRomInfoWnd::setDiskInfo(void)
-{
-    u64 total = 0;
-    u64 used = 0;
-    u64 freeSpace = 0;
-
-    if( !getDiskSpaceInfo( _fullName, total, used, freeSpace ) )
-        return;
-
-    _filenameText = formatString( LANG("disk info", "total").c_str(), getFriendlyFileSizeString(total).c_str() );
-    _fileDateText = formatString( LANG("disk info", "used").c_str(), getFriendlyFileSizeString(used).c_str() );
-    _fileSizeText = formatString( LANG("disk info", "free").c_str(), getFriendlyFileSizeString(freeSpace).c_str() );
-
-}
-
 void cRomInfoWnd::setFileInfo( const std::string & fullName, const std::string & showName )
 {
     _fullName=fullName;
@@ -258,8 +242,7 @@ void cRomInfoWnd::setFileInfo( const std::string & fullName, const std::string &
         return;
     }
 
-    if( "fat0:/" == fullName || "fat1:/" == fullName ) {
-        setDiskInfo();
+    if( "fat:/" == fullName ) {
         return;
     }
 
@@ -339,21 +322,6 @@ void cRomInfoWnd::onShow()
     centerScreen();
 }
 
-#if defined(_STORAGE_rpg)
-#define ITEM_SAVETYPE     0,0
-#define ITEM_DOWNLOADPLAY 0,1
-#define ITEM_DMA          0,2
-#define ITEM_PROTECTION   0,3
-#define ITEM_LINKAGE      0,4
-#define ITEM_RUMBLE       0,5
-
-#define ITEM_CHEATS       1,0
-#define ITEM_SOFTRESET    1,1
-#define ITEM_SDSAVE       1,2
-#define ITEM_SAVESLOT     1,3
-#define ITEM_ICON         1,4
-#define ITEM_LANGUAGE     1,5
-#elif defined(_STORAGE_r4) || defined(_STORAGE_r4idsn)
 #define ITEM_SAVETYPE     0,0
 #define ITEM_LINKAGE      0,1
 #define ITEM_RUMBLE       0,2
@@ -363,20 +331,6 @@ void cRomInfoWnd::onShow()
 #define ITEM_SAVESLOT     1,2
 #define ITEM_ICON         1,3
 #define ITEM_LANGUAGE     1,4
-#elif defined(_STORAGE_ak2i)
-#define ITEM_SAVETYPE     0,0
-#define ITEM_DOWNLOADPLAY 0,1
-#define ITEM_DMA          0,2
-#define ITEM_PROTECTION   0,3
-#define ITEM_LINKAGE      0,4
-#define ITEM_RUMBLE       0,5
-
-#define ITEM_CHEATS       1,0
-#define ITEM_SOFTRESET    1,1
-#define ITEM_SAVESLOT     1,2
-#define ITEM_ICON         1,3
-#define ITEM_LANGUAGE     1,4
-#endif
 
 void cRomInfoWnd::pressSaveType(void)
 {
@@ -398,25 +352,9 @@ void cRomInfoWnd::pressSaveType(void)
     _values.push_back( LANG("save type", "64M" ) );
     settingWnd.addSettingItem( LANG("save type", "text" ), _values, cSaveManager::SaveTypeToDisplaySaveType((SAVE_TYPE)_romInfo.saveInfo().saveType) );
 
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
     _values.clear();
     _values.push_back( LANG("switches", "Disable" ) );
     _values.push_back( LANG("switches", "Enable" ) );
-    settingWnd.addSettingItem( LANG("patches", "download play" ), _values, _romInfo.saveInfo().getDownloadPlay() );
-
-    _values.clear();
-    _values.push_back( LANG("switches", "Disable" ) );
-    _values.push_back( LANG("switches", "Enable" ) );
-    _values.push_back(formatString(LANG("switches","Global").c_str(),gs().dma?LANG("switches","Enable").c_str():LANG("switches","Disable").c_str()));
-    settingWnd.addSettingItem( LANG("patches", "dma" ), _values, _romInfo.saveInfo().getDMA() );
-#endif
-
-    _values.clear();
-    _values.push_back( LANG("switches", "Disable" ) );
-    _values.push_back( LANG("switches", "Enable" ) );
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-    settingWnd.addSettingItem( LANG("patches", "protection" ), _values, _romInfo.saveInfo().getProtection() );
-#endif
     settingWnd.addSettingItem( LANG("patches", "linkage" ), _values, _romInfo.saveInfo().getLinkage() );
 
     _values.clear();
@@ -439,14 +377,6 @@ void cRomInfoWnd::pressSaveType(void)
     _values.push_back( LANG("switches", "Enable" ) );
     _values.push_back(formatString(LANG("switches","Global").c_str(),gs().softreset?LANG("switches","Enable").c_str():LANG("switches","Disable").c_str()));
     settingWnd.addSettingItem( LANG("patches", "reset in game" ), _values, _romInfo.saveInfo().getSoftReset() );
-
-#if defined(_STORAGE_rpg)
-    _values.clear();
-    _values.push_back( LANG("switches", "Disable" ) );
-    _values.push_back( LANG("switches", "Enable" ) );
-    _values.push_back(formatString(LANG("switches","Global").c_str(),gs().sdsave?LANG("switches","Enable").c_str():LANG("switches","Disable").c_str()));
-    settingWnd.addSettingItem( LANG("patches", "sd save" ), _values, _romInfo.saveInfo().getSDSave() );
-#endif
 
     _values.clear();
     std::string slotValue;
@@ -476,7 +406,6 @@ void cRomInfoWnd::pressSaveType(void)
     settingWnd.addSettingItem( LANG("language", "text" ), _values, _romInfo.saveInfo().getLanguage() );
 
     _settingWnd = &settingWnd;
-    settingWnd.addYButton(LANG("rom info","copy slot"),this,&cRomInfoWnd::pressCopySlot);
 
     u32 ret = settingWnd.doModal();
     _settingWnd = NULL;
@@ -494,68 +423,19 @@ void cRomInfoWnd::pressSaveType(void)
     _romInfo.saveInfo().setFlags
     (
       settingWnd.getItemSelection(ITEM_RUMBLE),
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-      settingWnd.getItemSelection(ITEM_DOWNLOADPLAY),
-#elif defined(_STORAGE_r4) || defined(_STORAGE_r4idsn)
       0,
-#endif
       settingWnd.getItemSelection(ITEM_SOFTRESET),
       settingWnd.getItemSelection(ITEM_CHEATS),
       settingWnd.getItemSelection(ITEM_SAVESLOT),
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-      settingWnd.getItemSelection(ITEM_DMA),
-      settingWnd.getItemSelection(ITEM_PROTECTION),
-#elif defined(_STORAGE_r4) || defined(_STORAGE_r4idsn)
       2,
       0,
-#endif
       settingWnd.getItemSelection(ITEM_LINKAGE),
       settingWnd.getItemSelection(ITEM_ICON),
-#if defined(_STORAGE_rpg)
-      settingWnd.getItemSelection(ITEM_SDSAVE),
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
       2,
-#endif
       settingWnd.getItemSelection(ITEM_LANGUAGE)
     );
 
     saveManager().updateCustomSaveList( _romInfo.saveInfo() );
-}
-
-void cRomInfoWnd::pressCopySlot(void)
-{
-  if(_settingWnd)
-  {
-    u8 slot=_settingWnd->getItemSelection(ITEM_SAVESLOT);
-    std::string saveSrc=cSaveManager::generateSaveName(_fullName,slot);
-    struct stat st;
-    if(0==stat(saveSrc.c_str(),&st))
-    {
-      std::vector<std::string> values;
-      std::string slotValue,srcValue;
-      for(size_t ii=0;ii<4;++ii)
-      {
-        if(ii) slotValue='0'+ii;
-        else slotValue=LANG("save type","default");
-        if(slot!=ii)
-        {
-          if(SlotExists(ii)) slotValue+="*";
-          values.push_back(slotValue);
-        }
-        else srcValue=slotValue;
-      }
-      cSettingWnd settingWnd(0,0,252,188,NULL,LANG("saveslot","title")+": "+srcValue);
-      settingWnd.addSettingItem(LANG("saveslot","target slot" ),values,0);
-      settingWnd.setConfirmMessage(LANG("saveslot","confirm"));
-      u32 ret=settingWnd.doModal();
-      if(ret==ID_CANCEL) return;
-
-      u8 new_slot=settingWnd.getItemSelection(0,0);
-      if(new_slot>=slot) ++new_slot;
-      std::string saveDst=cSaveManager::generateSaveName(_fullName,new_slot);
-      copyFile(saveSrc,saveDst,false,st.st_size);
-    }
-  }
 }
 
 void cRomInfoWnd::pressFlash(void)

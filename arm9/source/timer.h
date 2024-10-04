@@ -54,7 +54,7 @@ private:
     double _lastTime;
     double _currentTime;
     static vu64 _overFlow;
-    static const double _factor = 1.f/(33.514*1000000.f);
+    const double _factor = 1.f/(33.514*1000000.f);
     double _fps;
     u32 _fpsCounter;
 };

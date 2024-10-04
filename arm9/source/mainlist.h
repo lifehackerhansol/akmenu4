@@ -29,11 +29,7 @@
 #include "dsrom.h"
 #include "zoomingicon.h"
 
-#if defined(_STORAGE_rpg)
-#define SD_ROOT_0 "fat1:"
-#else
-#define SD_ROOT_0 "fat0:"
-#endif
+#define SD_ROOT_0 "fat:"
 #define SD_ROOT SD_ROOT_0"/"
 
 // 显示游戏列表，文件列表等等

@@ -27,7 +27,7 @@
 
 namespace akui {
 
-// bitmap desc£¬Ö»¸ºÔğ»­±³¾°
+// bitmap descï¼Œåªè´Ÿè´£ç”»èƒŒæ™¯
 enum BLTMODE
 {
     BM_BITBLT,

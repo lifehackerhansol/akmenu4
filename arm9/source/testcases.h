@@ -39,10 +39,6 @@ void testViolenceEEP512Kauto( u32 count );
 
 void testViolenceEEP8Mauto( u32 count );
 
-void testViolenceCopy();
-
 void testEEPReadStatus();
-
-void testGetDiskFreeSpace();
 
 #endif//_TESTCASES_H_

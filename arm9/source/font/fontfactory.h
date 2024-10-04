@@ -21,7 +21,7 @@
 #include <nds.h>
 
 
-#include <singleton.h>
+#include "singleton.h"
 
 #include "font.h"
 class cFontFactory

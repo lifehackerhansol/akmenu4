@@ -31,7 +31,7 @@
 #include "sram.h"
 #include "gbapatcher.h"
 #include "gbaloader.h"
-#include <elm.h>
+#include <fat.h>
 
 #define LEN 0x100000
 #define LEN_NOR 0x8000
@@ -225,7 +225,6 @@ bool CGbaLoader::CheckPSRAM(u32 aSize)
 void CGbaLoader::StartGBA(void)
 {
   LoadBorder();
-  ELM_Unmount();
   BootGBA();
   while(true) swiWaitForVBlank();
 }
@@ -241,7 +240,7 @@ void CGbaLoader::LoadBorder(void)
 {
   videoSetMode(MODE_5_2D | DISPLAY_BG3_ACTIVE);
   videoSetModeSub(MODE_5_2D | DISPLAY_BG3_ACTIVE);
-  vramSetMainBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_BG_0x06020000, VRAM_C_SUB_BG_0x06200000, VRAM_D_LCD);
+  vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_BG_0x06020000, VRAM_C_SUB_BG_0x06200000, VRAM_D_LCD);
 
   // for the main screen
   REG_BG3CNT = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_WRAP_OFF;
@@ -358,7 +357,7 @@ bool CGbaLoader::LoadNor(void)
       cSram::CreateDefaultFile(iFileName.c_str(),saveSize);
 /*
   FILE *log;
-  log=fopen("fat0:/test.bin","wb");
+  log=fopen("fat:/test.bin","wb");
   fwrite((void*)0x08000000,iSize,1,log);
   fclose(log);
 // */

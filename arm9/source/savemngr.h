@@ -25,7 +25,6 @@
 #include <vector>
 #include <string>
 #include "singleton.h"
-#include "savechip.h"
 #include "globalsettings.h"
 
 typedef struct _SAVE_INFO_T
@@ -186,17 +185,6 @@ typedef struct SAVE_INFO_EX_HEADER_T
   u32 reserved;
 } SAVE_INFO_EX_HEADER;
 
-#if defined(_STORAGE_rpg)
-typedef struct _SAVE_BLOCK_INFO_T
-{
-    u32 saveSize;
-    u32 eepPageSize;
-    u32 nandPageSize;
-    u32 validPageCount;
-    u32 nandBlockCount;
-} SAVE_BLOCK_INFO;
-#endif
-
 class cSaveManager
 {
   public:
@@ -219,17 +207,7 @@ class cSaveManager
 
     bool clearLastInfo();
 
-#if defined(_STORAGE_rpg)
-    bool backupSaveData();
-
-    bool restoreSaveData( const std::string & romFilename, SAVE_TYPE saveType, u8 slot );
-#endif
-
     static bool initializeSaveFile(const std::string& romFilename,u8 slot,u32 size);
-
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-    static bool generateProtectionFix(const std::string& romFilename,u32 bytesPerCluster);
-#endif
 
     static std::string generateSaveName(const std::string& romFilename,u8 slot);
 
@@ -240,46 +218,7 @@ class cSaveManager
     static DISPLAY_SAVE_TYPE SaveTypeToDisplaySaveType(SAVE_TYPE aSaveType);
     static SAVE_TYPE DisplaySaveTypeToSaveType(DISPLAY_SAVE_TYPE aSaveType);
 
-#if defined(_STORAGE_rpg)
-    void lockSave();
-
-    bool unlockSave( SAVE_TYPE st, bool writeToDisk );
-
-    bool clearSaveBlocks();
-
-    bool buildSaveBlockTable( CHIP_TYPE * ct );
-
   protected:
-    struct SZoneInfo
-    {
-      u32 iIndex;
-      u32 iFree;
-      u32 iAllocated;
-      u32 iUnused;
-    };
-#endif
-  protected:
-
-#if defined(_STORAGE_rpg)
-    void lockChips();
-
-    bool unlockChip( SAVE_TYPE saveType, bool writeToDisk );
-
-    static u32 saveSizeFromSaveType( SAVE_TYPE saveType );
-
-    static CHIP_TYPE chipTypeFromSaveType( SAVE_TYPE saveType );
-
-    static SAVE_TYPE saveTypeFromChipType( CHIP_TYPE chipType );
-
-    static SAVE_BLOCK_INFO getBlockInfo( CHIP_TYPE chipType );
-
-    bool assignSaveBlocks( SAVE_TYPE saveType, CHIP_TYPE chipType, u32 nandAddress[64] );
-
-    static int CompareIndex(const void* a,const void* b);
-    static int CompareFree(const void* a,const void* b);
-
-    u32 _saveBlockTable[64];
-#endif
 
     std::vector<SAVE_INFO> _saveList;
 

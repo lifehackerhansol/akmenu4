@@ -155,16 +155,16 @@ void cGdi::activeFbMain(void)
     vramSetBankA( VRAM_A_MAIN_SPRITE_0x06400000 );
 
     REG_BG2CNT = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_PRIORITY_1;
-    REG_BG2PA = 1 << 8; // 2 =·Å´ó±¶Êý
-    REG_BG2PD = 1 << 8;  // 2 =·Å´ó±¶Êý
+    REG_BG2PA = 1 << 8; // 2 =æ”¾å¤§å€æ•°
+    REG_BG2PD = 1 << 8;  // 2 =æ”¾å¤§å€æ•°
     REG_BG2PB = 0;
     REG_BG2PC = 0;
     REG_BG2Y = 0;
     REG_BG2X = 0;
 
     REG_BG3CNT = BG_BMP16_256x256 | BG_BMP_BASE(8) | BG_PRIORITY_2;
-    REG_BG3PA = 1 << 8; // 2 =·Å´ó±¶Êý
-    REG_BG3PD = 1 << 8;  // 2 =·Å´ó±¶Êý
+    REG_BG3PA = 1 << 8; // 2 =æ”¾å¤§å€æ•°
+    REG_BG3PD = 1 << 8;  // 2 =æ”¾å¤§å€æ•°
     REG_BG3PB = 0;
     REG_BG3PC = 0;
     REG_BG3Y = 0;
@@ -200,14 +200,14 @@ void cGdi::activeFbSub(void)
     MyInitConsole(_bufferSub3+0x2000,_bufferSub3);
 #endif
 
-    // ·ÖÅäÏÔ´æ´æ£¬ 128k
+    // åˆ†é…æ˜¾å­˜å­˜ï¼Œ 128k
     vramSetBankC( VRAM_C_SUB_BG_0x06200000 );    // 128k
 
-    // ³õÊ¼»¯ÎªÎÄ×ÖÄ£Ê½
+    // åˆå§‹åŒ–ä¸ºæ–‡å­—æ¨¡å¼
     _subEngineMode = SEM_GRAPHICS;
     //_subEngineMode = SEM_TEXT;
 
-    // BMP bg µÄ²ÎÊýÉèÖÃ£¬´Ó VRAMµØÖ· 0x06200000 ¿ªÊ¼£¬ÓÅÏÈ¼¶3
+    // BMP bg çš„å‚æ•°è®¾ç½®ï¼Œä»Ž VRAMåœ°å€ 0x06200000 å¼€å§‹ï¼Œä¼˜å…ˆçº§3
     REG_BG2CNT_SUB = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_PRIORITY_1;
     REG_BG2PA_SUB = 1<<8;
     REG_BG2PD_SUB = 1<<8;
@@ -225,18 +225,18 @@ void cGdi::activeFbSub(void)
     fillMemory( _bufferSub1, 0x18000, 0xffffffff );
 
     // text BG
-    // text bg µÄ×ÖÄ£Õ¼ÓÃ 32(×Ö½Ú/×ÖÄ£) * 256(¸öascii×Ö) = 8192 ×Ö½ÚÏÔ´æ£¬
-    // ÎÄ×ÖÏÔÊ¾Õ¼ÓÃ 32 x 32 * 2 = 2048 ×Ö½ÚÏÔ´æ
-    // ×ÖÄ£´Ó block 8 ¿ªÊ¼ = 0x06200000 + 8 * 0x4000      = 0x06220000
-    // ÎÄ×ÖÐÅÏ¢´Ó block 72 ¿ªÊ¼ = 0x06200000 + 72 * 0x800 = 0x06224000
-    // ÓÅÏÈ¼¶ 2
+    // text bg çš„å­—æ¨¡å ç”¨ 32(å­—èŠ‚/å­—æ¨¡) * 256(ä¸ªasciiå­—) = 8192 å­—èŠ‚æ˜¾å­˜ï¼Œ
+    // æ–‡å­—æ˜¾ç¤ºå ç”¨ 32 x 32 * 2 = 2048 å­—èŠ‚æ˜¾å­˜
+    // å­—æ¨¡ä»Ž block 8 å¼€å§‹ = 0x06200000 + 8 * 0x4000      = 0x06220000
+    // æ–‡å­—ä¿¡æ¯ä»Ž block 72 å¼€å§‹ = 0x06200000 + 72 * 0x800 = 0x06224000
+    // ä¼˜å…ˆçº§ 2
 #ifdef DEBUG
     BG_PALETTE_SUB[255] = RGB15(31,31,31);    //by default font will be rendered with color 255
     REG_BG0CNT_SUB = BG_TILE_BASE(0) | BG_MAP_BASE(8) | BG_PRIORITY_2;
 #endif
 
     swiWaitForVBlank(); //remove tearing at top screen
-    // Ä£Ê½5£¬¿ªÁ½²ãBG£¬Ò»²ãBMP£¬Ò»²ãÎÄ×Ö(ÓÃÓÚµ÷ÊÔ)£¬bmp²ãÏÖÔÚÄ¬ÈÏ¹Ø±Õ
+    // æ¨¡å¼5ï¼Œå¼€ä¸¤å±‚BGï¼Œä¸€å±‚BMPï¼Œä¸€å±‚æ–‡å­—(ç”¨äºŽè°ƒè¯•)ï¼Œbmpå±‚çŽ°åœ¨é»˜è®¤å…³é—­
     videoSetModeSub( MODE_5_2D | DISPLAY_BG2_ACTIVE );// | DISPLAY_BG2_ACTIVE );
 }
 
@@ -483,8 +483,8 @@ void cGdi::bitBlt( const void * src, s16 destX, s16 destY, u16 destW, u16 destH,
     }
 }
 
-// maskBlt ÒªdestWÊÇÅ¼Êý£¬ËÙ¶È¿ÉÒÔ¿ìÒ»±¶
-// ²»ÊÇÅ¼ÊýÒ²¿ÉÒÔ£¬µ«ÒªÇóÔÚÄÚ´æÖÐ src µÄ pitch ´Õ³ÉÅ¼Êý
+// maskBlt è¦destWæ˜¯å¶æ•°ï¼Œé€Ÿåº¦å¯ä»¥å¿«ä¸€å€
+// ä¸æ˜¯å¶æ•°ä¹Ÿå¯ä»¥ï¼Œä½†è¦æ±‚åœ¨å†…å­˜ä¸­ src çš„ pitch å‡‘æˆå¶æ•°
 void cGdi::maskBlt( const void * src, s16 destX, s16 destY, u16 destW, u16 destH, GRAPHICS_ENGINE engine )
 {
     //dbg_printf("x %d y %d w %d h %d\n", destX, destY, destW, destH );
@@ -618,7 +618,7 @@ void cGdi::textOutRect( s16 x, s16 y, u16 w, u16 h, const char * text, GRAPHICS_
 
 void cGdi::present( GRAPHICS_ENGINE engine )
 {
-    if( GE_MAIN == engine ) { // ·­×ªÖ÷ÒýÇæ
+    if( GE_MAIN == engine ) { // ç¿»è½¬ä¸»å¼•æ“Ž
         //u16 * temp = _bufferMain1;
         //_bufferMain1 = _bufferMain2;
         //_bufferMain2 = temp;
@@ -629,7 +629,7 @@ void cGdi::present( GRAPHICS_ENGINE engine )
 
         fillMemory( (void *)(_bufferMain2 + _layerPitch), 256 * 192 * 2, 0 );
 
-    } else if ( GE_SUB == engine ) { // ·­×ª¸±ÒýÇæ
+    } else if ( GE_SUB == engine ) { // ç¿»è½¬å‰¯å¼•æ“Ž
         if( SEM_GRAPHICS == _subEngineMode )
             dmaCopyWordsGdi( 3, (void *)_bufferSub2, (void *)_bufferSub1, 256 * 192 * 2 );
         //else if( SEM_TEXT == _subEngineMode )
@@ -651,16 +651,16 @@ void cGdi::present(void)
 #ifdef DEBUG
 void cGdi::switchSubEngineMode()
 {
-    // ÐèÒª±£´æºÍ»Ö¸´ÎÄ±¾Ä£Ê½µÄÏÖ³¡
+    // éœ€è¦ä¿å­˜å’Œæ¢å¤æ–‡æœ¬æ¨¡å¼çš„çŽ°åœº
     switch( _subEngineMode )
     {
-    case SEM_GRAPHICS:   // µ±Ç°ÊÇÍ¼ÐÎÄ£Ê½µÄ»°£¬¾Í»Ö¸´¸Õ²ÅµÄtextÏÖ³¡
+    case SEM_GRAPHICS:   // å½“å‰æ˜¯å›¾å½¢æ¨¡å¼çš„è¯ï¼Œå°±æ¢å¤åˆšæ‰çš„textçŽ°åœº
         videoSetModeSub( MODE_5_2D | DISPLAY_BG0_ACTIVE );
         custom_console.fontBgMap=(u16*)0x6204000;
         custom_console.fontBgGfx=(u16*)0x6200000;
         dmaCopyWordsGdi( 3, (void *)_bufferSub3, (void *)_bufferSub1, 0x4800 );
         break;
-    case SEM_TEXT:      // µ±Ç°ÊÇÎÄ×ÖÄ£Ê½µÄ»°£¬±£´æÏÖ³¡£¬ÇÐµ½Í¼ÐÎÄ£Ê½
+    case SEM_TEXT:      // å½“å‰æ˜¯æ–‡å­—æ¨¡å¼çš„è¯ï¼Œä¿å­˜çŽ°åœºï¼Œåˆ‡åˆ°å›¾å½¢æ¨¡å¼
         videoSetModeSub( MODE_5_2D | DISPLAY_BG2_ACTIVE );
         custom_console.fontBgMap=_bufferSub3+0x2000;
         custom_console.fontBgGfx=_bufferSub3;

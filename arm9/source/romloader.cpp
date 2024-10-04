@@ -19,20 +19,30 @@
 */
 
 #include <string.h>
+#include <limits.h>
 #include <nds.h>
-#include <elm.h>
+#include <fat.h>
 #include "romloader.h"
 #include "dbgtool.h"
-#include "akloader_arm7_bin.h"
-#include "akloader_arm9_bin.h"
-#include "savechip.h"
+//#include "akloader_arm7_bin.h"
+//#include "akloader_arm9_bin.h"
 #include "savemngr.h"
 #include "../../share/fifotool.h"
-#include "../../share/timetool.h"
+#include "timetool.h"
 #include "globalsettings.h"
-#if defined(_STORAGE_rpg)
-#include <iorpg.h>
-#endif
+
+// FIFO_CHANNEL_BITS - number of bits used to specify the channel in a packet - default=4
+#define FIFO_CHANNEL_BITS				4
+#define FIFO_CHANNEL_SHIFT				(32-FIFO_CHANNEL_BITS)
+#define FIFO_IMMEDIATEBIT_SHIFT			(FIFO_CHANNEL_SHIFT-2)
+#define FIFO_IMMEDIATEBIT				(1<<FIFO_IMMEDIATEBIT_SHIFT)
+#define FIFO_EXTRABIT_SHIFT				(FIFO_CHANNEL_SHIFT-3)
+#define FIFO_EXTRABIT					(1<<FIFO_EXTRABIT_SHIFT)
+#define FIFO_VALUE32_MASK				(FIFO_EXTRABIT-1)
+
+#define FIFO_PACK_VALUE32(channel, value32) \
+	( ((channel)<<FIFO_CHANNEL_SHIFT) | FIFO_IMMEDIATEBIT | \
+	(((value32))&FIFO_VALUE32_MASK) )
 
 static void resetAndLoop()
 {
@@ -55,48 +65,26 @@ static void resetAndLoop()
     swiSoftReset();
 }
 
-#if defined(_STORAGE_rpg)
-bool loadRom( const std::string & filename, u32 flags, long cheatOffset,size_t cheatSize )
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
 bool loadRom( const std::string & filename, const std::string & savename, u32 flags, long cheatOffset,size_t cheatSize )
-#endif
 {
-#if defined(_STORAGE_rpg)
-    // copy filename to sram
-    ALIGN(4) u8 filenameBuffer[MAX_FILENAME_LENGTH];
-    memset( filenameBuffer, 0, MAX_FILENAME_LENGTH );
-    memcpy( filenameBuffer, filename.c_str(), filename.length() );
-
-    u32 address=SRAM_LOADING_FILENAME_START;
-    ioRpgWriteSram( address, filenameBuffer, MAX_FILENAME_LENGTH );
-    address+=MAX_FILENAME_LENGTH;
-    ioRpgWriteSram( address, &flags, sizeof(flags) );
-    address+=sizeof(u32);
-    ioRpgWriteSram( address, &cheatOffset, sizeof(cheatOffset) );
-    address+=sizeof(u32);
-    ioRpgWriteSram( address, &cheatSize, sizeof(cheatSize) );
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
     *(u32*)0x23fd900=flags;
     *(u32*)0x23fd904=cheatOffset;
     *(u32*)0x23fd908=cheatSize;
-    memset((void*)0x23fda00,0,MAX_FILENAME_LENGTH*2);
+    memset((void*)0x23fda00,0,PATH_MAX*2);
     strcpy((char*)0x23fda00,filename.c_str());
-    strcpy((char*)(0x23fda00+MAX_FILENAME_LENGTH),savename.c_str());
-#endif
+    strcpy((char*)(0x23fda00+PATH_MAX),savename.c_str());
 
     dbg_printf( "load %s\n", filename.c_str() );
 
     // copy loader's arm7 code
-    memcpy( (void *)0x023FA000, akloader_arm7_bin, akloader_arm7_bin_size );
-    __NDSHeader->arm7executeAddress = 0x023FA000;
+//    memcpy( (void *)0x023FA000, akloader_arm7_bin, akloader_arm7_bin_size );
+    __NDSHeader->arm7executeAddress = (void*)0x023FA000;
 
     // copy loader's arm9 code
-    memcpy( (void *)0x023c0000, akloader_arm9_bin, akloader_arm9_bin_size );
-    __NDSHeader->arm9executeAddress = 0x023c0000;
+//    memcpy( (void *)0x023c0000, akloader_arm9_bin, akloader_arm9_bin_size );
+    __NDSHeader->arm9executeAddress = (void*)0x023c0000;
 
     dbg_printf( "load done\n" );
-
-    ELM_Unmount();
 
     resetAndLoop();
     return true;

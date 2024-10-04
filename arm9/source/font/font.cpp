@@ -21,7 +21,6 @@
 #include <nds.h>
 #include <string.h>
 #include "font.h"
-#include "files.h"
 #include "dbgtool.h"
 #include "systemfilenames.h"
 

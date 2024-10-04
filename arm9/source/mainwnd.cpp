@@ -24,7 +24,7 @@
 #include "msgbox.h"
 #include "systemfilenames.h"
 #include "timer.h"
-#include "../../share/timetool.h"
+#include "timetool.h"
 #include "../../share/fifotool.h"
 
 #include "testcases.h"
@@ -32,7 +32,6 @@
 
 #include "romloader.h"
 #include "progresswnd.h"
-#include "files.h"
 #include "inifile.h"
 #include "language.h"
 #include "testcases.h"
@@ -41,15 +40,11 @@
 #include "expwnd.h"
 #include "gbaloader.h"
 #include "romlauncher.h"
-#include "sdidentify.h"
 #include "favorites.h"
 
-#ifdef DEBUG
-#include "iocmn.h"
-#endif
-
+#include <dirent.h>
 #include <sys/iosupport.h>
-#include <elm.h>
+#include <fat.h>
 
 using namespace akui;
 
@@ -96,7 +91,7 @@ void cMainWnd::init()
     _mainList->selectedRowHeadClicked.connect( this, &cMainWnd::onMainListSelItemHeadClicked );
     _mainList->directoryChanged.connect( this, &cMainWnd::onFolderChanged );
     _mainList->animateIcons.connect( this, &cMainWnd::onAnimation );
-    //_mainList->enterDir( "fat0:/" );
+    //_mainList->enterDir( "fat:/" );
     addChildWindow( _mainList );
     dbg_printf( "mainlist %08x\n", _mainList );
 
@@ -200,64 +195,7 @@ void cMainWnd::startMenuItemClicked( s16 i )
     dbg_printf( "start menu item %d\n", i );
     //messageBox( this, "Power Off", "Are you sure you want to turn off ds?", MB_YES | MB_NO );
 
-    if( START_MENU_ITEM_COPY == i ) {
-        if( "" == _mainList->getSelectedFullPath() )
-            return;
-        struct stat st;
-        stat( _mainList->getSelectedFullPath().c_str(), &st );
-        if( st.st_mode & S_IFDIR ) {
-            messageBox( this, LANG("no copy dir", "title"), LANG("no copy dir", "text"), MB_YES | MB_NO );
-            return;
-        }
-        setSrcFile( _mainList->getSelectedFullPath(), SFM_COPY );
-    }
-
-    else if( START_MENU_ITEM_CUT == i ) {
-        if( "" == _mainList->getSelectedFullPath() )
-            return;
-        struct stat st;
-        stat( _mainList->getSelectedFullPath().c_str(), &st );
-        if( st.st_mode & S_IFDIR ) {
-            messageBox( this, LANG("no copy dir", "title"), LANG("no copy dir", "text"), MB_YES | MB_NO );
-            return;
-        }
-        setSrcFile( _mainList->getSelectedFullPath(), SFM_CUT );
-    }
-
-    else if( START_MENU_ITEM_PASTE == i )
-    {
-        bool ret=false;
-        if(_mainList->IsFavorites())
-        {
-          ret=cFavorites::AddToFavorites(getSrcFile());
-        }
-        else
-        {
-          ret=copyOrMoveFile(_mainList->getCurrentDir());
-        }
-        if(ret) // refresh current directory
-          _mainList->enterDir(_mainList->getCurrentDir());
-    }
-
-    else if( START_MENU_ITEM_DELETE == i ) {
-        std::string fullPath = _mainList->getSelectedFullPath();
-        if( "" != fullPath )
-        {
-          bool ret=false;
-          if(_mainList->IsFavorites())
-          {
-            ret=cFavorites::RemoveFromFavorites(fullPath);
-          }
-          else
-          {
-            ret=deleteFile(fullPath);
-          }
-          if(ret)
-            _mainList->enterDir(_mainList->getCurrentDir());
-        }
-    }
-
-    else if( START_MENU_ITEM_SETTING == i ) {
+    if( START_MENU_ITEM_SETTING == i ) {
         showSettings();
     }
 
@@ -389,18 +327,7 @@ bool cMainWnd::processKeyMessage( const cKeyMessage & msg )
             }
             else
             {
-#if defined(_STORAGE_rpg)
-              const std::string dir =  _mainList->getCurrentDir();
-              if( dir.length() < 5 ) {
-                  _mainList->enterDir( "fat0:/" );
-              } else if( dir.substr( 0, 5 ) == "fat0:" ) {
-                  _mainList->enterDir( "fat1:/" );
-              } else {
-                  _mainList->enterDir( "fat0:/" );
-              }
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
               _mainList->enterDir( "favorites:/" );
-#endif
             }
             ret = true;
             break;
@@ -463,12 +390,6 @@ bool cMainWnd::processTouchMessage( const cTouchMessage & msg )
 void cMainWnd::onKeyYPressed()
 {
     if(gs().safeMode) return;
-#ifdef DEBUG
-    // hardware version check
-    {
-        dbg_printf("HW: %02x\n",ioVersion());
-    }
-#endif//#ifdef DEBUG
     showFileInfo();
 }
 
@@ -517,26 +438,6 @@ void cMainWnd::launchSelected()
     std::string title,text; bool show=true;
     switch(launchRom(fullPath,rominfo,rominfo.isHomebrew()&&"akmenu4.nds"==_mainList->getSelectedShowName()))
     {
-#if defined(_STORAGE_rpg)
-      case ELaunchSDOnly:
-        title=LANG("sd save","title");
-        text=LANG("sd save","text");
-        break;
-      case ELaunchRestoreFail:
-        title=LANG("restore save fail","title");
-        text=LANG("restore save fail","text");
-        break;
-#endif
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-      case ELaunchSlowSD:
-        {
-          std::string model=sdidGetSDManufacturerName()+" "+sdidGetSDName();
-          title=LANG("unsupported sd","title");
-          text=LANG("unsupported sd","text");
-          text=formatString(text.c_str(),model.c_str());
-        }
-        break;
-#endif
       case ELaunchNoFreeSpace:
         title=LANG("no free space","title");
         text=LANG("no free space","text");
@@ -564,17 +465,16 @@ void cMainWnd::setParam(void)
   //user interface style
   _values.clear();
   std::vector<std::string> uiNames;
-  DIR_ITER* dir=diropen(SFN_UI_DIRECTORY);
+  DIR* dir=opendir(SFN_UI_DIRECTORY);
+  struct dirent *entry;
   if(NULL!=dir)
   {
-    struct stat st;
-    char longFilename[MAX_FILENAME_LENGTH];
-    while(dirnext(dir,longFilename,&st)==0)
+    while((entry=readdir(dir))!=NULL)
     {
-      std::string lfn(longFilename);
+      std::string lfn(entry->d_name);
       if(lfn!=".."&&lfn!=".") _values.push_back(lfn);
     }
-    dirclose(dir);
+    closedir(dir);
     dir=NULL;
   }
   else
@@ -584,7 +484,7 @@ void cMainWnd::setParam(void)
   std::sort(_values.begin(),_values.end());
   for(size_t ii=0;ii<_values.size();++ii)
   {
-    if(0==stricmp(_values[ii].c_str(),gs().uiName.c_str())) uiIndex=ii;
+    if(0==strcasecmp(_values[ii].c_str(),gs().uiName.c_str())) uiIndex=ii;
   }
   uiNames=_values;
   settingWnd.addSettingItem(LANG("ui style","text"),_values,uiIndex);
@@ -592,17 +492,15 @@ void cMainWnd::setParam(void)
   //language
   _values.clear();
   std::vector<std::string> langNames;
-  dir=diropen(SFN_LANGUAGE_DIRECTORY);
+  dir=opendir(SFN_LANGUAGE_DIRECTORY);
   if(NULL!=dir )
   {
-    struct stat st;
-    char longFilename[MAX_FILENAME_LENGTH];
-    while(dirnext(dir,longFilename,&st)==0)
+    while ((entry=readdir(dir))!=NULL)
     {
-      std::string lfn(longFilename);
+      std::string lfn(entry->d_name);
       if(lfn!=".."&&lfn!=".") _values.push_back(lfn);
     }
-    dirclose(dir);
+    closedir(dir);
     dir=NULL;
   }
   else
@@ -612,7 +510,7 @@ void cMainWnd::setParam(void)
   std::sort(_values.begin(),_values.end());
   for(size_t ii=0;ii<_values.size();++ii)
   {
-    if(0==stricmp(_values[ii].c_str(),gs().langDirectory.c_str())) langIndex=ii;
+    if(0==strcasecmp(_values[ii].c_str(),gs().langDirectory.c_str())) langIndex=ii;
   }
   langNames=_values;
   settingWnd.addSettingItem(LANG("language","text"),_values,langIndex);
@@ -682,12 +580,6 @@ void cMainWnd::setParam(void)
   settingWnd.addSettingItem(LANG("patches","cheating system"),_values,gs().cheats);
   settingWnd.addSettingItem(LANG("patches","reset in game"),_values,gs().softreset);
   settingWnd.addSettingItem(LANG("patches","homebrew reset"),_values,gs().homebrewreset);
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-  settingWnd.addSettingItem(LANG("patches","dma"),_values,gs().dma);
-#endif
-#if defined(_STORAGE_rpg)
-  settingWnd.addSettingItem(LANG("patches","sd save"),_values,gs().sdsave);
-#endif
 
   //page 5: gba
   settingWnd.addSettingTab(LANG("gba settings","title"));
@@ -737,12 +629,6 @@ void cMainWnd::setParam(void)
   gs().cheats=settingWnd.getItemSelection(3,0);
   gs().softreset=settingWnd.getItemSelection(3,1);
   gs().homebrewreset=settingWnd.getItemSelection(3,2);
-#if defined(_STORAGE_rpg) || defined(_STORAGE_ak2i)
-  gs().dma=settingWnd.getItemSelection(3,3);
-#endif
-#if defined(_STORAGE_rpg)
-  gs().sdsave=settingWnd.getItemSelection(3,4);
-#endif
 
   //page 5: gba
   gs().gbaSleepHack=settingWnd.getItemSelection(4,0);
@@ -758,16 +644,7 @@ void cMainWnd::setParam(void)
           gs().uiName = uiNames[uiIndexAfter];
           gs().langDirectory = langNames[langIndexAfter];
           gs().saveSettings();
-#if defined(_STORAGE_rpg)
-          loadRom( "fat0:/akmenu4.nds", 0, 0, 0 );
-#elif defined(_STORAGE_r4)
-          loadRom( "fat0:/_ds_menu.dat", "", 0, 0, 0 );
-#elif defined(_STORAGE_ak2i)
-          loadRom( "fat0:/akmenu4.nds", "", 0, 0, 0 );
-#elif defined(_STORAGE_r4idsn)
-          loadRom( "fat0:/_dsmenu.dat", "", 0, 0, 0 );
-#endif
-
+          loadRom( "fat:/akmenu4.nds", "", 0, 0, 0 );
       }
   }
 
@@ -781,15 +658,7 @@ void cMainWnd::setParam(void)
       {
           gs().langDirectory = langNames[langIndexAfter];
           gs().saveSettings();
-#if defined(_STORAGE_rpg)
-          loadRom( "fat0:/akmenu4.nds", 0, 0, 0 );
-#elif defined(_STORAGE_r4)
-          loadRom( "fat0:/_ds_menu.dat", "", 0, 0, 0 );
-#elif defined(_STORAGE_ak2i)
-          loadRom( "fat0:/akmenu4.nds", "", 0, 0, 0 );
-#elif defined(_STORAGE_r4idsn)
-          loadRom( "fat0:/_dsmenu.dat", "", 0, 0, 0 );
-#endif
+          loadRom( "fat:/akmenu4.nds", "", 0, 0, 0 );
       }
   }
 
@@ -840,11 +709,6 @@ void cMainWnd::onFolderChanged()
 {
     resetInputIdle();
     std::string dirShowName = _mainList->getCurrentDir();
-#if defined(_STORAGE_rpg)
-    if( dirShowName.substr( 0, 5 ) == "fat0:" )
-        dirShowName.replace( 0, 4, "Flash" );
-    else
-#endif
     if( dirShowName.substr( 0, 5 ) == SD_ROOT_0 )
         dirShowName.replace( 0, 4, "SD" );
     else if( "favorites:/" != dirShowName && "slot2:/" == _mainList->getSelectedFullPath() )
@@ -878,11 +742,7 @@ void cMainWnd::onFolderChanged()
       }
       if(mode==cGlobalSettings::ESlot2Nds)
       {
-#if defined(_STORAGE_rpg)
-        loadRom("slot2:/",0,0,0);
-#elif defined(_STORAGE_r4) || defined(_STORAGE_ak2i) || defined(_STORAGE_r4idsn)
         loadRom("slot2:/","",0,0,0);
-#endif
       }
       else
       {

@@ -23,7 +23,7 @@
 #include "windowmanager.h"
 #include "inifile.h"
 #include "globalsettings.h"
-#include "../../share/stringtool.h"
+#include "stringtool.h"
 #include "../../share/memtool.h"
 
 using namespace akui;

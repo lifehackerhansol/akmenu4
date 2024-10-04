@@ -20,6 +20,9 @@
 #ifndef __GBALOADER_H__
 #define __GBALOADER_H__
 
+#include <nds/ndstypes.h>
+#include <string>
+
 class CGbaLoader
 {
   private:

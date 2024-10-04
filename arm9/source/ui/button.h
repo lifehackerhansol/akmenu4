@@ -110,7 +110,7 @@ protected:
 
 };
 
-// form desc£¬Ö»¸ºÔğ»­±³¾°
+// form descï¼Œåªè´Ÿè´£ç”»èƒŒæ™¯
 class cButtonDesc : public cRenderDesc
 {
 public:

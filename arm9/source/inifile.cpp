@@ -21,9 +21,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include "inifile.h"
-#include "../../share/stringtool.h"
+#include "stringtool.h"
 #include "dbgtool.h"
-#include <elm.h>
+#include <fat.h>
 
 static bool freadLine(FILE* f,std::string& str)
 {
@@ -229,11 +229,9 @@ bool CIniFile::SaveIniFile(const std::string& FileName)
   if(FileName!="")
     m_sFileName=FileName;
 
-  NandFast();
   FILE* f=fopen(m_sFileName.c_str(),"wb");
   if(NULL==f)
   {
-    NandFlush();
     return false;
   }
 
@@ -255,7 +253,6 @@ bool CIniFile::SaveIniFile(const std::string& FileName)
   }
 
   fclose(f);
-  NandFlush();
 
   m_bModified=false;
 

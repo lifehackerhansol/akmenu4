@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FIFOTOOL_H__
-#define __FIFOTOOL_H__
+#pragma once
 
 #define MENU_MSG_GBA 1
 #define MENU_MSG_ARM7_REBOOT 2
@@ -30,5 +29,3 @@
 #define MENU_MSG_BRIGHTNESS_SET2 10
 #define MENU_MSG_BRIGHTNESS_SET3 11
 #define MENU_MSG_SHUTDOWN 12
-
-#endif

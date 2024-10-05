@@ -22,8 +22,7 @@
 //  The original version of this code was written and placed in the public domain by Sarah Thompson
 // See http://sigslot.sourceforge.net/
 // __________________________________________________________________________________________________
-#ifndef SIGSLOT__H
-#define SIGSLOT__H
+#pragma once
 
 #include <list>
 #include <set>
@@ -465,5 +464,3 @@ class Signal1 : public BasicSignal1<Type1> {
 };
 
 }  // namespace akui
-
-#endif  // SIGSLOT__H

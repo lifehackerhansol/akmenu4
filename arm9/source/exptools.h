@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __EXPTOOLS_H__
-#define __EXPTOOLS_H__
+#pragma once
 
 #include <nds.h>
 #include "singleton.h"
@@ -71,5 +70,3 @@ typedef t_singleton<cExpansion> cExpansion_s;
 inline cExpansion& expansion() {
     return cExpansion_s::instance();
 }
-
-#endif

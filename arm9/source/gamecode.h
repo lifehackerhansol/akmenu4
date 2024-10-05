@@ -16,13 +16,10 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAMECODE_H__
-#define __GAMECODE_H__
+#pragma once
 
 inline u32 gamecode(const char* aGameCode) {
     u32 gameCode;
     memcpy(&gameCode, aGameCode, sizeof(gameCode));
     return gameCode;
 }
-
-#endif

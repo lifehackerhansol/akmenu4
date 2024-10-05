@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _IRQS_H_
-#define _IRQS_H_
+#pragma once
 
 #include <nds.h>
 #include "singleton.h"
@@ -49,5 +48,3 @@ typedef t_singleton<cIRQ> irq_s;
 inline cIRQ& irq() {
     return irq_s::instance();
 }
-
-#endif  //_IRQS_H_

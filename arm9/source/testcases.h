@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TESTCASES_H_
-#define _TESTCASES_H_
+#pragma once
 
 int PrintFreeMem(void);
 
@@ -40,5 +39,3 @@ void testViolenceEEP512Kauto(u32 count);
 void testViolenceEEP8Mauto(u32 count);
 
 void testEEPReadStatus();
-
-#endif  //_TESTCASES_H_

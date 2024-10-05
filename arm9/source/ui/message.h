@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_MESSAGE_H_
-#define _AKUI_MESSAGE_H_
+#pragma once
 
 namespace akui {
 
@@ -67,5 +66,3 @@ class cMessage {
 };
 
 }  // namespace akui
-
-#endif  //_AKUI_MESSAGE_H_

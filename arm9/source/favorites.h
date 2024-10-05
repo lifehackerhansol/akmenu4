@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FAVORITES_H__
-#define __FAVORITES_H__
+#pragma once
 
 #include <string>
 
@@ -28,5 +27,3 @@ class cFavorites {
     static bool UpdateFavorites(const std::string& aOldFileName, const std::string& aNewFileName);
     static bool RemoveFromFavorites(const std::string& aFileName);
 };
-
-#endif

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CALENDAR_H_
-#define _CALENDAR_H_
+#pragma once
 
 #include "bmp15.h"
 #include "datetime.h"
@@ -68,5 +67,3 @@ typedef t_singleton<cCalendar> calendar_s;
 inline cCalendar& calendar() {
     return calendar_s::instance();
 }
-
-#endif  //_CALENDAR_H_

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DSROM_H_
-#define _DSROM_H_
+#pragma once
 
 #include <nds.h>
 #include <string.h>
@@ -76,5 +75,3 @@ class DSRomInfo {
     };
     void setBanner(const std::string& anExtIcon, const u8* aBanner);
 };
-
-#endif  //_DSROM_H_

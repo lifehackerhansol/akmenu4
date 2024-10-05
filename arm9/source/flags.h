@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FLAGS_H__
-#define __FLAGS_H__
+#pragma once
 
 #include <nds.h>
 
@@ -36,5 +35,3 @@
 #define PATCH_LANGUAGE_MASK 0x0000e000
 #define PATCH_LANGUAGE_SHIFT 13
 //#define PATCH_NEXT          BIT(16)
-
-#endif

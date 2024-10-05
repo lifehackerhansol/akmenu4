@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SYSTEMFILENAMES_H_
-#define _SYSTEMFILENAMES_H_
+#pragma once
 
 #define SFN_SYSTEM_DIR "fat:/__rpg/"
 #define SFN_OFFICIAL_SAVELIST SFN_SYSTEM_DIR "savelist.bin"
@@ -67,5 +66,3 @@
 #define SFN_ICONS_DIRECTORY SFN_SYSTEM_DIR "icons/"
 
 #define SFN_CHEATS SFN_SYSTEM_DIR "cheats/usrcheat.dat"
-
-#endif  //_SYSTEMFILENAMES_H_

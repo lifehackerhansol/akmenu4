@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SAVEMNGR_H_
-#define _SAVEMNGR_H_
+#pragma once
 
 #include <nds.h>
 #include <string>
@@ -239,5 +238,3 @@ typedef t_singleton<cSaveManager> SaveManager_s;
 inline cSaveManager& saveManager() {
     return SaveManager_s::instance();
 }
-
-#endif  //_SAVEMNGR_H_

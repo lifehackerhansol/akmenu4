@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FORMDESC_H_
-#define _FORMDESC_H_
+#pragma once
 
 #include <string>
 #include "bmp15.h"
@@ -53,5 +52,3 @@ class cFormDesc : public cRenderDesc {
 };
 
 }  // namespace akui
-
-#endif  //_FORMDESC_H_

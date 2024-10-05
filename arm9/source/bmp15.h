@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _BMP15_H_
-#define _BMP15_H_
+#pragma once
 
 #include <nds.h>
 #include <memory>
@@ -64,5 +63,3 @@ cBMP15 createBMP15FromFile(const std::string& filename);
 cBMP15 createBMP15FromMem(void* mem);
 // void destroyBMP15( cBMP15 * bmp );
 // void destroyBMP15ByFilename( const char * filename );
-
-#endif  //_BMP15_H_

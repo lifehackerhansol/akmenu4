@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _STARTMENU_H_
-#define _STARTMENU_H_
+#pragma once
 
 #include "popmenu.h"
 
@@ -41,5 +40,3 @@ class cStartMenu : public akui::cPopMenu {
 
     cWindow& loadAppearance(const std::string& aFileName);
 };
-
-#endif  //_STARTMENU_H_

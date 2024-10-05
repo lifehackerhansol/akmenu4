@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _USERWINDOW_H_
-#define _USERWINDOW_H_
+#pragma once
 
 #include "bmp15.h"
 #include "datetime.h"
@@ -63,5 +62,3 @@ typedef t_singleton<cUserWindow> UserWindow_s;
 inline cUserWindow& userWindow() {
     return UserWindow_s::instance();
 }
-
-#endif  //_UserWindow_H_

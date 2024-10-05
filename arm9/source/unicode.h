@@ -18,13 +18,10 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _UNICODE_H_
-#define _UNICODE_H_
+#pragma once
 
 #include <nds.h>
 #include <string>
 
 std::string unicode_to_local_string(const u16* unicode_string, size_t length,
                                     bool* defCharUsed = NULL);
-
-#endif  //_UNICODE_H_

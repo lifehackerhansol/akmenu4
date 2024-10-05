@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _HELPWND_H_
-#define _HELPWND_H_
+#pragma once
 
 #include <string>
 #include "dsrom.h"
@@ -55,5 +54,3 @@ class cHelpWnd : public akui::cForm {
 
     std::string _helpText;
 };
-
-#endif  //_HELPWND_H_

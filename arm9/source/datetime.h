@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DATETIME_H_
-#define _DATETIME_H_
+#pragma once
 
 #include <nds.h>
 #include <time.h>
@@ -57,5 +56,3 @@ typedef t_singleton<cDateTime> dateTime_s;
 inline cDateTime& datetime() {
     return dateTime_s::instance();
 }
-
-#endif  //_DATETIME_H_

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_TOUCHMESSAGE_H_
-#define _AKUI_TOUCHMESSAGE_H_
+#pragma once
 
 #include "message.h"
 
@@ -58,5 +57,3 @@ class cTouchMessage : public cMessage {
 };
 
 }  // namespace akui
-
-#endif  //_AKUI_TOUCHMESSAGE_H_

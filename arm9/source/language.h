@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _LANGUAGE_H_
-#define _LANGUAGE_H_
+#pragma once
 
 #include "dbgtool.h"
 #include "globalsettings.h"
@@ -45,5 +44,3 @@ inline cLanguageFile& lang() {
 #define LANG(i, t) lang().GetString(i, t, t)
 
 bool stringComp(const std::string& item1, const std::string& item2);
-
-#endif  //_LANGUAGE_H_

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _BMPWINDOWDESC_H_
-#define _BMPWINDOWDESC_H_
+#pragma once
 
 #include <string>
 #include "bmp15.h"
@@ -52,5 +51,3 @@ class cBitmapDesc : public cRenderDesc {
 };
 
 }  // namespace akui
-
-#endif  //_BMPWINDOWDESC_H_

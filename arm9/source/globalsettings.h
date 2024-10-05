@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _GLOBALSETTINGS_H_
-#define _GLOBALSETTINGS_H_
+#pragma once
 
 #include <nds.h>
 #include <string>
@@ -79,5 +78,3 @@ typedef t_singleton<cGlobalSettings> globalSettings_s;
 inline cGlobalSettings& gs() {
     return globalSettings_s::instance();
 }
-
-#endif  //_GLOBALSETTINGS_H_

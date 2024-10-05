@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_MESSAGEBOX_H_
-#define _AKUI_MESSAGEBOX_H_
+#pragma once
 
 #include "button.h"
 #include "form.h"
@@ -90,5 +89,3 @@ class cMessageBox : public cForm {
 u32 messageBox(cWindow* parent, const std::string& title, const std::string& msg, u32 style);
 
 }  // namespace akui
-
-#endif  //_MESSAGEBOX_H_

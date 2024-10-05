@@ -24,8 +24,7 @@ THE SOFTWARE.
 
 ---------------------------------------------------------------------------------*/
 
-#ifndef _MEMTOOL_H_
-#define _MEMTOOL_H_
+#pragma once
 
 inline void fillMemory(void* addr, u32 count, u32 value) {
     swiFastCopy((void*)(&value), addr, (count >> 2) | COPY_MODE_WORD | COPY_MODE_FILL);
@@ -34,5 +33,3 @@ inline void fillMemory(void* addr, u32 count, u32 value) {
 inline void zeroMemory(void* addr, u32 count) {
     fillMemory(addr, count, 0);
 }
-
-#endif  //_MEMTOOL_H_

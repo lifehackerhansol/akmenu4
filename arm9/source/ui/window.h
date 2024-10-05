@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_WINDOW_H_
-#define _AKUI_WINDOW_H_
+#pragma once
 
 #include <string>
 #include "dbgtool.h"
@@ -183,4 +182,3 @@ class cWindow : public SlotHolder {
 };
 
 }  // namespace akui
-#endif  //_AKUI_WINDOW_H_

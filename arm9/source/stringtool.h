@@ -24,11 +24,8 @@ THE SOFTWARE.
 
 ---------------------------------------------------------------------------------*/
 
-#ifndef _STRINGTOOL_H_
-#define _STRINGTOOL_H_
+#pragma once
 
 #include <string>
 
 std::string formatString(const char* fmt, ...);
-
-#endif  //_STRINGTOOL_H_

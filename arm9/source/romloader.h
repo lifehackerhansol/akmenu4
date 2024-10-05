@@ -18,13 +18,10 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ROMLOADER_H_
-#define _ROMLOADER_H_
+#pragma once
 
 #include <nds/ndstypes.h>
 #include <string>
 
 bool loadRom(const std::string& filename, const std::string& savename, u32 flags, long cheatOffset,
              size_t cheatSize);
-
-#endif  //_ROMLOADER_H_

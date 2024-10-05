@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __USERINPUT_H__
-#define __USERINPUT_H__
+#pragma once
 
 #include <nds.h>
 
@@ -53,5 +52,3 @@ INPUT& getInput();
 u32 getInputIdleMs();
 void resetInputIdle(void);
 bool processInput(INPUT& inputs);
-
-#endif  //_INPUT_H_

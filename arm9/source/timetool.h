@@ -24,9 +24,6 @@ THE SOFTWARE.
 
 ---------------------------------------------------------------------------------*/
 
-#ifndef _TIMETOOL_H_
-#define _TIMETOOL_H_
+#pragma once
 
 void waitMs(unsigned int requestTime);
-
-#endif  //_TIMETOOL_H_

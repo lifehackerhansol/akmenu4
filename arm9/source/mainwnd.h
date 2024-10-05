@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _MAINWND_H_
-#define _MAINWND_H_
+#pragma once
 
 #include "button.h"
 #include "form.h"
@@ -98,5 +97,3 @@ class cMainWnd : public akui::cForm {
 
     bool _processL;
 };
-
-#endif  //_MAINWND_H_

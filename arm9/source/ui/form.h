@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_FORM_H_
-#define _AKUI_FORM_H_
+#pragma once
 
 #include <list>
 #include "bitmapdesc.h"
@@ -77,5 +76,3 @@ class cForm : public cWindow {
 };
 
 }  // namespace akui
-
-#endif  //_AKUI_FORM_H_

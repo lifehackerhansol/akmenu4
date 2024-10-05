@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __EXPWND_H__
-#define __EXPWND_H__
+#pragma once
 
 #include <string>
 #include "dsrom.h"
@@ -55,5 +54,3 @@ class cExpWnd : public akui::cForm {
     akui::cFormDesc _renderDesc;
     std::string _romName;
 };
-
-#endif  //_HELPWND_H_

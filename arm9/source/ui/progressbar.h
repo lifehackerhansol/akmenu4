@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PROGRESSBAR_H_
-#define _PROGRESSBAR_H_
+#pragma once
 
 #include "bmp15.h"
 #include "ui.h"
@@ -46,5 +45,3 @@ class cProgressBar : public cWindow {
 };
 
 }  // namespace akui
-
-#endif  //_PROGRESSBAR_H_

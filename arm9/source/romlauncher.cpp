@@ -14,6 +14,7 @@
 
 #include "launcher/ILauncher.h"
 #include "launcher/HomebrewLauncher.h"
+#include "launcher/NdsBootstrapLauncher.h"
 
 static SAVE_TYPE PrefillGame(u32 aGameCode) {
     if (0x45444759 == aGameCode)  // YGDE: 2209 - Diary Girl (USA)
@@ -136,89 +137,44 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
     size_t cheatSize = 0;
     std::string saveName;
     ILauncher * launcher = nullptr;
-#if 0
     if (!aRomInfo.isHomebrew()) {
         u32 gameCode;
         memcpy(&gameCode, aRomInfo.saveInfo().gameCode, sizeof(gameCode));  // because alignment
-        bool isBigSave = false;
-        u32 bigSaveSize = 8 * 1024 * 1024;
-        u32 bigSaveMask = 14;
-        // reading speed setting
-        std::string disk = aFullPath.substr(0, 5);
-        bool dma = false, protection = aRomInfo.saveInfo().isProtection();
-        u32 speed = 0;
+
+        saveName = cSaveManager::generateSaveName(aFullPath, aRomInfo.saveInfo().getSlot());
+
+        // restore save data only for offical programs
+        SAVE_TYPE st = (SAVE_TYPE)aRomInfo.saveInfo().saveType;
+        if (ST_UNKNOWN == st) st = ST_AUTO;
+        SAVE_TYPE st_new = PrefillGame(gameCode);
+        if (st_new != ST_UNKNOWN)  // special save size
         {
-            if (protection) speed = 0x1fff;
-            dma = aRomInfo.saveInfo().isDMA();
-            flags |= PATCH_DMA;
-            /*
-                  if((gameCode&0xffffff)==0x425841) //2385 - Daigassou! Band-Brothers DX (Japan)
-                  {
-                    isBigSave=true;
-                  }
-                  if((gameCode&0xffffff)==0x414156) //5054 - Eigokoro Kyoushitsu DS (Japan) (NDSi
-               Enhanced)
-                  {
-                    isBigSave=true;
-                  }
-            */
-            if ((gameCode & 0xffffff) ==
-                0x425855)  // 4950 - Jam with the Band (Europe) (En,Fr,De,Es,It)
-            {
-                isBigSave = true;
-                bigSaveSize = 32 * 1024 * 1024;
-                bigSaveMask = 0;
+            if (st_new != st) {
+                st = st_new;
+                aRomInfo.saveInfo().saveType = st;
+                saveManager().updateCustomSaveList(aRomInfo.saveInfo());
             }
-            if ((gameCode & 0xffffff) ==
-                0x524f55)  // 3690 - Made in Ore (Japan) & 4812 - WarioWare D.I.Y. (USA)
-            {
-                isBigSave = true;
-                bigSaveSize = 32 * 1024 * 1024;
-                bigSaveMask = 0;
+        }
+        if (cSaveManager::initializeSaveFile(aFullPath, aRomInfo.saveInfo().getSlot(),
+                                                SaveSize(st))) {
+            flags |= PATCH_SD_SAVE | (SaveMask(st) << PATCH_SAVE_SHIFT);
+            saveManager().saveLastInfo(aFullPath);
+        } else {
+            return ELaunchNoFreeSpace;
+        }
+
+        // 3in1 support
+        fifoSendValue32(FIFO_USER_01, MENU_MSG_SYSTEM);
+        fifoWaitValue32(FIFO_USER_02);
+        if (2 != fifoGetValue32(FIFO_USER_02)) {  // not dsi
+            if (gameCode == 0x4a524255 || gameCode == 0x50524255) {
+                expansion().SoftReset();
+                cExpansion::SetRompage(0x300);
+                cExpansion::OpenNorWrite();
+                cExpansion::EnableBrowser();
             }
         }
 
-        saveName = cSaveManager::generateSaveName(aFullPath, aRomInfo.saveInfo().getSlot());
-        if (isBigSave) {
-            isBigSave = cSaveManager::initializeSaveFile(aFullPath, aRomInfo.saveInfo().getSlot(),
-                                                         bigSaveSize);
-            if (!isBigSave) return ELaunchNoFreeSpace;
-            flags |= PATCH_SD_SAVE | (bigSaveMask << PATCH_SAVE_SHIFT);
-            saveManager().saveLastInfo(aFullPath);
-        } else {
-            // restore save data only for offical programs
-            SAVE_TYPE st = (SAVE_TYPE)aRomInfo.saveInfo().saveType;
-            if (ST_UNKNOWN == st) st = ST_AUTO;
-            SAVE_TYPE st_new = PrefillGame(gameCode);
-            if (st_new != ST_UNKNOWN)  // special save size
-            {
-                if (st_new != st) {
-                    st = st_new;
-                    aRomInfo.saveInfo().saveType = st;
-                    saveManager().updateCustomSaveList(aRomInfo.saveInfo());
-                }
-            }
-            if (cSaveManager::initializeSaveFile(aFullPath, aRomInfo.saveInfo().getSlot(),
-                                                 SaveSize(st))) {
-                flags |= PATCH_SD_SAVE | (SaveMask(st) << PATCH_SAVE_SHIFT);
-                saveManager().saveLastInfo(aFullPath);
-            } else {
-                return ELaunchNoFreeSpace;
-            }
-        }
-        __NDSHeader->cardControl13 = 0x00406000 | speed;
-        // 3in1 support
-        if (gameCode == 0x4a524255 || gameCode == 0x50524255) {
-            expansion().SoftReset();
-            cExpansion::SetRompage(0x300);
-            cExpansion::OpenNorWrite();
-            cExpansion::EnableBrowser();
-        }
-        if (aRomInfo.saveInfo().getRumble()) {
-            expansion().SoftReset();
-            cExpansion::SetShake(0xEF + aRomInfo.saveInfo().getRumble());
-        }
-        if (aRomInfo.saveInfo().isDownloadPlay()) flags |= PATCH_DOWNLOAD_PLAY;
         if (aRomInfo.saveInfo().isCheat()) {
             u32 gameCode, crc32;
             if (cCheatWnd::romData(aFullPath, gameCode, crc32)) {
@@ -231,18 +187,14 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
                 }
             }
         }
-        if (aRomInfo.saveInfo().isSoftReset()) flags |= PATCH_SOFT_RESET;
-        if (expansion().Rampage() == cExpansion::EPsramPage) flags |= PATCH_PSRAM;
-        if (aRomInfo.saveInfo().isLinkage()) flags |= PATCH_LINKAGE;
         u8 language = aRomInfo.saveInfo().getLanguage();
         if (language) flags |= (language << PATCH_LANGUAGE_SHIFT) & PATCH_LANGUAGE_MASK;
+
+        launcher = new NdsBootstrapLauncher();
     } else {
-#endif
         if (!aMenu) saveManager().saveLastInfo(aFullPath);
         launcher = new HomebrewLauncher();
-#if 0
     }
-#endif
     launcher->launchRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
     return ELaunchRomOk;
 }

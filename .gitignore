@@ -1,4 +1,5 @@
 build
+arm9/data/load.bin
 *.elf
 *.nds
 *.pcf

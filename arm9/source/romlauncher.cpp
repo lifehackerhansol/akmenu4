@@ -12,6 +12,9 @@
 #include "language.h"
 #include "romloader.h"
 
+#include "launcher/ILauncher.h"
+#include "launcher/HomebrewLauncher.h"
+
 static SAVE_TYPE PrefillGame(u32 aGameCode) {
     if (0x45444759 == aGameCode)  // YGDE: 2209 - Diary Girl (USA)
     {
@@ -132,6 +135,8 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
     long cheatOffset = 0;
     size_t cheatSize = 0;
     std::string saveName;
+    ILauncher * launcher = nullptr;
+#if 0
     if (!aRomInfo.isHomebrew()) {
         u32 gameCode;
         memcpy(&gameCode, aRomInfo.saveInfo().gameCode, sizeof(gameCode));  // because alignment
@@ -232,15 +237,13 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
         u8 language = aRomInfo.saveInfo().getLanguage();
         if (language) flags |= (language << PATCH_LANGUAGE_SHIFT) & PATCH_LANGUAGE_MASK;
     } else {
+#endif
         if (!aMenu) saveManager().saveLastInfo(aFullPath);
-        const u16 lameboy[] = {'L', 'a', 'm', 'e', 'b', 'o', 'y'};
-        if (memcmp(aRomInfo.banner().titles[0], lameboy, sizeof(lameboy)) == 0) {
-            expansion().SoftReset();
-            cExpansion::SetShake(0xF0);
-        }
-        if (gs().homebrewreset) flags |= PATCH_SOFT_RESET;
+        launcher = new HomebrewLauncher();
+#if 0
     }
-    loadRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
+#endif
+    launcher->launchRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
     return ELaunchRomOk;
 }
 

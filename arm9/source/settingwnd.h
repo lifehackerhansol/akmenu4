@@ -21,46 +21,48 @@
 #ifndef _SETTINGWND_H_
 #define _SETTINGWND_H_
 
+#include <string>
 #include "form.h"
 #include "formdesc.h"
+#include "message.h"
 #include "spinbox.h"
 #include "statictext.h"
-#include "message.h"
-#include <string>
 
-class cSettingWnd: public akui::cForm
-{
+class cSettingWnd : public akui::cForm {
   public:
-    cSettingWnd(s32 x,s32 y,u32 w,u32 h,cWindow* parent,const std::string& text);
+    cSettingWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
     ~cSettingWnd();
+
   public:
     void draw(void);
     bool process(const akui::cMessage& msg);
     cWindow& loadAppearance(const std::string& aFileName);
     void addSettingTab(const std::string& text);
-    void addSettingItem(const std::string& text,const std::vector<std::string>& itemTexts,size_t defaultValue);
-    ssize_t getItemSelection(size_t tabId,size_t itemId);
+    void addSettingItem(const std::string& text, const std::vector<std::string>& itemTexts,
+                        size_t defaultValue);
+    ssize_t getItemSelection(size_t tabId, size_t itemId);
     void setConfirmMessage(const std::string& text);
-    template<class TargetType>
-    void addYButton(std::string title,TargetType* slotHolder,void (TargetType::*aMemberFunction)())
-    {
-      _buttonY.setText("\x04 "+title);
-      _buttonY.clicked.connect(slotHolder,aMemberFunction);
-      _buttonY.show();
+    template <class TargetType>
+    void addYButton(std::string title, TargetType* slotHolder,
+                    void (TargetType::*aMemberFunction)()) {
+        _buttonY.setText("\x04 " + title);
+        _buttonY.clicked.connect(slotHolder, aMemberFunction);
+        _buttonY.show();
     }
+
   protected:
-    struct sSetingItem
-    {
-      akui::cStaticText* _label;
-      akui::cSpinBox* _item;
-      sSetingItem(akui::cStaticText* label,akui::cSpinBox* item): _label(label),_item(item) {};
+    struct sSetingItem {
+        akui::cStaticText* _label;
+        akui::cSpinBox* _item;
+        sSetingItem(akui::cStaticText* label, akui::cSpinBox* item) : _label(label), _item(item){};
     };
-    struct sSetingTab
-    {
-      std::vector<sSetingItem>* _tab;
-      std::string _title;
-      sSetingTab(std::vector<sSetingItem>* tab,const std::string& title): _tab(tab),_title(title) {};
+    struct sSetingTab {
+        std::vector<sSetingItem>* _tab;
+        std::string _title;
+        sSetingTab(std::vector<sSetingItem>* tab, const std::string& title)
+            : _tab(tab), _title(title){};
     };
+
   protected:
     void onOK(void);
     void onCancel(void);
@@ -78,9 +80,9 @@ class cSettingWnd: public akui::cForm
 
     void HideTab(size_t index);
     void ShowTab(size_t index);
-    void SwitchTab(size_t oldIndex,size_t newIndex);
+    void SwitchTab(size_t oldIndex, size_t newIndex);
 
-    std::vector<sSetingItem>& items(size_t index) {return *_tabs[index]._tab;};
+    std::vector<sSetingItem>& items(size_t index) { return *_tabs[index]._tab; };
 
     u32 _maxLabelLength;
     u32 _spinBoxWidth;
@@ -97,4 +99,4 @@ class cSettingWnd: public akui::cForm
     akui::cButton _buttonY;
 };
 
-#endif//_SETTINGWND_H_
+#endif  //_SETTINGWND_H_

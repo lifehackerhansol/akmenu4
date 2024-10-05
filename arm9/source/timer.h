@@ -24,16 +24,13 @@
 #include <nds.h>
 #include "singleton.h"
 
-class cTimer
-{
-public:
-
+class cTimer {
+  public:
     cTimer();
 
     ~cTimer() {}
 
-public:
-
+  public:
     void initTimer();
 
     double updateTimer();
@@ -46,20 +43,21 @@ public:
 
     vu64 getTick();
 
-    double tickToUs( u64 tick );
+    double tickToUs(u64 tick);
 
-private:
-
+  private:
     static void timerInterruptHandler();
     double _lastTime;
     double _currentTime;
     static vu64 _overFlow;
-    const double _factor = 1.f/(33.514*1000000.f);
+    const double _factor = 1.f / (33.514 * 1000000.f);
     double _fps;
     u32 _fpsCounter;
 };
 
-typedef t_singleton< cTimer > timer_s;
-inline cTimer & timer() { return timer_s::instance(); }
+typedef t_singleton<cTimer> timer_s;
+inline cTimer& timer() {
+    return timer_s::instance();
+}
 
-#endif//_TIMER_H_
+#endif  //_TIMER_H_

@@ -21,35 +21,33 @@
 #ifndef _ROMINFOWND_H_
 #define _ROMINFOWND_H_
 
-#include "form.h"
-#include "formdesc.h"
-#include "spinbox.h"
-#include "statictext.h"
-#include "message.h"
 #include <string>
 #include "dsrom.h"
+#include "form.h"
+#include "formdesc.h"
+#include "message.h"
 #include "settingwnd.h"
+#include "spinbox.h"
+#include "statictext.h"
 
-class cRomInfoWnd : public akui::cForm
-{
-public:
-    cRomInfoWnd( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cRomInfoWnd : public akui::cForm {
+  public:
+    cRomInfoWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cRomInfoWnd();
 
-public:
-
+  public:
     void draw();
 
-    bool process( const akui::cMessage & msg );
+    bool process(const akui::cMessage& msg);
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-    void setFileInfo( const std::string & fullName, const std::string & showName );
+    void setFileInfo(const std::string& fullName, const std::string& showName);
 
-    void setRomInfo( const DSRomInfo & romInfo );
+    void setRomInfo(const DSRomInfo& romInfo);
 
-    const DSRomInfo & getRomInfo();
+    const DSRomInfo& getRomInfo();
 
     void setSaves(const std::vector<std::string>* saves);
 
@@ -57,8 +55,7 @@ public:
 
     static void showCheats(const std::string& aFileName);
 
-protected:
-
+  protected:
     void pressFlash(void);
 
     void pressSaveType(void);
@@ -67,7 +64,7 @@ protected:
 
     void pressCheats(void);
 
-    bool processKeyMessage( const akui::cKeyMessage & msg );
+    bool processKeyMessage(const akui::cKeyMessage& msg);
 
     void onOK();
 
@@ -108,7 +105,4 @@ protected:
     const std::vector<std::string>* _saves;
 };
 
-
-
-
-#endif//_ROMINFOWND_H_
+#endif  //_ROMINFOWND_H_

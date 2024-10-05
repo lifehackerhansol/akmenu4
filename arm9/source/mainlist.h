@@ -22,29 +22,22 @@
 #define _MAINLIST_H_
 
 #include <nds.h>
+#include "dsrom.h"
+#include "keymessage.h"
 #include "listview.h"
 #include "sigslot.h"
-#include "keymessage.h"
 #include "touchmessage.h"
-#include "dsrom.h"
 #include "zoomingicon.h"
 
 #define SD_ROOT_0 "fat:"
-#define SD_ROOT SD_ROOT_0"/"
+#define SD_ROOT SD_ROOT_0 "/"
 
 // 显示游戏列表，文件列表等等
-class cMainList : public akui::cListView
-{
-public:
+class cMainList : public akui::cListView {
+  public:
+    enum VIEW_MODE { VM_LIST = 0, VM_ICON, VM_INTERNAL };
 
-    enum VIEW_MODE
-    {
-        VM_LIST = 0,
-        VM_ICON,
-        VM_INTERNAL
-    };
-
-    enum //COLUMN_LIST
+    enum  // COLUMN_LIST
     {
         ICON_COLUMN = 0,
         SHOWNAME_COLUMN = 1,
@@ -54,17 +47,15 @@ public:
         FILESIZE_COLUMN = 5
     };
 
-public:
-
-    cMainList( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+  public:
+    cMainList(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cMainList();
 
-public:
-
+  public:
     int init();
 
-    bool enterDir( const std::string & dirName );
+    bool enterDir(const std::string& dirName);
 
     void backParentDir();
 
@@ -72,11 +63,11 @@ public:
 
     std::string getCurrentDir();
 
-    bool getRomInfo( u32 rowIndex, DSRomInfo & info ) const;
+    bool getRomInfo(u32 rowIndex, DSRomInfo& info) const;
 
-    void setRomInfo( u32 rowIndex, const DSRomInfo & info );
+    void setRomInfo(u32 rowIndex, const DSRomInfo& info);
 
-    void setViewMode( VIEW_MODE mode );
+    void setViewMode(VIEW_MODE mode);
 
     std::string getSelectedFullPath();
 
@@ -86,52 +77,45 @@ public:
 
     void arrangeIcons();
 
-    akui::Signal1< u32 > selectedRowHeadClicked;
+    akui::Signal1<u32> selectedRowHeadClicked;
 
     akui::Signal0 directoryChanged;
 
-    akui::Signal1< bool& > animateIcons;
+    akui::Signal1<bool&> animateIcons;
 
-public:
-
+  public:
     bool IsFavorites(void);
 
     void SwitchShowAllFiles(void);
 
     const std::vector<std::string>* Saves(void);
 
-protected:
-
+  protected:
     void draw();
 
-    void drawIcons();                        // 直接画家算法画 icons
+    void drawIcons();  // 直接画家算法画 icons
 
-    enum {
-        POSITION = 0,
-        CONTENT = 1
-    };
+    enum { POSITION = 0, CONTENT = 1 };
 
-    void updateActiveIcon( bool updateContent );  // 更新活动图标的坐标等等
+    void updateActiveIcon(bool updateContent);  // 更新活动图标的坐标等等
 
     void updateInternalNames(void);
 
-protected:
+  protected:
+    void onSelectedRowClicked(u32 index);
 
-    void onSelectedRowClicked( u32 index );
+    void onSelectChanged(u32 index);
 
-    void onSelectChanged( u32 index );
+    void onScrolled(u32 index);
 
-    void onScrolled( u32 index );
-
-protected:
-
+  protected:
     VIEW_MODE _viewMode;
 
     std::string _currentDir;
 
-    std::vector< std::string > _extnameFilter;
+    std::vector<std::string> _extnameFilter;
 
-    std::vector< DSRomInfo > _romInfoList;
+    std::vector<DSRomInfo> _romInfoList;
 
     cZoomingIcon _activeIcon;
 
@@ -139,16 +123,16 @@ protected:
 
     bool _showAllFiles;
 
-    std::vector< std::string > _saves;
+    std::vector<std::string> _saves;
 
-protected:
+  protected:
     u32 _topCount;
     u32 _topuSD;
     u32 _topSlot2;
     u32 _topFavorites;
-public:
-    u32 Slot2(void) {return _topSlot2;}
+
+  public:
+    u32 Slot2(void) { return _topSlot2; }
 };
 
-
-#endif//_MAINLIST_H_
+#endif  //_MAINLIST_H_

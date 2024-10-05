@@ -21,37 +21,30 @@
 #ifndef _PROGRESSBAR_H_
 #define _PROGRESSBAR_H_
 
-
-#include "ui.h"
 #include "bmp15.h"
+#include "ui.h"
 
-namespace akui
-{
+namespace akui {
 
-class cProgressBar : public cWindow
-{
-public:
-
-    cProgressBar( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cProgressBar : public cWindow {
+  public:
+    cProgressBar(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cProgressBar();
 
-public:
-
+  public:
     void draw();
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-    void setPercent( u8 percent );
+    void setPercent(u8 percent);
 
-protected:
-
+  protected:
     u8 _percent;
 
     cBMP15 _barBmp;
-
 };
 
-}
+}  // namespace akui
 
-#endif//_PROGRESSBAR_H_
+#endif  //_PROGRESSBAR_H_

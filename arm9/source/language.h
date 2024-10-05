@@ -21,30 +21,29 @@
 #ifndef _LANGUAGE_H_
 #define _LANGUAGE_H_
 
+#include "dbgtool.h"
+#include "globalsettings.h"
 #include "inifile.h"
 #include "singleton.h"
-#include "systemfilenames.h"
-#include "globalsettings.h"
 #include "stringtool.h"
-#include "dbgtool.h"
+#include "systemfilenames.h"
 #include "timetool.h"
 
-
-class cLanguageFile : public CIniFile
-{
+class cLanguageFile : public CIniFile {
   public:
-    cLanguageFile()
-    {
-      m_bReadOnly=true;
-      LoadIniFile(SFN_LANGUAGE_TEXT);
+    cLanguageFile() {
+        m_bReadOnly = true;
+        LoadIniFile(SFN_LANGUAGE_TEXT);
     }
-    ~cLanguageFile() {};
+    ~cLanguageFile(){};
 };
 
 typedef t_singleton<cLanguageFile> languageFile_s;
-inline cLanguageFile& lang() {return languageFile_s::instance();}
-#define LANG(i,t) lang().GetString(i,t,t)
+inline cLanguageFile& lang() {
+    return languageFile_s::instance();
+}
+#define LANG(i, t) lang().GetString(i, t, t)
 
-bool stringComp(const std::string& item1,const std::string& item2);
+bool stringComp(const std::string& item1, const std::string& item2);
 
-#endif//_LANGUAGE_H_
+#endif  //_LANGUAGE_H_

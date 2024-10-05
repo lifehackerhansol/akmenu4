@@ -22,24 +22,19 @@
 #define _AKUI_FORM_H_
 
 #include <list>
+#include "bitmapdesc.h"
 #include "rectangle.h"
 #include "window.h"
-#include "bitmapdesc.h"
 
 namespace akui {
 
-
-class cForm : public cWindow
-{
-
-public:
-
-    cForm( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cForm : public cWindow {
+  public:
+    cForm(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cForm();
 
-public:
-
+  public:
     u32 doModal();
 
     cForm& addChildWindow(cWindow* aWindow);
@@ -50,11 +45,11 @@ public:
 
     void draw();
 
-    //cWindow& loadAppearance(const std::string& aFileName );
+    // cWindow& loadAppearance(const std::string& aFileName );
 
-    bool process( const cMessage & msg );
+    bool process(const cMessage& msg);
 
-    cWindow* windowBelow(const cPoint & p);
+    cWindow* windowBelow(const cPoint& p);
 
     u32 modalRet();
 
@@ -64,8 +59,7 @@ public:
 
     cWindow& disableFocus(void);
 
-protected:
-
+  protected:
     virtual void onOK();
 
     virtual void onCancel();
@@ -74,22 +68,14 @@ protected:
 
     void onMove();
 
-    bool processKeyMessage( const cKeyMessage & msg );
+    bool processKeyMessage(const cKeyMessage& msg);
 
-    std::list< cWindow * > _childWindows;
+    std::list<cWindow*> _childWindows;
 
-    //cFormDesc * _renderDesc;
+    // cFormDesc * _renderDesc;
     u32 _modalRet;
-
-
 };
 
+}  // namespace akui
 
-}
-
-
-
-
-
-
-#endif//_AKUI_FORM_H_
+#endif  //_AKUI_FORM_H_

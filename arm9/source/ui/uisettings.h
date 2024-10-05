@@ -25,20 +25,16 @@
 #include "gdi.h"
 #include "singleton.h"
 
-class cUISettings
-{
-public:
-
+class cUISettings {
+  public:
     cUISettings();
 
     ~cUISettings();
 
-public:
-
+  public:
     void loadSettings();
 
-public:
-
+  public:
     bool showCalendar;
 
     COLOR formFrameColor;
@@ -62,8 +58,12 @@ public:
     u32 thickness;
 };
 
-typedef t_singleton< cUISettings > uiSettings_s;
-inline cUISettings & uiSettings() { return uiSettings_s::instance(); }
-inline cUISettings & uis() { return uiSettings_s::instance(); }
+typedef t_singleton<cUISettings> uiSettings_s;
+inline cUISettings& uiSettings() {
+    return uiSettings_s::instance();
+}
+inline cUISettings& uis() {
+    return uiSettings_s::instance();
+}
 
-#endif//_UISETTINGS_H_
+#endif  //_UISETTINGS_H_

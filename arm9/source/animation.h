@@ -23,17 +23,13 @@
 
 #include "ui.h"
 
-class cAnimation
-{
-
-public:
-
+class cAnimation {
+  public:
     cAnimation();
 
     virtual ~cAnimation();
 
-public:
-
+  public:
     virtual void update() = 0;
 
     void show();
@@ -42,39 +38,32 @@ public:
 
     bool visible() { return _visible; }
 
-protected:
-
+  protected:
     akui::cPoint _position;
     akui::cSize _size;
     bool _visible;
-
 };
 
-class cAnimationManager
-{
-
-public:
-
+class cAnimationManager {
+  public:
     cAnimationManager();
 
     ~cAnimationManager();
 
-public:
-
+  public:
     void update();
 
-    void addAnimation( cAnimation * animation );
+    void addAnimation(cAnimation* animation);
 
-    void removeAnimation( cAnimation * animation );
+    void removeAnimation(cAnimation* animation);
 
-protected:
-
-    std::list< cAnimation * > _animations;
-
+  protected:
+    std::list<cAnimation*> _animations;
 };
 
-typedef t_singleton< cAnimationManager > animationManager_s;
-inline cAnimationManager & animationManager() { return animationManager_s::instance(); }
+typedef t_singleton<cAnimationManager> animationManager_s;
+inline cAnimationManager& animationManager() {
+    return animationManager_s::instance();
+}
 
-
-#endif//_ANIMATION_H_
+#endif  //_ANIMATION_H_

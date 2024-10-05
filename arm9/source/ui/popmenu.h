@@ -23,49 +23,45 @@
 
 #include <nds.h>
 #include <vector>
-#include "point.h"
-#include "window.h"
 #include "form.h"
+#include "point.h"
 #include "sigslot.h"
+#include "window.h"
 
 namespace akui {
 
-class cPopMenu : public cWindow
-{
-public:
-
-    cPopMenu( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cPopMenu : public cWindow {
+  public:
+    cPopMenu(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cPopMenu();
 
-public:
-
+  public:
     void draw();
 
-    bool process( const cMessage & msg );
+    bool process(const cMessage& msg);
 
     // 返回选中的项
     void popup();
 
-    void addItem( size_t index, const std::string & itemText );
+    void addItem(size_t index, const std::string& itemText);
 
-    void removeItem( size_t index );
+    void removeItem(size_t index);
 
     size_t itemCount();
 
     void clearItem();
 
-    Signal1< s16 > itemClicked;
+    Signal1<s16> itemClicked;
 
-protected:
-
+  protected:
     void onShow();
 
-    bool processKeyMessage( const cKeyMessage & msg );
+    bool processKeyMessage(const cKeyMessage& msg);
 
-    bool processTouchMessage( const cTouchMessage & msg );
+    bool processTouchMessage(const cTouchMessage& msg);
 
-    size_t itemBelowPoint( const cPoint & pt );
+    size_t itemBelowPoint(const cPoint& pt);
 
     void drawItems();
 
@@ -73,7 +69,7 @@ protected:
 
     cPoint _itemTopLeftPoint;
 
-    std::vector< std::string > _items;
+    std::vector<std::string> _items;
 
     s16 _selectedItemIndex;
 
@@ -85,9 +81,9 @@ protected:
     COLOR _textHighLightColor;
     COLOR _barColor;
 
-    cBitmapDesc * _renderDesc;
+    cBitmapDesc* _renderDesc;
     bool _skipTouch;
 };
 
-}
-#endif//_POPMENU_H_
+}  // namespace akui
+#endif  //_POPMENU_H_

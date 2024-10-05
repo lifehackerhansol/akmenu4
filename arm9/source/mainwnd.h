@@ -21,42 +21,38 @@
 #ifndef _MAINWND_H_
 #define _MAINWND_H_
 
-#include "form.h"
-#include "mainlist.h"
 #include "button.h"
+#include "form.h"
 #include "keymessage.h"
-#include "touchmessage.h"
-#include "spinbox.h"
+#include "mainlist.h"
 #include "settingwnd.h"
+#include "spinbox.h"
 #include "startmenu.h"
+#include "touchmessage.h"
 
-class cMainWnd : public akui::cForm
-{
-public:
-
-    cMainWnd( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cMainWnd : public akui::cForm {
+  public:
+    cMainWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cMainWnd();
 
-public:
+  public:
+    bool process(const akui::cMessage& msg);
 
-    bool process( const akui::cMessage & msg );
-
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
     void init();
 
     void draw();
 
-    cWindow* windowBelow(const akui::cPoint & p);
+    cWindow* windowBelow(const akui::cPoint& p);
 
-    cMainList * _mainList;
+    cMainList* _mainList;
 
-protected:
+  protected:
+    void onMainListSelItemClicked(u32 index);
 
-    void onMainListSelItemClicked( u32 index );
-
-    void onMainListSelItemHeadClicked( u32 index );
+    void onMainListSelItemHeadClicked(u32 index);
 
     void onKeyAPressed();
 
@@ -66,17 +62,17 @@ protected:
 
     void onKeyYPressed();
 
-    void listSelChange( u32 i );
+    void listSelChange(u32 i);
 
-    void startMenuItemClicked( s16 i );
+    void startMenuItemClicked(s16 i);
 
     void startButtonClicked();
 
     void brightnessButtonClicked();
 
-    bool processKeyMessage( const akui::cKeyMessage & msg );
+    bool processKeyMessage(const akui::cKeyMessage& msg);
 
-    bool processTouchMessage( const akui::cTouchMessage & msg );
+    bool processTouchMessage(const akui::cTouchMessage& msg);
 
     void setParam(void);
 
@@ -90,19 +86,17 @@ protected:
 
     void launchSelected();
 
-    cStartMenu * _startMenu;
+    cStartMenu* _startMenu;
 
-    akui::cButton * _startButton;
+    akui::cButton* _startButton;
 
-    akui::cButton * _brightnessButton;
+    akui::cButton* _brightnessButton;
 
-    akui::cButton * _folderUpButton;
+    akui::cButton* _folderUpButton;
 
-    akui::cStaticText * _folderText;
+    akui::cStaticText* _folderText;
 
     bool _processL;
 };
 
-
-
-#endif//_MAINWND_H_
+#endif  //_MAINWND_H_

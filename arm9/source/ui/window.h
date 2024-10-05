@@ -22,34 +22,30 @@
 #define _AKUI_WINDOW_H_
 
 #include <string>
-#include "userinput.h"
+#include "dbgtool.h"
 #include "gdi.h"
+#include "keymessage.h"
 #include "point.h"
 #include "rectangle.h"
 #include "sigslot.h"
-#include "keymessage.h"
 #include "touchmessage.h"
-#include "dbgtool.h"
+#include "userinput.h"
 
 namespace akui {
 
-class cWindow : public SlotHolder
-{
-public:
-
-    explicit cWindow( cWindow * aParent = 0, const std::string & aText =  "" );
+class cWindow : public SlotHolder {
+  public:
+    explicit cWindow(cWindow* aParent = 0, const std::string& aText = "");
     virtual ~cWindow();
 
-public:
-
-
+  public:
     cWindow& setWindowRectangle(const cRect& rect);
 
     cRect windowRectangle() const;
 
     //! The window text is a string with a context sensitive interpretation. It can be the
     //! label of a button or the title of a frame window etc.
-    const std::string & text() const { return _text; }
+    const std::string& text() const { return _text; }
 
     //! \brief Sets the window text; a string with a context sensitive
     //! interpretation. It can be the label of a button or the title of a
@@ -66,7 +62,10 @@ public:
     const cPoint& position() const { return _position; }
 
     const cPoint& relativePosition() const { return _relative_position; }
-    cWindow& setRelativePosition(const cPoint& rPosition) {_relative_position = rPosition;return *this;}
+    cWindow& setRelativePosition(const cPoint& rPosition) {
+        _relative_position = rPosition;
+        return *this;
+    }
 
     //! sets the position of the window in app window coords
     cWindow& setPosition(const cPoint& aPosition);
@@ -80,15 +79,14 @@ public:
     //! removes the focus from this window
     cWindow& disableFocused();
 
-public:
-
+  public:
     //! \brief Returns a pointer to the window below the passed in point
     //!
     //! The window manager calls this on top level windows to determine
     //! which window is currently below the mouse cursor. Each derived class
     //! which has child windows must overwrite this and pass the call on to
     //! the children.
-    virtual cWindow* windowBelow(const cPoint & p);
+    virtual cWindow* windowBelow(const cPoint& p);
 
     //! makes the window visible \sa hide
     cWindow& show();
@@ -112,28 +110,29 @@ public:
     //! returns a pointer to this window's parent
     cWindow* parent() const { return _parent; }
 
-    void setParent(cWindow* parent) {_parent = parent;}
+    void setParent(cWindow* parent) { _parent = parent; }
 
     //! Loads a descriptor for this individual window instance from an xml file
-    virtual cWindow& loadAppearance(const std::string& aFileName ) = 0;
+    virtual cWindow& loadAppearance(const std::string& aFileName) = 0;
 
     virtual void update() {}
 
-    virtual bool process( const cMessage & msg );
+    virtual bool process(const cMessage& msg);
 
     bool isFocusable() { return _isFocusable; }
 
-    virtual cWindow& disableFocus(void) { _isFocusable = false; return*this; }
+    virtual cWindow& disableFocus(void) {
+        _isFocusable = false;
+        return *this;
+    }
 
     cWindow& render();
 
-    void setEngine( GRAPHICS_ENGINE engine ) { _engine = engine; }
+    void setEngine(GRAPHICS_ENGINE engine) { _engine = engine; }
 
     GRAPHICS_ENGINE selectedEngine() { return _engine; }
 
-
-protected:
-
+  protected:
     virtual void draw() = 0;
 
     //! \brief called when the window is shown, derived classes can override this to
@@ -142,45 +141,46 @@ protected:
 
     //! \brief called when the window is hidden, derived classes can override this to
     //! react to the window being hidden
-    virtual void onHide() { /*dbg_printf("%s default onHide()\n", _text.c_str() );*/ }
+    virtual void onHide() { /*dbg_printf("%s default onHide()\n", _text.c_str() );*/
+    }
 
     //! Called when the window receives the focus
-    virtual void onGainedFocus() { /*dbg_printf("%s get FOCUS\n", _text.c_str() );*/ }
+    virtual void onGainedFocus() { /*dbg_printf("%s get FOCUS\n", _text.c_str() );*/
+    }
 
     //! Called when the window loses the focus
-    virtual void onLostFocus() { dbg_printf("%s lost FOCUS\n", _text.c_str() ); }
+    virtual void onLostFocus() { dbg_printf("%s lost FOCUS\n", _text.c_str()); }
 
     //! \brief called when the window is resized, derived classes can override this to
     //! react to the window size changing
-    virtual void onResize() { /*dbg_printf("%s on resize\n", _text.c_str() );*/ }
+    virtual void onResize() { /*dbg_printf("%s on resize\n", _text.c_str() );*/
+    }
 
     //! \brief called when the window is moved, derived classes can override this to
     //! react to the window position changing
-    virtual void onMove() { /*dbg_printf("%s on move\n", _text.c_str() ); */}
+    virtual void onMove() { /*dbg_printf("%s on move\n", _text.c_str() ); */
+    }
 
     //! \brief called when the window text changes, derived classes can override this to
     //! react to the window text changing
     virtual void onTextChanged() {}
 
+  protected:
+    cWindow* _parent;  //!< The window's parent (or 0 if this window has no parent)
 
-protected:
-
-    cWindow * _parent;                //!< The window's parent (or 0 if this window has no parent)
-
-    //MessageListeners messageListeners_; //!< The message listeners attached to this window
+    // MessageListeners messageListeners_; //!< The message listeners attached to this window
 
     std::string _text;          //!< The window text
-    cSize _size;        //!< The size of the window
-    cPoint _position;    //!< The position of the window
-    cPoint _relative_position;    //!< The position of the window
+    cSize _size;                //!< The size of the window
+    cPoint _position;           //!< The position of the window
+    cPoint _relative_position;  //!< The position of the window
     bool _isVisible;            //!< The visiblility flag
     bool _isSizeSetByUser;      //!< Whether the user has explicitly set the window's size
     bool _isFocusable;
 
-protected:
-
+  protected:
     GRAPHICS_ENGINE _engine;
 };
 
-}
-#endif//_AKUI_WINDOW_H_
+}  // namespace akui
+#endif  //_AKUI_WINDOW_H_

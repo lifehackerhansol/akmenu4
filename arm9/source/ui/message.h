@@ -21,26 +21,23 @@
 #ifndef _AKUI_MESSAGE_H_
 #define _AKUI_MESSAGE_H_
 
-namespace akui
-{
+namespace akui {
 
-class cMessage
-{
+class cMessage {
     // ---------------------------------------------------------------------------------------------
     //  public enumerations
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! all possible messages have a unique id
-    enum Id
-    {
+    enum Id {
         keyMessageStart = 0,
-        keyDown,        //!< \sa KeyMessage
-        keyUp,            //!< \sa KeyMessage
+        keyDown,  //!< \sa KeyMessage
+        keyUp,    //!< \sa KeyMessage
         keyMessageEnd,
         touchMessageStart,
-        touchMove,        //!< \sa TouchMessage
-        touchDown,        //!< \sa TouchMessage
-        touchUp,        //!< \sa TouchMessage
+        touchMove,  //!< \sa TouchMessage
+        touchDown,  //!< \sa TouchMessage
+        touchUp,    //!< \sa TouchMessage
         touchMessageEnd
         // more to come...
     };
@@ -48,31 +45,27 @@ public:
     // ---------------------------------------------------------------------------------------------
     //  Construction / Destruction
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! constructor requires id
     cMessage(Id anId) : _id(anId) {}
 
     //! destructor
     virtual ~cMessage() {}
 
-
     // ---------------------------------------------------------------------------------------------
     //  Accessors
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! returns the id of the message
     Id id() const { return _id; }
-
 
     // ---------------------------------------------------------------------------------------------
     //  Implementation
     // ---------------------------------------------------------------------------------------------
-protected:
+  protected:
     Id _id;
 };
 
+}  // namespace akui
 
-
-}
-
-#endif//_AKUI_MESSAGE_H_
+#endif  //_AKUI_MESSAGE_H_

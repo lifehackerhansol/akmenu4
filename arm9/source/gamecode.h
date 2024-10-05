@@ -19,6 +19,10 @@
 #ifndef __GAMECODE_H__
 #define __GAMECODE_H__
 
-inline u32 gamecode(const char* aGameCode) {u32 gameCode; memcpy(&gameCode,aGameCode,sizeof(gameCode)); return gameCode;}
+inline u32 gamecode(const char* aGameCode) {
+    u32 gameCode;
+    memcpy(&gameCode, aGameCode, sizeof(gameCode));
+    return gameCode;
+}
 
 #endif

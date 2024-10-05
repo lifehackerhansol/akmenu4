@@ -23,27 +23,23 @@
 
 #include "popmenu.h"
 
-#define START_MENU_ITEM_SETTING      0
-#define START_MENU_ITEM_INFO         1
-#define START_MENU_ITEM_HELP         2
-#define START_MENU_ITEM_TOOLS        3
+#define START_MENU_ITEM_SETTING 0
+#define START_MENU_ITEM_INFO 1
+#define START_MENU_ITEM_HELP 2
+#define START_MENU_ITEM_TOOLS 3
 
-class cStartMenu : public akui::cPopMenu
-{
-public:
-
-    cStartMenu( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text ) :
-      cPopMenu( x, y, w, h, parent, text )
-    {}
+class cStartMenu : public akui::cPopMenu {
+  public:
+    cStartMenu(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text)
+        : cPopMenu(x, y, w, h, parent, text) {}
 
     ~cStartMenu() {}
 
     void init();
 
-    bool process( const akui::cMessage & msg );
+    bool process(const akui::cMessage& msg);
 
-    cWindow& loadAppearance(const std::string& aFileName );
-
+    cWindow& loadAppearance(const std::string& aFileName);
 };
 
-#endif//_STARTMENU_H_
+#endif  //_STARTMENU_H_

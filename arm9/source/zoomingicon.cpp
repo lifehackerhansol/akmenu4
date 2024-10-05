@@ -21,86 +21,72 @@
 #include "zoomingicon.h"
 #include "gdi.h"
 
-
-
-cZoomingIcon::cZoomingIcon()
-{
+cZoomingIcon::cZoomingIcon() {
     _x = 0;
     _y = 0;
     _scale = 1.f;
     _needUpdateBuffer = false;
 
-    _sprite.init( 0 );
-    _sprite.setPriority( 1 );
-    _sprite.setAlpha( 15 );
+    _sprite.init(0);
+    _sprite.setPriority(1);
+    _sprite.setAlpha(15);
     _sprite.show();
 }
 
-cZoomingIcon::~cZoomingIcon()
-{}
+cZoomingIcon::~cZoomingIcon() {}
 
-void cZoomingIcon::setScale( float scale )
-{
+void cZoomingIcon::setScale(float scale) {
     _scale = scale;
 }
 
-void cZoomingIcon::setPosition( u8 x, u8 y )
-{
+void cZoomingIcon::setPosition(u8 x, u8 y) {
     _x = x;
     _y = y;
 }
 
-void cZoomingIcon::setBufferChanged()
-{
+void cZoomingIcon::setBufferChanged() {
     _needUpdateBuffer = true;
 }
 
-void cZoomingIcon::update()
-{
+void cZoomingIcon::update() {
     static float scaleFactor = 0.015;
-    if( _visible ) {
+    if (_visible) {
         _scale += scaleFactor;
-        if( _scale > 1.2 || _scale < 0.9  )
-            scaleFactor *= -1;
-        _sprite.setScale( _scale, _scale );
-        if( !_sprite.visible() )
-            _sprite.show();
+        if (_scale > 1.2 || _scale < 0.9) scaleFactor *= -1;
+        _sprite.setScale(_scale, _scale);
+        if (!_sprite.visible()) _sprite.show();
     } else {
         _scale = 1.0;
         scaleFactor = 0.015;
-        _sprite.setScale( 1.f, 1.f );
-        if( _sprite.visible() )
-            _sprite.hide();
+        _sprite.setScale(1.f, 1.f);
+        if (_sprite.visible()) _sprite.hide();
     }
 
-    _sprite.setScale( _scale, _scale );
-    _sprite.setPosition( _x, _y );
+    _sprite.setScale(_scale, _scale);
+    _sprite.setPosition(_x, _y);
 
-    if( _needUpdateBuffer ) {
-        DC_FlushRange(_buffer,32*32*2);
-        dmaCopy( _buffer, _sprite.buffer(), 32 * 32 * 2 );
-        DC_InvalidateRange(_sprite.buffer(),32*32*2);
+    if (_needUpdateBuffer) {
+        DC_FlushRange(_buffer, 32 * 32 * 2);
+        dmaCopy(_buffer, _sprite.buffer(), 32 * 32 * 2);
+        DC_InvalidateRange(_sprite.buffer(), 32 * 32 * 2);
         _needUpdateBuffer = false;
     }
 }
 
-void cZoomingIcon::show()
-{
-    if( !_visible ) {
+void cZoomingIcon::show() {
+    if (!_visible) {
         _visible = true;
-        gdi().maskBlt( _buffer, _x, _y, 32, 32, GE_MAIN ); // sprite only available on main engine
+        gdi().maskBlt(_buffer, _x, _y, 32, 32, GE_MAIN);  // sprite only available on main engine
     }
 }
 
-void cZoomingIcon::hide()
-{
-    if( _visible ) {
+void cZoomingIcon::hide() {
+    if (_visible) {
         _visible = false;
-        gdi().maskBlt( _buffer, _x, _y, 32, 32, GE_MAIN ); // sprite only available on main engine
+        gdi().maskBlt(_buffer, _x, _y, 32, 32, GE_MAIN);  // sprite only available on main engine
     }
 }
 
-void cZoomingIcon::reset()
-{
+void cZoomingIcon::reset() {
     _scale = 1.f;
 }

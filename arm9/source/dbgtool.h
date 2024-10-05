@@ -22,57 +22,53 @@
 #define _DBG_TOOL_H_
 
 #include <nds.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 
 //#define DEBUG
 
 #ifdef DEBUG
-static inline int dbg_printf( const char* format, ... )
-{
+static inline int dbg_printf(const char* format, ...) {
     va_list args;
-    va_start( args, format );
-    int ret = vprintf( format, args );
+    va_start(args, format);
+    int ret = vprintf(format, args);
     va_end(args);
     return ret;
 }
 #else
 #define dbg_printf(...)
-#endif//DEBUG
-
+#endif  // DEBUG
 
 #ifdef DEBUG
-static inline void _cwl(const char *file,int line)
-{
-  const char *seek=file;
+static inline void _cwl(const char* file, int line) {
+    const char* seek = file;
 
-  while(*seek!=0){
-    if(*seek=='/') file=seek;
-    seek++;
-  }
-  dbg_printf("%s(%d)\n",file,line);
+    while (*seek != 0) {
+        if (*seek == '/') file = seek;
+        seek++;
+    }
+    dbg_printf("%s(%d)\n", file, line);
 }
-#define cwl(); _cwl( __FILE__, __LINE__ );
+#define cwl() \
+    ;         \
+    _cwl(__FILE__, __LINE__);
 #else
 #define cwl()
-#endif//DEBUG
+#endif  // DEBUG
 
 #ifdef DEBUG
-static inline void wait_press_b()
-{
+static inline void wait_press_b() {
     dbg_printf("\npress B to continue.\n");
     scanKeys();
     u16 keys_up = 0;
-    while( 0 == (keys_up & KEY_B) )
-    {
+    while (0 == (keys_up & KEY_B)) {
         scanKeys();
         keys_up = keysUp();
     }
 }
 #else
 #define wait_press_b()
-#endif//DEBUG
+#endif  // DEBUG
 
-
-#endif//_DBG_TOOL_H_
+#endif  //_DBG_TOOL_H_

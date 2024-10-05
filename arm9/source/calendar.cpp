@@ -19,19 +19,18 @@
 */
 
 #include "calendar.h"
+#include "../../share/memtool.h"
+#include "globalsettings.h"
+#include "inifile.h"
+#include "stringtool.h"
 #include "systemfilenames.h"
 #include "windowmanager.h"
-#include "inifile.h"
-#include "globalsettings.h"
-#include "stringtool.h"
-#include "../../share/memtool.h"
 
 using namespace akui;
 
-cCalendar::cCalendar() : cWindow( NULL, "calendar" )
-{
-    _size = cSize( 0, 0 );
-    _position = cPoint( 134, 34 );
+cCalendar::cCalendar() : cWindow(NULL, "calendar") {
+    _size = cSize(0, 0);
+    _position = cPoint(134, 34);
     _engine = GE_SUB;
 
     _showYear = false;
@@ -40,121 +39,112 @@ cCalendar::cCalendar() : cWindow( NULL, "calendar" )
     _showDay = false;
 }
 
-void cCalendar::init()
-{
-    loadAppearance( SFN_UI_SETTINGS );
+void cCalendar::init() {
+    loadAppearance(SFN_UI_SETTINGS);
 }
 
-cWindow& cCalendar::loadAppearance(const std::string& aFileName )
-{
+cWindow& cCalendar::loadAppearance(const std::string& aFileName) {
     // load day number
-    _dayNumbers = createBMP15FromFile( SFN_DAY_NUMBERS );
+    _dayNumbers = createBMP15FromFile(SFN_DAY_NUMBERS);
 
     // load year number
-    _yearNumbers = createBMP15FromFile( SFN_YEAR_NUMBERS );
+    _yearNumbers = createBMP15FromFile(SFN_YEAR_NUMBERS);
 
-    CIniFile ini( aFileName );
-    _dayPosition.x = ini.GetInt( "calendar day", "x", 134 );
-    _dayPosition.y = ini.GetInt( "calendar day", "y", 34 );
-    _daySize.x = ini.GetInt( "calendar day", "dw", 16 );
-    _daySize.y = ini.GetInt( "calendar day", "dh", 14 );
-    _dayHighlightColor = ini.GetInt( "calendar day", "highlightColor", 0xfc00 );
-    _showDay = ini.GetInt( "calendar day", "show", _showDay );
+    CIniFile ini(aFileName);
+    _dayPosition.x = ini.GetInt("calendar day", "x", 134);
+    _dayPosition.y = ini.GetInt("calendar day", "y", 34);
+    _daySize.x = ini.GetInt("calendar day", "dw", 16);
+    _daySize.y = ini.GetInt("calendar day", "dh", 14);
+    _dayHighlightColor = ini.GetInt("calendar day", "highlightColor", 0xfc00);
+    _showDay = ini.GetInt("calendar day", "show", _showDay);
 
-    _dayxPosition.x = ini.GetInt( "calendar dayx", "x", 0 );
-    _dayxPosition.y = ini.GetInt( "calendar dayx", "y", 28 );
-    _showDayX = ini.GetInt( "calendar dayx", "show", _showDayX );
+    _dayxPosition.x = ini.GetInt("calendar dayx", "x", 0);
+    _dayxPosition.y = ini.GetInt("calendar dayx", "y", 28);
+    _showDayX = ini.GetInt("calendar dayx", "show", _showDayX);
 
-    _monthPosition.x = ini.GetInt( "calendar month", "x", 12 );
-    _monthPosition.y = ini.GetInt( "calendar month", "y", 28 );
-    _showMonth = ini.GetInt( "calendar month", "show", _showMonth );
+    _monthPosition.x = ini.GetInt("calendar month", "x", 12);
+    _monthPosition.y = ini.GetInt("calendar month", "y", 28);
+    _showMonth = ini.GetInt("calendar month", "show", _showMonth);
 
-    _yearPosition.x = ini.GetInt( "calendar year", "x", 52 );
-    _yearPosition.y = ini.GetInt( "calendar year", "y", 28 );
-    _showYear = ini.GetInt( "calendar year", "show", _showYear );
-
+    _yearPosition.x = ini.GetInt("calendar year", "x", 52);
+    _yearPosition.y = ini.GetInt("calendar year", "y", 28);
+    _showYear = ini.GetInt("calendar year", "show", _showYear);
 
     return *this;
 }
 
-#define IS_LEAP(n)  ((!(((n) + 1900) % 400) || (!(((n) + 1900) % 4) && (((n) + 1900) % 100))) != 0)
+#define IS_LEAP(n) ((!(((n) + 1900) % 400) || (!(((n) + 1900) % 4) && (((n) + 1900) % 100))) != 0)
 static u8 daysOfMonth() {
-  return ( 28 | (((IS_LEAP(datetime().year())? 62648028 : 62648012) >> (datetime().month()*2)) & 3) );
+    return (28 |
+            (((IS_LEAP(datetime().year()) ? 62648028 : 62648012) >> (datetime().month() * 2)) & 3));
 }
 
-void cCalendar::drawDayNumber( u8 day )
-{
-    if( day > 31 )
-        return;
+void cCalendar::drawDayNumber(u8 day) {
+    if (day > 31) return;
 
     u8 weekDayOfDay = (((day - 1) % 7) + weekDayOfFirstDay()) % 7;
     u8 x = weekDayOfDay * _daySize.x + _dayPosition.x;
     u8 y = ((day - 1 + weekDayOfFirstDay()) / 7 * _daySize.y) + _dayPosition.y;
-    u8 pitch = _dayNumbers.pitch()>>1;
+    u8 pitch = _dayNumbers.pitch() >> 1;
     u8 w = _dayNumbers.width();
     u8 h = _dayNumbers.height() / 10;
     u8 firstNumber = day / 10;
     u8 secondNumber = day % 10;
 
-    if( day == datetime().day() )
-        gdi().fillRect( _dayHighlightColor, _dayHighlightColor,
-            x-(_daySize.x/2-w), y-(_daySize.y-h)/2, _daySize.x-1, _daySize.y-1, selectedEngine() );
+    if (day == datetime().day())
+        gdi().fillRect(_dayHighlightColor, _dayHighlightColor, x - (_daySize.x / 2 - w),
+                       y - (_daySize.y - h) / 2, _daySize.x - 1, _daySize.y - 1, selectedEngine());
 
-    if( _dayNumbers.valid() ) {
-        gdi().maskBlt( _dayNumbers.buffer() + firstNumber * pitch * h / 2, x, y, w, h, selectedEngine() );
-        gdi().maskBlt( _dayNumbers.buffer() + secondNumber * pitch * h / 2, x+w, y, w, h, selectedEngine() );
+    if (_dayNumbers.valid()) {
+        gdi().maskBlt(_dayNumbers.buffer() + firstNumber * pitch * h / 2, x, y, w, h,
+                      selectedEngine());
+        gdi().maskBlt(_dayNumbers.buffer() + secondNumber * pitch * h / 2, x + w, y, w, h,
+                      selectedEngine());
     }
 }
 
-u8 cCalendar::weekDayOfFirstDay()
-{
-    return (datetime().weekday() + 7 - (( datetime().day() - 1) % 7)) % 7;
+u8 cCalendar::weekDayOfFirstDay() {
+    return (datetime().weekday() + 7 - ((datetime().day() - 1) % 7)) % 7;
 }
 
-void cCalendar::drawNumber( const akui::cPoint& position, u32 index, u32 value )
-{
-    if( !_yearNumbers.valid() )
-        return;
+void cCalendar::drawNumber(const akui::cPoint& position, u32 index, u32 value) {
+    if (!_yearNumbers.valid()) return;
 
     u8 w = _yearNumbers.width();
     u8 h = _yearNumbers.height() / 10;
-    u8 pitch = _yearNumbers.pitch()>>1;
+    u8 pitch = _yearNumbers.pitch() >> 1;
     u8 x = position.x + index * w;
     u8 y = position.y;
 
-    gdi().maskBlt( _yearNumbers.buffer() + value * pitch * h / 2, x, y, w, h, selectedEngine() );
+    gdi().maskBlt(_yearNumbers.buffer() + value * pitch * h / 2, x, y, w, h, selectedEngine());
 }
 
-void cCalendar::drawText( const akui::cPoint& position, u32 value, u32 factor )
-{
+void cCalendar::drawText(const akui::cPoint& position, u32 value, u32 factor) {
     u32 ii = 0;
-    while( true )
-    {
+    while (true) {
         u8 number = value / factor;
         value %= factor;
-        drawNumber( position, ii, number );
+        drawNumber(position, ii, number);
         factor /= 10;
         ii++;
-        if(0 == factor) break;
+        if (0 == factor) break;
     }
 }
 
-void cCalendar::draw()
-{
-    if( _showDay ) {
-        for( u8 i = 1; i <= daysOfMonth(); ++i )
-        {
-            drawDayNumber( i );
+void cCalendar::draw() {
+    if (_showDay) {
+        for (u8 i = 1; i <= daysOfMonth(); ++i) {
+            drawDayNumber(i);
         }
     }
 
-    if( _showDayX ) {
-        drawText( _dayxPosition, datetime().day(), 10 );
+    if (_showDayX) {
+        drawText(_dayxPosition, datetime().day(), 10);
     }
-    if( _showMonth ) {
-        drawText( _monthPosition, datetime().month(), 10 );
+    if (_showMonth) {
+        drawText(_monthPosition, datetime().month(), 10);
     }
-    if( _showYear ) {
-        drawText( _yearPosition, datetime().year(), 1000 );
+    if (_showYear) {
+        drawText(_yearPosition, datetime().year(), 1000);
     }
 }

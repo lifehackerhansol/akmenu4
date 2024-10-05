@@ -21,25 +21,26 @@
 #ifndef __EXPWND_H__
 #define __EXPWND_H__
 
-#include "form.h"
-#include "formdesc.h"
-#include "spinbox.h"
-#include "statictext.h"
-#include "message.h"
 #include <string>
 #include "dsrom.h"
+#include "form.h"
+#include "formdesc.h"
+#include "message.h"
+#include "spinbox.h"
+#include "statictext.h"
 
-class cExpWnd: public akui::cForm
-{
+class cExpWnd : public akui::cForm {
   public:
-    cExpWnd(s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+    cExpWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
     ~cExpWnd();
+
   public:
     void draw();
-    bool process( const akui::cMessage & msg );
-    cWindow& loadAppearance(const std::string& aFileName );
+    bool process(const akui::cMessage& msg);
+    cWindow& loadAppearance(const std::string& aFileName);
+
   protected:
-    bool processKeyMessage( const akui::cKeyMessage & msg );
+    bool processKeyMessage(const akui::cKeyMessage& msg);
     void onOK();
     void onCancel();
     void onRAM();
@@ -55,7 +56,4 @@ class cExpWnd: public akui::cForm
     std::string _romName;
 };
 
-
-
-
-#endif//_HELPWND_H_
+#endif  //_HELPWND_H_

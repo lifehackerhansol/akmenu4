@@ -19,55 +19,48 @@
 */
 
 #include "irqs.h"
-#include "dbgtool.h"
-#include "userinput.h"
-#include "windowmanager.h"
-#include "diskicon.h"
-#include "calendarwnd.h"
-#include "calendar.h"
-#include "bigclock.h"
-#include "timer.h"
 #include "animation.h"
+#include "bigclock.h"
+#include "calendar.h"
+#include "calendarwnd.h"
+#include "dbgtool.h"
+#include "diskicon.h"
+#include "timer.h"
+#include "userinput.h"
 #include "userwnd.h"
+#include "windowmanager.h"
 
 using namespace akui;
 
-
 bool cIRQ::_vblankStarted(false);
 
-void cIRQ::init()
-{
-    irqSet( IRQ_VBLANK, vBlank );
-    irqSet( IRQ_CARD_LINE, cardMC );
+void cIRQ::init() {
+    irqSet(IRQ_VBLANK, vBlank);
+    irqSet(IRQ_CARD_LINE, cardMC);
 }
 
-void cIRQ::cardMC()
-{
+void cIRQ::cardMC() {
     dbg_printf("cardMC\n");
     diskIcon().blink();
     REG_IF &= ~IRQ_CARD_LINE;
 }
 
-void cIRQ::vblankStart()
-{
+void cIRQ::vblankStart() {
     _vblankStarted = true;
 }
 
-void cIRQ::vblankStop()
-{
+void cIRQ::vblankStop() {
     _vblankStarted = false;
 }
 
-void cIRQ::vBlank()
-{
-    if( !_vblankStarted )
-        return;
+void cIRQ::vBlank() {
+    if (!_vblankStarted) return;
 
     timer().updateTimer();
 
     static u32 vBlankCounter = 0;
 
-    if( vBlankCounter++ > 30 ) {
+    if (vBlankCounter++ > 30) {
         vBlankCounter = 0;
         bigClock().blinkColon();
         calendarWnd().draw();
@@ -81,12 +74,12 @@ void cIRQ::vBlank()
         gdi().textOut( 40, 178, fpsText, GE_SUB );
 #endif
 
-        gdi().present( GE_SUB );
+        gdi().present(GE_SUB);
     }
 
     animationManager().update();
 
-    if( REG_ROMCTRL & CARD_BUSY )
+    if (REG_ROMCTRL & CARD_BUSY)
         diskIcon().turnOn();
     else
         diskIcon().turnOff();

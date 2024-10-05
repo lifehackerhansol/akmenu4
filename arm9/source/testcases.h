@@ -33,12 +33,12 @@ void testWrite();
 
 void testWriteFile();
 
-void testViolenceEEP4Kauto( u32 count );
+void testViolenceEEP4Kauto(u32 count);
 
-void testViolenceEEP512Kauto( u32 count );
+void testViolenceEEP512Kauto(u32 count);
 
-void testViolenceEEP8Mauto( u32 count );
+void testViolenceEEP8Mauto(u32 count);
 
 void testEEPReadStatus();
 
-#endif//_TESTCASES_H_
+#endif  //_TESTCASES_H_

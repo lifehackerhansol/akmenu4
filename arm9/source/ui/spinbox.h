@@ -21,50 +21,43 @@
 #ifndef _SPINBOX_H_
 #define _SPINBOX_H_
 
-#include "form.h"
-#include "button.h"
-#include "statictext.h"
-#include <vector>
 #include <string>
+#include <vector>
+#include "button.h"
+#include "form.h"
+#include "statictext.h"
 
-namespace akui
-{
+namespace akui {
 
-class cSpinBox : public cForm
-{
-
-public:
-
-    cSpinBox( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cSpinBox : public cForm {
+  public:
+    cSpinBox(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
     ~cSpinBox();
 
-public:
-
+  public:
     void draw();
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
     u32 selectedItemId() { return _selectedItemId; }
 
-    void selectItem( u32 id );
+    void selectItem(u32 id);
 
     void selectNext();
 
     void selectPrev();
 
-    void insertItem( const std::string & item, u32 position );
+    void insertItem(const std::string& item, u32 position);
 
-    void removeItem( u32 position );
+    void removeItem(u32 position);
 
-    void setTextColor( COLOR color );
+    void setTextColor(COLOR color);
 
     void onCmponentClicked();
-    Signal1< cSpinBox * > componentClicked;
+    Signal1<cSpinBox*> componentClicked;
     Signal1<cSpinBox*> changed;
 
-
-protected:
-
+  protected:
     void onResize();
 
     void onMove();
@@ -75,8 +68,7 @@ protected:
 
     void arrangeText();
 
-protected:
-
+  protected:
     COLOR _focusedColor;
     COLOR _normalColor;
     COLOR _frameColor;
@@ -84,9 +76,9 @@ protected:
     cButton _nextButton;
     cStaticText _itemText;
     u32 _selectedItemId;
-    std::vector< std::string > _items;
+    std::vector<std::string> _items;
 };
 
-}
+}  // namespace akui
 
-#endif//_SPINBOX_H_
+#endif  //_SPINBOX_H_

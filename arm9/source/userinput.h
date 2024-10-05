@@ -23,12 +23,10 @@
 
 #include <nds.h>
 
-typedef struct T_INPUT
-{
-    struct touchPositionRelative
-    {
-      s16 px;
-      s16 py;
+typedef struct T_INPUT {
+    struct touchPositionRelative {
+        s16 px;
+        s16 py;
     };
     u32 keysHeld;
     u32 keysUp;
@@ -40,27 +38,20 @@ typedef struct T_INPUT
     bool touchUp;
     bool touchHeld;
     bool touchMoved;
-    bool operator==( const T_INPUT & src ) {
-        return keysHeld == src.keysHeld
-            && keysUp == src.keysUp
-            && keysDown == src.keysDown
-            && keysDownRepeat == src.keysDownRepeat
-            && touchPt.px == src.touchPt.px
-            && touchPt.py == src.touchPt.py
-            && movedPt.px == src.movedPt.px
-            && movedPt.py == src.movedPt.py
-            && touchDown == src.touchDown
-            && touchUp == src.touchUp
-            && touchHeld == src.touchHeld
-            && touchMoved == src.touchMoved;
+    bool operator==(const T_INPUT& src) {
+        return keysHeld == src.keysHeld && keysUp == src.keysUp && keysDown == src.keysDown &&
+               keysDownRepeat == src.keysDownRepeat && touchPt.px == src.touchPt.px &&
+               touchPt.py == src.touchPt.py && movedPt.px == src.movedPt.px &&
+               movedPt.py == src.movedPt.py && touchDown == src.touchDown &&
+               touchUp == src.touchUp && touchHeld == src.touchHeld && touchMoved == src.touchMoved;
     }
 } INPUT;
 
 void initInput();
-INPUT & updateInput();
-INPUT & getInput();
+INPUT& updateInput();
+INPUT& getInput();
 u32 getInputIdleMs();
 void resetInputIdle(void);
-bool processInput( INPUT & inputs  );
+bool processInput(INPUT& inputs);
 
-#endif//_INPUT_H_
+#endif  //_INPUT_H_

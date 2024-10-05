@@ -22,42 +22,35 @@
 #define _BMPWINDOWDESC_H_
 
 #include <string>
-#include "renderdesc.h"
 #include "bmp15.h"
+#include "renderdesc.h"
 
 namespace akui {
 
 // bitmap desc，只负责画背景
-enum BLTMODE
-{
-    BM_BITBLT,
-    BM_MASKBLT
-};
+enum BLTMODE { BM_BITBLT, BM_MASKBLT };
 
-class cBitmapDesc : public cRenderDesc
-{
-public:
+class cBitmapDesc : public cRenderDesc {
+  public:
     cBitmapDesc();
 
     ~cBitmapDesc();
 
-public:
+  public:
+    void setBltMode(BLTMODE bltmode) { _bltmode = bltmode; }
 
-    void setBltMode( BLTMODE bltmode ) { _bltmode = bltmode; }
+    void draw(const cRect& area, GRAPHICS_ENGINE engine) const;
 
-    void draw( const cRect & area, GRAPHICS_ENGINE engine ) const;
-
-    void loadData( const std::string & filename );
+    void loadData(const std::string& filename);
 
     cSize size();
 
-protected:
-
-    cBMP15    _background;
+  protected:
+    cBMP15 _background;
 
     BLTMODE _bltmode;
 };
 
-}
+}  // namespace akui
 
-#endif//_BMPWINDOWDESC_H_
+#endif  //_BMPWINDOWDESC_H_

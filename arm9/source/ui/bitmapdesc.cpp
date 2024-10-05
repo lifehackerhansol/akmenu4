@@ -25,42 +25,34 @@
 namespace akui {
 
 ///////////////////////////////// desc ////////////////
-cBitmapDesc::cBitmapDesc()
-{
+cBitmapDesc::cBitmapDesc() {
     _bltmode = BM_BITBLT;
 }
 
-cBitmapDesc::~cBitmapDesc()
-{
-}
+cBitmapDesc::~cBitmapDesc() {}
 
-void cBitmapDesc::draw( const cRect & area, GRAPHICS_ENGINE engine ) const
-{
-    if( _background.valid() ) {
-        if( BM_BITBLT == _bltmode )
-            gdi().bitBlt( _background.buffer(),
-                area.position().x, area.position().y,
-                _background.width(), _background.height(), engine );
+void cBitmapDesc::draw(const cRect& area, GRAPHICS_ENGINE engine) const {
+    if (_background.valid()) {
+        if (BM_BITBLT == _bltmode)
+            gdi().bitBlt(_background.buffer(), area.position().x, area.position().y,
+                         _background.width(), _background.height(), engine);
         else
-            gdi().maskBlt( _background.buffer(),
-                area.position().x, area.position().y,
-                _background.width(), _background.height(), engine );
+            gdi().maskBlt(_background.buffer(), area.position().x, area.position().y,
+                          _background.width(), _background.height(), engine);
     }
 }
 
-void cBitmapDesc::loadData( const std::string & filename )
-{
-    if( !_background.valid() ) {
-        _background = createBMP15FromFile( filename );
+void cBitmapDesc::loadData(const std::string& filename) {
+    if (!_background.valid()) {
+        _background = createBMP15FromFile(filename);
     }
 }
 
-cSize cBitmapDesc::size()
-{
-    if( _background.valid() )
-        return cSize( _background.width(), _background.height() );
+cSize cBitmapDesc::size() {
+    if (_background.valid())
+        return cSize(_background.width(), _background.height());
     else
-        return cSize(0,0);
+        return cSize(0, 0);
 }
 
-}
+}  // namespace akui

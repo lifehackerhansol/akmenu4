@@ -19,38 +19,27 @@
 */
 
 #include "calendarwnd.h"
-#include "gdi.h"
 #include "bmp15.h"
-#include "systemfilenames.h"
+#include "gdi.h"
 #include "globalsettings.h"
+#include "systemfilenames.h"
 
 using namespace akui;
 
-cCalendarWnd::cCalendarWnd() : cForm( 0, 0, 256, 192, NULL, "calendar window" )
-{
+cCalendarWnd::cCalendarWnd() : cForm(0, 0, 256, 192, NULL, "calendar window") {}
 
+cCalendarWnd::~cCalendarWnd() {}
+
+void cCalendarWnd::init() {
+    setEngine(GE_SUB);
+    loadAppearance(SFN_UPPER_SCREEN_BG);
 }
 
-cCalendarWnd::~cCalendarWnd()
-{
-
-}
-
-void cCalendarWnd::init()
-{
-    setEngine( GE_SUB );
-    loadAppearance( SFN_UPPER_SCREEN_BG );
-}
-
-cWindow& cCalendarWnd::loadAppearance(const std::string& aFileName )
-{
-    _background = createBMP15FromFile( aFileName );
+cWindow& cCalendarWnd::loadAppearance(const std::string& aFileName) {
+    _background = createBMP15FromFile(aFileName);
     return *this;
 }
 
-
-void cCalendarWnd::draw()
-{
-    if( _background.valid() )
-        gdi().bitBlt( _background.buffer(), 0, 0, 256, 192, selectedEngine() );
+void cCalendarWnd::draw() {
+    if (_background.valid()) gdi().bitBlt(_background.buffer(), 0, 0, 256, 192, selectedEngine());
 }

@@ -19,111 +19,97 @@
 */
 
 #include "bigclock.h"
+#include "globalsettings.h"
+#include "inifile.h"
 #include "stringtool.h"
 #include "systemfilenames.h"
 #include "windowmanager.h"
-#include "inifile.h"
-#include "globalsettings.h"
 
 using namespace akui;
 
-cBigClock::cBigClock() : cWindow( NULL, "big clock" )
-{
-    _size = cSize( 0, 0 );
-    _position = cPoint( 8, 80 );
+cBigClock::cBigClock() : cWindow(NULL, "big clock") {
+    _size = cSize(0, 0);
+    _position = cPoint(8, 80);
     _engine = GE_SUB;
     _show = false;
     _colonShow = false;
     _ampmShow = false;
-    _ampmColor = RGB15(17,12,0);
+    _ampmColor = RGB15(17, 12, 0);
 }
 
-void cBigClock::init()
-{
-    loadAppearance( SFN_UI_SETTINGS );
+void cBigClock::init() {
+    loadAppearance(SFN_UI_SETTINGS);
 }
 
-cWindow& cBigClock::loadAppearance(const std::string& aFileName )
-{
-    CIniFile ini( aFileName );
-    _position.x = ini.GetInt( "big clock", "x", 8 );
-    _position.y = ini.GetInt( "big clock", "y", 80 );
-    _show = ini.GetInt( "big clock", "show", _show );
+cWindow& cBigClock::loadAppearance(const std::string& aFileName) {
+    CIniFile ini(aFileName);
+    _position.x = ini.GetInt("big clock", "x", 8);
+    _position.y = ini.GetInt("big clock", "y", 80);
+    _show = ini.GetInt("big clock", "show", _show);
 
-    _ampmPosition.x = ini.GetInt( "am pm", "x", 8 );
-    _ampmPosition.y = ini.GetInt( "am pm", "y", 80 );
-    _ampmShow = ini.GetInt( "am pm", "show", _ampmShow );
-    _ampmColor = ini.GetInt( "am pm", "color", _ampmColor );
+    _ampmPosition.x = ini.GetInt("am pm", "x", 8);
+    _ampmPosition.y = ini.GetInt("am pm", "y", 80);
+    _ampmShow = ini.GetInt("am pm", "show", _ampmShow);
+    _ampmColor = ini.GetInt("am pm", "color", _ampmColor);
 
-    _numbers = createBMP15FromFile( SFN_CLOCK_NUMBERS );
-    _colon = createBMP15FromFile( SFN_CLOCK_COLON );
-
+    _numbers = createBMP15FromFile(SFN_CLOCK_NUMBERS);
+    _colon = createBMP15FromFile(SFN_CLOCK_COLON);
 
     return *this;
 }
 
-void cBigClock::drawNumber( u8 id, u8 number )
-{
-    if( number > 10 )
-        return;
+void cBigClock::drawNumber(u8 id, u8 number) {
+    if (number > 10) return;
 
     u8 x = _position.x + id * (_numbers.width() + 2);
-    if( id > 2 ) {// minute number
+    if (id > 2) {  // minute number
         x -= 8;
     }
-    if( _numbers.valid() )
-    {
+    if (_numbers.valid()) {
         u8 w = _numbers.width();
         u8 h = _numbers.height() / 10;
-        u8 pitch = _numbers.pitch()>>1;
-        gdi().maskBlt( _numbers.buffer() + number * pitch * h / 2, x, _position.y, w, h, selectedEngine() );
+        u8 pitch = _numbers.pitch() >> 1;
+        gdi().maskBlt(_numbers.buffer() + number * pitch * h / 2, x, _position.y, w, h,
+                      selectedEngine());
     }
 }
 
-void cBigClock::drawColon()
-{
+void cBigClock::drawColon() {
     u8 x = _position.x + 2 * _numbers.width();
-    if( _colon.valid() ) {
-        gdi().maskBlt( _colon.buffer(),
-            x, _position.y, _colon.width(), _colon.height(), selectedEngine() );
+    if (_colon.valid()) {
+        gdi().maskBlt(_colon.buffer(), x, _position.y, _colon.width(), _colon.height(),
+                      selectedEngine());
     }
 }
 
-void cBigClock::draw()
-{
-    if( !_show )
-        return;
+void cBigClock::draw() {
+    if (!_show) return;
     u8 hours = datetime().hours();
     u8 minutes = datetime().minutes();
-    const char* ampm=(hours<12)?"AM":"PM";
-    if(gs().show12hrClock)
-    {
-      if(hours>12) hours-=12;
-      if(hours==0) hours=12;
+    const char* ampm = (hours < 12) ? "AM" : "PM";
+    if (gs().show12hrClock) {
+        if (hours > 12) hours -= 12;
+        if (hours == 0) hours = 12;
     }
 
     u8 number1 = hours / 10;
     u8 number2 = hours % 10;
     u8 number3 = minutes / 10;
     u8 number4 = minutes % 10;
-    //u8 number5 = datetime().seconds() / 10;
-    //u8 number6 = datetime().seconds() % 10;
+    // u8 number5 = datetime().seconds() / 10;
+    // u8 number6 = datetime().seconds() % 10;
 
-    drawNumber( 0, number1 );
-    drawNumber( 1, number2 );
-    drawNumber( 3, number3 );
-    drawNumber( 4, number4 );
-    if( _colonShow)
-        drawColon();
-    if(gs().show12hrClock&&_ampmShow)
-    {
-      gdi().setPenColor(_ampmColor,_engine);
-      gdi().textOut(_ampmPosition.x,_ampmPosition.y,ampm,_engine);
+    drawNumber(0, number1);
+    drawNumber(1, number2);
+    drawNumber(3, number3);
+    drawNumber(4, number4);
+    if (_colonShow) drawColon();
+    if (gs().show12hrClock && _ampmShow) {
+        gdi().setPenColor(_ampmColor, _engine);
+        gdi().textOut(_ampmPosition.x, _ampmPosition.y, ampm, _engine);
     }
 }
 
-
-void cBigClock::blinkColon()
-{
+void cBigClock::blinkColon() {
     _colonShow = !_colonShow;
 }

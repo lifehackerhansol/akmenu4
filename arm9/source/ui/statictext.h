@@ -21,35 +21,28 @@
 #ifndef _STATICTEXT_H_
 #define _STATICTEXT_H_
 
-#include "window.h"
 #include "bmp15.h"
+#include "window.h"
 
-namespace akui
-{
+namespace akui {
 
-class cStaticText : public cWindow
-{
-public:
-
-    cStaticText( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cStaticText : public cWindow {
+  public:
+    cStaticText(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cStaticText();
 
-public:
-
+  public:
     void draw();
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-    void setTextColor( COLOR color );
+    void setTextColor(COLOR color);
 
-protected:
-
+  protected:
     COLOR _textColor;
-
 };
 
+}  // namespace akui
 
-}
-
-#endif//_STATICTEXT_H_
+#endif  //_STATICTEXT_H_

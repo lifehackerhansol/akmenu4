@@ -20,27 +20,27 @@
 
 #include <nds.h>
 
-
 #include "singleton.h"
 
 #include "font.h"
-class cFontFactory
-{
-public:
-
+class cFontFactory {
+  public:
     cFontFactory();
 
     ~cFontFactory();
 
     void makeFont(void);
 
-    cFont & font() { return *_font; }
+    cFont& font() { return *_font; }
 
-protected:
-
-    cFont * _font;
+  protected:
+    cFont* _font;
 };
 
-typedef t_singleton< cFontFactory > fontFactory_s;
-inline cFontFactory & fontFactory() { return fontFactory_s::instance(); }
-inline cFont & font() { return fontFactory_s::instance().font(); }
+typedef t_singleton<cFontFactory> fontFactory_s;
+inline cFontFactory& fontFactory() {
+    return fontFactory_s::instance();
+}
+inline cFont& font() {
+    return fontFactory_s::instance().font();
+}

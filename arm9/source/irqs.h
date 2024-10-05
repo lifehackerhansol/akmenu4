@@ -24,17 +24,13 @@
 #include <nds.h>
 #include "singleton.h"
 
-
-class cIRQ
-{
-public:
-
+class cIRQ {
+  public:
     cIRQ() {}
 
     ~cIRQ() {}
 
-public:
-
+  public:
     void init();
 
     void vblankStart();
@@ -46,12 +42,12 @@ public:
     static void vBlank();
 
     static bool _vblankStarted;
-
 };
 
-typedef t_singleton< cIRQ > irq_s;
+typedef t_singleton<cIRQ> irq_s;
 
-inline cIRQ & irq() { return irq_s::instance(); }
+inline cIRQ& irq() {
+    return irq_s::instance();
+}
 
-
-#endif//_IRQS_H_
+#endif  //_IRQS_H_

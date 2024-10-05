@@ -36,6 +36,7 @@
 #include <sys/iosupport.h>
 
 #include "launcher/HomebrewLauncher.h"
+#include "launcher/NdsBootstrapLauncher.h"
 
 using namespace akui;
 

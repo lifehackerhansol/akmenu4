@@ -22,6 +22,8 @@
 #include "systemfilenames.h"
 #include "ui.h"
 
+#include "saves/ROMList.h"
+
 using namespace akui;
 
 cSaveManager::cSaveManager() {}
@@ -221,6 +223,9 @@ SAVE_TYPE cSaveManager::getSaveTypeByFile(const std::string& romFilename) {
     return ST_UNKNOWN;
 }
 
+SAVE_TYPE MelonDSROMListToSaveType[] = {ST_NOSAVE, ST_4K, ST_64K, ST_512K, ST_1M, ST_2M,
+                                        ST_4M,     ST_8M, ST_16M, ST_32M,  ST_64M};
+
 void cSaveManager::updateSaveInfoByInfo(SAVE_INFO_EX& gameInfo) {
     size_t saveCount = _customSaveList.size();
     for (size_t i = 0; i < saveCount; ++i) {
@@ -231,13 +236,17 @@ void cSaveManager::updateSaveInfoByInfo(SAVE_INFO_EX& gameInfo) {
     }
 
     gameInfo.defaults();
-    saveCount = _saveList.size();
-    for (size_t ii = 0; ii < saveCount; ii++) {
-        if (0 == memcmp(&gameInfo, &_saveList[ii], SAVE_INFO_EX_COMPARE_SIZE)) {
-            u8 saveType = _saveList[ii].saveType;
-            if (saveType > ST_UNKNOWN && saveType <= ST_8M)
-                gameInfo.saveType = _saveList[ii].saveType;
-            return;
+    u32 gameCode;
+    memcpy(&gameCode, gameInfo.gameCode, sizeof(gameCode));  // because alignment
+
+    for (size_t i = 0; i < ROMListEntryCount; i++) {
+        const ROMListEntry* entry = &ROMList[i];
+        if (gameCode == entry->GameCode) {
+            if (entry->SaveMemType == 0xFFFFFFFF)
+                gameInfo.saveType = ST_AUTO;
+            else
+                gameInfo.saveType = MelonDSROMListToSaveType[entry->SaveMemType];
+            break;
         }
     }
     return;

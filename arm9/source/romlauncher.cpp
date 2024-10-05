@@ -13,6 +13,7 @@
 
 #include "launcher/HomebrewLauncher.h"
 #include "launcher/ILauncher.h"
+#include "launcher/NdsBootstrapLauncher.h"
 
 static SAVE_TYPE PrefillGame(u32 aGameCode) {
     if (0x45444759 == aGameCode)  // YGDE: 2209 - Diary Girl (USA)
@@ -135,7 +136,6 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
     size_t cheatSize = 0;
     std::string saveName;
     ILauncher* launcher = nullptr;
-#if 0
     if (!aRomInfo.isHomebrew()) {
         u32 gameCode;
         memcpy(&gameCode, aRomInfo.saveInfo().gameCode, sizeof(gameCode));  // because alignment
@@ -167,6 +167,8 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
         }
 
         saveName = cSaveManager::generateSaveName(aFullPath, aRomInfo.saveInfo().getSlot());
+
+        // restore save data only for offical programs
         if (isBigSave) {
             isBigSave = cSaveManager::initializeSaveFile(aFullPath, aRomInfo.saveInfo().getSlot(),
                                                          bigSaveSize);
@@ -174,7 +176,6 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
             flags |= PATCH_SD_SAVE | (bigSaveMask << PATCH_SAVE_SHIFT);
             saveManager().saveLastInfo(aFullPath);
         } else {
-            // restore save data only for offical programs
             SAVE_TYPE st = (SAVE_TYPE)aRomInfo.saveInfo().saveType;
             if (ST_UNKNOWN == st) st = ST_AUTO;
             SAVE_TYPE st_new = PrefillGame(gameCode);
@@ -232,12 +233,9 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
 
         launcher = new NdsBootstrapLauncher();
     } else {
-#endif
-    if (!aMenu) saveManager().saveLastInfo(aFullPath);
-    launcher = new HomebrewLauncher();
-#if 0
+        if (!aMenu) saveManager().saveLastInfo(aFullPath);
+        launcher = new HomebrewLauncher();
     }
-#endif
     launcher->launchRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
     return ELaunchRomOk;
 }

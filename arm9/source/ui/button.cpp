@@ -174,10 +174,8 @@ void cButtonDesc::draw(const cRect& area, GRAPHICS_ENGINE engine) const {
 }
 
 void cButtonDesc::loadData(const std::string& filename) {
-    int width = 40;
     int height = 16;
     if (_button) {
-        width = _button->size().x;
         height = _button->size().y;
     }
 

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FONT_H_
-#define _FONT_H_
+#pragma once
 
 #include <string>
 #include "gdi.h"
@@ -40,5 +39,3 @@ class cFont {
     virtual bool Load(const char* aFileName) = 0;
     virtual u32 FontRAM(void);
 };
-
-#endif  //_FONT_H_

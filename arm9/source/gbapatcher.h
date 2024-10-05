@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GBAPATCHER_H__
-#define __GBAPATCHER_H__
+#pragma once
 
 #include <nds.h>
 #include <setjmp.h>
@@ -148,5 +147,3 @@ class CGbaPatcher {
         return iResultSize;
     };
 };
-
-#endif

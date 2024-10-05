@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SETTINGWND_H_
-#define _SETTINGWND_H_
+#pragma once
 
 #include <string>
 #include "form.h"
@@ -98,5 +97,3 @@ class cSettingWnd : public akui::cForm {
     akui::cFormDesc _renderDesc;
     akui::cButton _buttonY;
 };
-
-#endif  //_SETTINGWND_H_

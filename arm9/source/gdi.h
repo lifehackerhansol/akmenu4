@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _GDI_H_
-#define _GDI_H_
+#pragma once
 
 #include <nds.h>
 #include <vector>
@@ -143,5 +142,3 @@ typedef t_singleton<cGdi> cGdi_s;
 inline cGdi& gdi() {
     return cGdi_s::instance();
 }
-
-#endif  //_GDI_H_

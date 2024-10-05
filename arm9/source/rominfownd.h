@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ROMINFOWND_H_
-#define _ROMINFOWND_H_
+#pragma once
 
 #include <string>
 #include "dsrom.h"
@@ -104,5 +103,3 @@ class cRomInfoWnd : public akui::cForm {
 
     const std::vector<std::string>* _saves;
 };
-
-#endif  //_ROMINFOWND_H_

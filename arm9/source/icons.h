@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ICONS_H__
-#define __ICONS_H__
+#pragma once
 
 #include <nds.h>
 
@@ -25,5 +24,3 @@ class cIcons {
   public:
     static void maskBlt(const u16* aSrc, u16* aDst);
 };
-
-#endif

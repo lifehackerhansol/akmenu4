@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CALENDARWND_H_
-#define _CALENDARWND_H_
+#pragma once
 
 #include <nds.h>
 #include "form.h"
@@ -46,5 +45,3 @@ typedef t_singleton<cCalendarWnd> calendarWnd_s;
 inline cCalendarWnd& calendarWnd() {
     return calendarWnd_s::instance();
 }
-
-#endif  //_CALENDARWND_H_

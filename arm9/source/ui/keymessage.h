@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_KEYMESSAGE_H_
-#define _AKUI_KEYMESSAGE_H_
+#pragma once
 
 #include "message.h"
 
@@ -91,5 +90,3 @@ class cKeyMessage : public cMessage {
 // const unsigned char cKeyMessage::UI_KEY_LID            =    14; //!< Lid state.
 
 }  // namespace akui
-
-#endif  //_AKUI_cKeyMessage_H_

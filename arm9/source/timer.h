@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#pragma once
 
 #include <nds.h>
 #include "singleton.h"
@@ -59,5 +58,3 @@ typedef t_singleton<cTimer> timer_s;
 inline cTimer& timer() {
     return timer_s::instance();
 }
-
-#endif  //_TIMER_H_

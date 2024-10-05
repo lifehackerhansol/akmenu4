@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ANIMATION_H_
-#define _ANIMATION_H_
+#pragma once
 
 #include "ui.h"
 
@@ -65,5 +64,3 @@ typedef t_singleton<cAnimationManager> animationManager_s;
 inline cAnimationManager& animationManager() {
     return animationManager_s::instance();
 }
-
-#endif  //_ANIMATION_H_

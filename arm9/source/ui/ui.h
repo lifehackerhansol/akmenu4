@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_H_
-#define _AKUI_H_
+#pragma once
 
 #include <nds.h>
 #include "../../share/memtool.h"
@@ -60,5 +59,3 @@
 #include "globalsettings.h"
 #include "systemfilenames.h"
 #include "uisettings.h"
-
-#endif  //_AKUI_H_

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _INIFILE_H_
-#define _INIFILE_H_
+#pragma once
 
 #include <map>
 #include <string>
@@ -66,5 +65,3 @@ class CIniFile {
     std::string GetString(const std::string& Section, const std::string& Item);
     int GetInt(const std::string& Section, const std::string& Item);
 };
-
-#endif  // _INIFILE_H_

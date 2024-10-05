@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FONT_PCF_INTERNALS_H__
-#define __FONT_PCF_INTERNALS_H__
+#pragma once
 
 #include <nds.h>
 
@@ -84,5 +83,3 @@ struct SPcfAccel {
     u32 iFontDescent;
     u32 iMaxOverlap;
 };
-
-#endif

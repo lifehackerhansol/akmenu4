@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SPINBOX_H_
-#define _SPINBOX_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -80,5 +79,3 @@ class cSpinBox : public cForm {
 };
 
 }  // namespace akui
-
-#endif  //_SPINBOX_H_

@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __BINARYFIND_H__
-#define __BINARYFIND_H__
+#pragma once
 
 #include <algorithm>
 
@@ -33,5 +32,3 @@ Iterator binary_find(Iterator first, Iterator last, const T& value, Compare cmp)
         return last;
 }
 }  // namespace akui
-
-#endif

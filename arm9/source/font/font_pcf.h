@@ -22,8 +22,7 @@
   supported only fonts with ...
 */
 
-#ifndef __FONT_PCF_H__
-#define __FONT_PCF_H__
+#pragma once
 
 #include "font.h"
 
@@ -81,5 +80,3 @@ class cFontPcf : public cFont {
     void Info(const char* aString, u32* aWidth, u32* aSymbolCount);
     u32 FontRAM(void);
 };
-
-#endif

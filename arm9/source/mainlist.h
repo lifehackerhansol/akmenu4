@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _MAINLIST_H_
-#define _MAINLIST_H_
+#pragma once
 
 #include <nds.h>
 #include "dsrom.h"
@@ -134,5 +133,3 @@ class cMainList : public akui::cListView {
   public:
     u32 Slot2(void) { return _topSlot2; }
 };
-
-#endif  //_MAINLIST_H_

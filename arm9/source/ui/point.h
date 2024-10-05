@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_POINT_H_
-#define _AKUI_POINT_H_
+#pragma once
 
 #include <algorithm>
 
@@ -72,5 +71,3 @@ typedef t_point<float> cPointf;
 typedef t_point<int> cSize;
 
 }  // namespace akui
-
-#endif  //_AKUI_POINT_H_

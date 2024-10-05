@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PROGRESSWND_H_
-#define _PROGRESSWND_H_
+#pragma once
 
 #include "progressbar.h"
 #include "singleton.h"
@@ -64,5 +63,3 @@ typedef t_singleton<akui::cProgressWnd> progressWnd_s;
 inline akui::cProgressWnd& progressWnd() {
     return progressWnd_s::instance();
 }
-
-#endif  //_PROGRESSWND_H_

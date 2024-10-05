@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_LISTVIEW_H_
-#define _AKUI_LISTVIEW_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -181,4 +180,3 @@ class cListView : public cWindow {
 };
 
 }  // namespace akui
-#endif  //_LISTVIEW_H_

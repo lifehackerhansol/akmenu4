@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_BUTTON_H_
-#define _AKUI_BUTTON_H_
+#pragma once
 
 #include "bmp15.h"
 #include "rectangle.h"
@@ -112,5 +111,3 @@ class cButtonDesc : public cRenderDesc {
     COLOR _textColor;
 };
 }  // namespace akui
-
-#endif  //_AKUI_BUTTON_H_

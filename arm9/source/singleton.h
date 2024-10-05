@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SINGLETON_H_
-#define _SINGLETON_H_
+#pragma once
 #include <cstdlib>
 
 template <class T>
@@ -55,5 +54,3 @@ class t_singleton {
 
 template <class T>
 T* t_singleton<T>::_instance = NULL;
-
-#endif  //_AGL_SINGLETON_H_

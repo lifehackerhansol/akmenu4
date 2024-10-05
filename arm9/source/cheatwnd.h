@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CHEATWND_H__
-#define __CHEATWND_H__
+#pragma once
 
 #include "button.h"
 #include "form.h"
@@ -92,5 +91,3 @@ class cCheatWnd : public akui::cForm {
     std::vector<size_t> _indexes;
     std::string _fileName;
 };
-
-#endif

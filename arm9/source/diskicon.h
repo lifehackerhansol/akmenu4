@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DISKICON_H_
-#define _DISKICON_H_
+#pragma once
 
 #include <nds.h>
 #include "singleton.h"
@@ -55,5 +54,3 @@ typedef t_singleton<cDiskIcon> diskIcon_s;
 inline cDiskIcon& diskIcon() {
     return diskIcon_s::instance();
 }
-
-#endif  //_DISKIOICON_H_

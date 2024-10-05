@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _BIGCLOCK_H_
-#define _BIGCLOCK_H_
+#pragma once
 
 #include "bmp15.h"
 #include "datetime.h"
@@ -61,5 +60,3 @@ typedef t_singleton<cBigClock> bigClock_s;
 inline cBigClock& bigClock() {
     return bigClock_s::instance();
 }
-
-#endif  //_BIGCLOCK_H_

@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ZOOMINGICON_H_
-#define _ZOOMINGICON_H_
+#pragma once
 
 #include <nds.h>
 #include "animation.h"
@@ -57,5 +56,3 @@ class cZoomingIcon : public cAnimation {
     float _scale;
     bool _needUpdateBuffer;
 };
-
-#endif  //_ZOOMINGICON_H_

@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROMLAUNCHER_H__
-#define __ROMLAUNCHER_H__
+#pragma once
 
 #include "dsrom.h"
 
@@ -31,5 +30,3 @@ enum TLaunchResult {
 
 TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool aMenu);
 void autoLaunchRom(const std::string& aFullPath);
-
-#endif

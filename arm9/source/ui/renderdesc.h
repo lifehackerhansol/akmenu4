@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_RENDERDESC_H_
-#define _AKUI_RENDERDESC_H_
+#pragma once
 
 #include "gdi.h"
 #include "rectangle.h"
@@ -46,4 +45,3 @@ class cRenderDesc {
 };
 
 }  // namespace akui
-#endif  //_AKUI_RENDERDESC_H_

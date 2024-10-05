@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _AKUI_WINDOWMANAGER_H_
-#define _AKUI_WINDOWMANAGER_H_
+#pragma once
 
 #include <list>
 #include <string>
@@ -72,5 +71,3 @@ inline cWindowManager& windowManager(void) {
     return cWindowManager_s::instance();
 }
 }  // namespace akui
-
-#endif  //_AKUI_WINDOWMANAGER_H_

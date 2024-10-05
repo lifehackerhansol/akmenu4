@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __SRAM_H__
-#define __SRAM_H__
+#pragma once
 
 #include <nds.h>
 #include <stdio.h>
@@ -52,5 +51,3 @@ class cSram {
     static void BlankSram(u16 aStartPage);
     static void NormalizeSize(sSaveInfo& anInfo);
 };
-
-#endif

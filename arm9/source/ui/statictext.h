@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _STATICTEXT_H_
-#define _STATICTEXT_H_
+#pragma once
 
 #include "bmp15.h"
 #include "window.h"
@@ -44,5 +43,3 @@ class cStaticText : public cWindow {
 };
 
 }  // namespace akui
-
-#endif  //_STATICTEXT_H_

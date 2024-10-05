@@ -16,8 +16,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FILEICONS_H__
-#define __FILEICONS_H__
+#pragma once
 
 #include <set>
 #include <vector>
@@ -63,5 +62,3 @@ typedef t_singleton<cFileIcons> fileIcons_s;
 inline cFileIcons& fileIcons() {
     return fileIcons_s::instance();
 }
-
-#endif

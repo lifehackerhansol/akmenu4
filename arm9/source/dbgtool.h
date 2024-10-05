@@ -18,8 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DBG_TOOL_H_
-#define _DBG_TOOL_H_
+#pragma once
 
 #include <nds.h>
 #include <stdarg.h>
@@ -70,5 +69,3 @@ static inline void wait_press_b() {
 #else
 #define wait_press_b()
 #endif  // DEBUG
-
-#endif  //_DBG_TOOL_H_

@@ -17,8 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GBALOADER_H__
-#define __GBALOADER_H__
+#pragma once
 
 #include <nds/ndstypes.h>
 #include <string>
@@ -46,5 +45,3 @@ class CGbaLoader {
     static bool CheckPSRAM(u32 aSize);
     static void StartGBA(void);
 };
-
-#endif

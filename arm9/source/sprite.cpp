@@ -18,6 +18,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <nds.h>
 #include "sprite.h"
 
 
@@ -31,24 +32,22 @@ cSprite::~cSprite()
 
 void cSprite::sysinit()
 {
-    SpriteEntry * psprites = (SpriteEntry *)OAM;
-    //SpriteRotation * pspriteRotations = (SpriteRotation * )OAM;
+    oamInit(&oamMain, SpriteMapping_Bmp_1D_128, true);
 
     for(int i = 0; i < 128; i++)
     {
-       psprites[i].attribute[0] = ATTR0_DISABLED;
-       psprites[i].attribute[1] = 0;
-       psprites[i].attribute[2] = 0;
-       psprites[i].filler = 0;
+       oamMain.oamMemory[i].attribute[0] = ATTR0_DISABLED;
+       oamMain.oamMemory[i].attribute[1] = 0;
+       oamMain.oamMemory[i].attribute[2] = 0;
+       oamMain.oamMemory[i].filler = 0;
     }
 
-    //DC_FlushRange( _sprites, 128 * sizeof(SpriteEntry) );
-    //dmaCopy( _sprites, OAM, 128 * sizeof(SpriteEntry) );
+    oamUpdate(&oamMain);
+    oamEnable(&oamMain);
 }
 
 void cSprite::init( u16 id )
 {
-    //_alpha = 0;
     _id = id;
 
     _size = SS_SIZE_32;
@@ -59,8 +58,8 @@ void cSprite::init( u16 id )
 
     _priority = 2;
 
-    _entry = ((SpriteEntry *)OAM) + _id;
-    _affine = ((SpriteRotation * )OAM) + _id;
+    _entry = &oamMain.oamMemory[_id];
+    _affine = &oamMain.oamRotationMemory[_id];
 
     // initial x = 0, hidden, bitmap obj mode, square shape
     _entry->attribute[0] = ATTR0_DISABLED | ATTR0_BMP | ATTR0_SQUARE | 0;
@@ -72,11 +71,6 @@ void cSprite::init( u16 id )
     _entry->attribute[2] = ATTR2_ALPHA(15) | ATTR2_PRIORITY(0) | 0;
 
     setScale( 1, 1 );
-
-    //for(int i=0;i<32*32;i++)
-    //    SPRITE_GFX[i]=RGB15(0,0,27)|(1<<15); //dont forget alpha bit
-
-    //update();
 }
 
 
@@ -92,8 +86,7 @@ void cSprite::hide()
 
 void cSprite::setAlpha( u8 alpha )
 {
-    _alpha = alpha & 0x1f;
-    _entry->attribute[2] = (_entry->attribute[2] & (~0xf000)) | ATTR2_ALPHA(_alpha);
+    oamSetAlpha(&oamMain, _id, alpha);
 }
 
 void cSprite::setPosition( u16 x, u8 y )
@@ -118,11 +111,10 @@ void cSprite::setPosition( u16 x, u8 y )
     };
     x -= offset;
     _x = x & 0x1FF;
-    _entry->attribute[1] = (_entry->attribute[1] & (~0x1FF)) | _x;
-
     y -= offset;
     _y = y & 0xFF;
-    _entry->attribute[0] = (_entry->attribute[0] & (~0xFF)) | _y;
+
+    oamSetXY(&oamMain, _id, _x, _y);
 }
 
 void cSprite::setSize( SPRITE_SIZE size )
@@ -142,13 +134,6 @@ u16 * cSprite::buffer()
 {
     return SPRITE_GFX + (_bufferOffset * 64);
 }
-
-//void cSprite::update()
-//{
-//    //DC_FlushRange( _sprites, 128 * sizeof(SpriteEntry) );
-//    SpriteEntry * psprites = (SpriteEntry * )OAM;
-//    dmaCopy( _sprites, &psprites[_id], sizeof(SpriteEntry) );
-//}
 
 void cSprite::setBufferOffset( u32 offset )
 {
@@ -179,7 +164,7 @@ void cSprite::setScale( float scaleX, float scaleY )
 void cSprite::setPriority( u8 priority )
 {
     _priority = priority;
-    _entry->attribute[2] = (_entry->attribute[2] & (~0x0C00)) | ATTR2_PRIORITY(_priority);
+    oamSetPriority(&oamMain, _id, _priority);
 }
 
 

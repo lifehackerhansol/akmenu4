@@ -65,11 +65,10 @@ public:
     void initBg(const std::string& aFileName);
 
     void drawPixel( u8 x, u8 y, GRAPHICS_ENGINE engine ) {
-        //if( y > (u8)SCREEN_HEIGHT - 1 ) y = (u8)SCREEN_WIDTH - 1;
         if( GE_MAIN == engine )
-            *(_bufferMain2 + ((u32)y << 8) + x + _layerPitch ) = _penColor;        //_bufferMain2[y * SCREEN_WIDTH + x] = _penColor;
+            *(_bufferMain2 + ((u32)y << 8) + x + _layerPitch ) = _penColor;
         else
-            _bufferSub2[((u32)y << 8) + x] = _penColor;        //_bufferSub2[y * SCREEN_WIDTH + x] = _penColor;
+            _bufferSub2[((u32)y << 8) + x] = _penColor;
     }
 
     void drawLine( s16 x1, s16 y1, s16 x2, s16 y2, GRAPHICS_ENGINE engine );

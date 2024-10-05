@@ -140,6 +140,7 @@ void cGdi::initBg(const std::string& aFileName)
       _sprites[index].show();
     }
   }
+  oamUpdate(&oamMain);
 }
 
 void cGdi::swapLCD(void)
@@ -177,7 +178,6 @@ void cGdi::activeFbMain(void)
     setMainEngineLayer( MEL_UP );
 
     zeroMemory( _bufferMain1, 0x20000 );
-    //fillMemory( _bufferMain3, 0x20000, 0x8f008f00 );
     fillMemory( _bufferMain3, 0x20000, 0xffffffff );
 
     REG_BLDCNT = BLEND_ALPHA | BLEND_DST_BG2 | BLEND_DST_BG3;
@@ -205,7 +205,6 @@ void cGdi::activeFbSub(void)
 
     // 初始化为文字模式
     _subEngineMode = SEM_GRAPHICS;
-    //_subEngineMode = SEM_TEXT;
 
     // BMP bg 的参数设置，从 VRAM地址 0x06200000 开始，优先级3
     REG_BG2CNT_SUB = BG_BMP16_256x256 | BG_BMP_BASE(0) | BG_PRIORITY_1;
@@ -219,8 +218,6 @@ void cGdi::activeFbSub(void)
     _bufferSub1 = (u16 *)0x06200000;
     _bufferSub2 = (u16 *)new u32[256*192/2];
 
-    //fillMemory( _bufferSub2, 0x18000, 0xfc00fc00 );
-    //fillMemory( _bufferSub1, 0x18000, 0xfc00fc00 );
     fillMemory( _bufferSub2, 0x18000, 0xffffffff );
     fillMemory( _bufferSub1, 0x18000, 0xffffffff );
 
@@ -237,7 +234,7 @@ void cGdi::activeFbSub(void)
 
     swiWaitForVBlank(); //remove tearing at top screen
     // 模式5，开两层BG，一层BMP，一层文字(用于调试)，bmp层现在默认关闭
-    videoSetModeSub( MODE_5_2D | DISPLAY_BG2_ACTIVE );// | DISPLAY_BG2_ACTIVE );
+    videoSetModeSub( MODE_5_2D | DISPLAY_BG2_ACTIVE );
 }
 
 void cGdi::drawLine( s16 x1, s16 y1, s16 x2, s16 y2, GRAPHICS_ENGINE engine )
@@ -268,10 +265,6 @@ void cGdi::drawLine( s16 x1, s16 y1, s16 x2, s16 y2, GRAPHICS_ENGINE engine )
             xs=x2+1;
             xe=x1;
         }
-        //for(int px=xs;px<=xe;px++) {
-        //    drawPixel(px,y1,engine);
-        //    //SetPixel(px,y1,Color);
-        //}
         if( GE_MAIN == engine )
             fillRect( _penColor, _penColor, xs, y1, xe - xs + 1, 1, engine );
         else
@@ -317,18 +310,7 @@ void cGdi::drawLine( s16 x1, s16 y1, s16 x2, s16 y2, GRAPHICS_ENGINE engine )
         }
 
         while(py!=ye) {
-            //if(AALineFlag==false){
             drawPixel(x1+(int)px,y1+py,engine);
-            //}else{
-            //    int Alpha=(int)(px*32);
-            //    if(Alpha<0){
-            //        while(Alpha<=0) Alpha+=32;
-            //    }else{
-            //        while(32<=Alpha) Alpha-=32;
-            //    }
-            //    SetPixelAlpha(x1+(int)px+0,y1+py,Color,32-Alpha);
-            //    SetPixelAlpha(x1+(int)px+1,y1+py,Color,Alpha);
-            //}
             px+=xv;
             py+=yv;
         }
@@ -362,9 +344,9 @@ void cGdi::fillRect( u16 color1, u16 color2, s16 x, s16 y, u16 w, u16 h, GRAPHIC
 
 
     if( GE_MAIN == engine )
-        pDest = _bufferMain2 + (y << 8) + x + _layerPitch;//_bufferMain2 + y * 256 + x + _layerPitch;
+        pDest = _bufferMain2 + (y << 8) + x + _layerPitch;
     else
-        pDest = _bufferSub2 + (y << 8) + x; //_bufferSub2 + y * 256 + x;
+        pDest = _bufferSub2 + (y << 8) + x;
 
     bool destAligned = !(x & 1);
 
@@ -459,7 +441,6 @@ void cGdi::bitBlt( const void * src, s16 srcW, s16 srcH, s16 destX, s16 destY, u
 
 void cGdi::bitBlt( const void * src, s16 destX, s16 destY, u16 destW, u16 destH, GRAPHICS_ENGINE engine )
 {
-    //dbg_printf("x %d y %d w %d h %d\n", destX, destY, destW, destH );
     u16 * pSrc = (u16 *)src;
     u16 * pDest = NULL;
 
@@ -487,7 +468,6 @@ void cGdi::bitBlt( const void * src, s16 destX, s16 destY, u16 destW, u16 destH,
 // 不是偶数也可以，但要求在内存中 src 的 pitch 凑成偶数
 void cGdi::maskBlt( const void * src, s16 destX, s16 destY, u16 destW, u16 destH, GRAPHICS_ENGINE engine )
 {
-    //dbg_printf("x %d y %d w %d h %d\n", destX, destY, destW, destH );
     u16 * pSrc = (u16 *)src;
     u16 * pDest = NULL;
     bool destAligned = !(destX & 1);
@@ -619,24 +599,19 @@ void cGdi::textOutRect( s16 x, s16 y, u16 w, u16 h, const char * text, GRAPHICS_
 void cGdi::present( GRAPHICS_ENGINE engine )
 {
     if( GE_MAIN == engine ) { // 翻转主引擎
-        //u16 * temp = _bufferMain1;
-        //_bufferMain1 = _bufferMain2;
-        //_bufferMain2 = temp;
-        //REG_BG2CNT ^= BG_BMP_BASE( 128 / 16 );
 
         dmaCopyWordsGdi( 3, _bufferMain2 + _layerPitch,
             _bufferMain1 + (_mainEngineLayer << 16), 256 * 192 * 2 );
 
         fillMemory( (void *)(_bufferMain2 + _layerPitch), 256 * 192 * 2, 0 );
 
+        oamUpdate(&oamMain);
+
     } else if ( GE_SUB == engine ) { // 翻转副引擎
         if( SEM_GRAPHICS == _subEngineMode )
             dmaCopyWordsGdi( 3, (void *)_bufferSub2, (void *)_bufferSub1, 256 * 192 * 2 );
-        //else if( SEM_TEXT == _subEngineMode )
-        //    dmaCopyWords( 3, (void *)_bufferSub3, (void *)_bufferSub1, 32768 );
         fillMemory( (void *)_bufferSub2, 0x18000, 0xffffffff );
     }
-    //dbg_printf( "\x1b[0;20%f\n", updateTimer() );
 }
 
 //special version for window switching

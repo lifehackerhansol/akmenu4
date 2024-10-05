@@ -205,7 +205,7 @@ void cExpansion::Block_Erase(u32 blockAdd) {
 
 void cExpansion::WriteNorFlash(u32 address, const u8* buffer, u32 size) {
     vu16 v1, v2;
-    register u32 loopwrite;
+    u32 loopwrite;
     vu16* buf = (vu16*)buffer;
     u32 size2, lop;
     u32 mapaddress;

@@ -20,7 +20,4 @@
 
 #include "keymessage.h"
 
-namespace akui {
-
-
-}
+namespace akui {}

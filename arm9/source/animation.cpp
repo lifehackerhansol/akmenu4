@@ -20,53 +20,36 @@
 
 #include "animation.h"
 
-cAnimation::cAnimation()
-{
+cAnimation::cAnimation() {
     _visible = false;
 }
 
-cAnimation::~cAnimation()
-{
+cAnimation::~cAnimation() {}
 
-}
-
-void cAnimation::show()
-{
+void cAnimation::show() {
     _visible = true;
 }
 
-void cAnimation::hide()
-{
+void cAnimation::hide() {
     _visible = false;
 }
 
+cAnimationManager::cAnimationManager() {}
 
-cAnimationManager::cAnimationManager()
-{
+cAnimationManager::~cAnimationManager() {}
 
-}
-
-cAnimationManager::~cAnimationManager()
-{
-
-}
-
-void cAnimationManager::update()
-{
-    std::list< cAnimation * >::iterator itr = _animations.begin();
-    while( itr != _animations.end() )
-    {
+void cAnimationManager::update() {
+    std::list<cAnimation*>::iterator itr = _animations.begin();
+    while (itr != _animations.end()) {
         (*itr)->update();
         ++itr;
     }
 }
 
-void cAnimationManager::addAnimation( cAnimation * animation )
-{
-    _animations.push_back( animation );
+void cAnimationManager::addAnimation(cAnimation* animation) {
+    _animations.push_back(animation);
 }
 
-void cAnimationManager::removeAnimation( cAnimation * animation )
-{
-    _animations.remove( animation );
+void cAnimationManager::removeAnimation(cAnimation* animation) {
+    _animations.remove(animation);
 }

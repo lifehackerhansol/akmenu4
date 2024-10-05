@@ -22,33 +22,28 @@
 #define _DISKICON_H_
 
 #include <nds.h>
-#include "window.h"
-#include "sprite.h"
 #include "singleton.h"
+#include "sprite.h"
+#include "window.h"
 
-class cDiskIcon : public akui::cWindow
-{
-
-public:
-
+class cDiskIcon : public akui::cWindow {
+  public:
     cDiskIcon();
 
     ~cDiskIcon() {}
 
-public:
-
+  public:
     void draw();
 
     void turnOn();
 
     void turnOff();
 
-    akui::cWindow & loadAppearance(const std::string& aFileName );
+    akui::cWindow& loadAppearance(const std::string& aFileName);
 
-    void blink( void );
+    void blink(void);
 
-protected:
-
+  protected:
     bool _draw;
 
     float _lightTime;
@@ -56,9 +51,9 @@ protected:
     cSprite _icon;
 };
 
-typedef t_singleton< cDiskIcon > diskIcon_s;
-inline cDiskIcon & diskIcon() { return diskIcon_s::instance(); }
+typedef t_singleton<cDiskIcon> diskIcon_s;
+inline cDiskIcon& diskIcon() {
+    return diskIcon_s::instance();
+}
 
-
-
-#endif//_DISKIOICON_H_
+#endif  //_DISKIOICON_H_

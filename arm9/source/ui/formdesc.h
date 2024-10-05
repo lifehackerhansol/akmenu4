@@ -22,32 +22,26 @@
 #define _FORMDESC_H_
 
 #include <string>
-#include "renderdesc.h"
 #include "bmp15.h"
+#include "renderdesc.h"
 
-namespace akui
-{
+namespace akui {
 
-class cFormDesc : public cRenderDesc
-{
-public:
-
+class cFormDesc : public cRenderDesc {
+  public:
     cFormDesc();
 
     ~cFormDesc();
 
-public:
+  public:
+    void draw(const cRect& area, GRAPHICS_ENGINE engine) const;
 
-    void draw( const cRect & area, GRAPHICS_ENGINE engine ) const;
+    void loadData(const std::string& topleftBmpFile, const std::string& toprightBmpFile,
+                  const std::string& middleBmpFile);
 
-    void loadData( const std::string & topleftBmpFile,
-        const std::string & toprightBmpFile,
-        const std::string & middleBmpFile );
+    void setTitleText(const std::string& text);
 
-    void setTitleText( const std::string & text );
-
-protected:
-
+  protected:
     cBMP15 _topleft;
     cBMP15 _middle;
     cBMP15 _topright;
@@ -58,10 +52,6 @@ protected:
     std::string _titleText;
 };
 
+}  // namespace akui
 
-}
-
-
-
-
-#endif//_FORMDESC_H_
+#endif  //_FORMDESC_H_

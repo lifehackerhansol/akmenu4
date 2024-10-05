@@ -24,6 +24,7 @@
 #include <nds/ndstypes.h>
 #include <string>
 
-bool loadRom( const std::string & filename, const std::string & savename, u32 flags, long cheatOffset,size_t cheatSize );
+bool loadRom(const std::string& filename, const std::string& savename, u32 flags, long cheatOffset,
+             size_t cheatSize);
 
-#endif//_ROMLOADER_H_
+#endif  //_ROMLOADER_H_

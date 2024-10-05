@@ -21,64 +21,45 @@
 #ifndef _AKUI_BUTTON_H_
 #define _AKUI_BUTTON_H_
 
-
-#include "rectangle.h"
-#include "window.h"
-#include "renderdesc.h"
 #include "bmp15.h"
+#include "rectangle.h"
+#include "renderdesc.h"
+#include "window.h"
 
-
-namespace akui
-{
+namespace akui {
 
 class cButtonDesc;
 
-class cButton : public cWindow
-{
+class cButton : public cWindow {
+  public:
+    enum State { up = 0, down = 1 };
 
-public:
-    enum State
-    {
-        up = 0,
-        down = 1
-    };
+    enum Style { single = 0, press = 1, toggle = 2 };
 
-    enum Style {
-        single = 0,
-        press = 1,
-        toggle = 2
-    };
+    enum Alignment { left, center, right };
 
-    enum Alignment
-    {
-      left,
-      center,
-      right
-    };
-
-    cButton( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+    cButton(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cButton();
 
-public:
-
+  public:
     void draw();
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-    bool process( const cMessage & msg );
+    bool process(const cMessage& msg);
 
     State state() { return _state; }
 
-    void setTextColor( COLOR color ) { _textColor = color; }
+    void setTextColor(COLOR color) { _textColor = color; }
 
     COLOR textColor() { return _textColor; }
 
-    void setStyle( Style style ) { _style = style; }
+    void setStyle(Style style) { _style = style; }
 
     Style style() { return _style; }
 
-    void setAlignment( Alignment alignment ) { _alignment = alignment; }
+    void setAlignment(Alignment alignment) { _alignment = alignment; }
 
     Alignment alignment() { return _alignment; }
 
@@ -92,9 +73,8 @@ public:
 
     Signal0 pressed;
 
-protected:
-
-    bool processTouchMessage( const akui::cTouchMessage & msg );
+  protected:
+    bool processTouchMessage(const akui::cTouchMessage& msg);
 
     bool _captured;
 
@@ -102,37 +82,35 @@ protected:
 
     COLOR _textColor;
 
-    cButtonDesc * _renderDesc;
+    cButtonDesc* _renderDesc;
 
     Style _style;
 
     Alignment _alignment;
-
 };
 
 // form desc，只负责画背景
-class cButtonDesc : public cRenderDesc
-{
-public:
+class cButtonDesc : public cRenderDesc {
+  public:
     cButtonDesc();
 
     ~cButtonDesc();
 
-public:
+  public:
+    cButtonDesc& setButton(cButton* button) {
+        _button = button;
+        return *this;
+    }
 
-    cButtonDesc & setButton( cButton * button )  { _button = button; return *this; }
+    void draw(const cRect& area, GRAPHICS_ENGINE engine) const;
 
-    void draw( const cRect & area, GRAPHICS_ENGINE engine ) const;
+    void loadData(const std::string& filename);
 
-    void loadData( const std::string & filename );
-
-protected:
-
-    cButton *  _button;
+  protected:
+    cButton* _button;
     cBMP15 _background;
     COLOR _textColor;
 };
-}
+}  // namespace akui
 
-
-#endif//_AKUI_BUTTON_H_
+#endif  //_AKUI_BUTTON_H_

@@ -23,76 +23,61 @@
 
 #include <nds.h>
 #include <string>
-#include "singleton.h"
 #include "../../share/fifotool.h"
+#include "singleton.h"
 
-class cGlobalSettings
-{
-public:
-  enum TScrollSpeed
-  {
-    EScrollFast=4,
-    EScrollMedium=10,
-    EScrollSlow=16
-  };
-  enum TViewMode
-  {
-    EViewList=0,
-    EViewIcon=1,
-    EViewInternal=2
-  };
-  enum TSlot2Mode
-  {
-    ESlot2Ask=0,
-    ESlot2Gba=1,
-    ESlot2Nds=2
-  };
-public:
+class cGlobalSettings {
+  public:
+    enum TScrollSpeed { EScrollFast = 4, EScrollMedium = 10, EScrollSlow = 16 };
+    enum TViewMode { EViewList = 0, EViewIcon = 1, EViewInternal = 2 };
+    enum TSlot2Mode { ESlot2Ask = 0, ESlot2Gba = 1, ESlot2Nds = 2 };
 
+  public:
     cGlobalSettings();
 
     ~cGlobalSettings();
 
-public:
-
+  public:
     void loadSettings();
     void saveSettings();
     void updateSafeMode(void);
     static u32 CopyBufferSize(void);
     void nextBrightness(void);
     void setBrightness(u32 level);
-public:
-    u8          fontHeight;
-    u8          brightness;
-    u8          language;
-    u8          fileListType;
-    u8          romTrim;
+
+  public:
+    u8 fontHeight;
+    u8 brightness;
+    u8 language;
+    u8 fileListType;
+    u8 romTrim;
     std::string langDirectory;
     std::string uiName;
     std::string startupFolder;
-    bool        showHiddenFiles;
-    bool        enterLastDirWhenBoot;
-    int         scrollSpeed;
-    bool        showGbaRoms;
-    int         viewMode;
-    bool        gbaSleepHack;
-    bool        gbaAutoSave;
-    bool        Animation;
-    bool        cheats;
-    bool        softreset;
-    bool        dma;
-    bool        sdsave;
-    bool        cheatDB;
-    int         slot2mode;
-    bool        saveExt;
-    bool        safeMode;
-    bool        show12hrClock;
-    bool        autorunWithLastRom;
-    bool        homebrewreset;
+    bool showHiddenFiles;
+    bool enterLastDirWhenBoot;
+    int scrollSpeed;
+    bool showGbaRoms;
+    int viewMode;
+    bool gbaSleepHack;
+    bool gbaAutoSave;
+    bool Animation;
+    bool cheats;
+    bool softreset;
+    bool dma;
+    bool sdsave;
+    bool cheatDB;
+    int slot2mode;
+    bool saveExt;
+    bool safeMode;
+    bool show12hrClock;
+    bool autorunWithLastRom;
+    bool homebrewreset;
 };
 
+typedef t_singleton<cGlobalSettings> globalSettings_s;
+inline cGlobalSettings& gs() {
+    return globalSettings_s::instance();
+}
 
-typedef t_singleton< cGlobalSettings > globalSettings_s;
-inline cGlobalSettings & gs() { return globalSettings_s::instance(); }
-
-#endif//_GLOBALSETTINGS_H_
+#endif  //_GLOBALSETTINGS_H_

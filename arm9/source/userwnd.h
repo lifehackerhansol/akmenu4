@@ -21,30 +21,24 @@
 #ifndef _USERWINDOW_H_
 #define _USERWINDOW_H_
 
-#include "window.h"
 #include "bmp15.h"
 #include "datetime.h"
-#include "singleton.h"
 #include "point.h"
+#include "singleton.h"
+#include "window.h"
 
-
-class cUserWindow : public akui::cWindow
-{
-public:
-
+class cUserWindow : public akui::cWindow {
+  public:
     cUserWindow();
 
     ~cUserWindow() {}
 
-public:
-
-
+  public:
     void draw();
 
-    akui::cWindow & loadAppearance(const std::string& aFileName ){return *this;}
+    akui::cWindow& loadAppearance(const std::string& aFileName) { return *this; }
 
-protected:
-
+  protected:
     void init();
 
     cBMP15 _userPicture;
@@ -63,11 +57,11 @@ protected:
     bool _showUserName;
     bool _showCustomText;
     bool _showCustomPic;
-
 };
 
-typedef t_singleton< cUserWindow > UserWindow_s;
-inline cUserWindow & userWindow() { return UserWindow_s::instance(); }
+typedef t_singleton<cUserWindow> UserWindow_s;
+inline cUserWindow& userWindow() {
+    return UserWindow_s::instance();
+}
 
-
-#endif//_UserWindow_H_
+#endif  //_UserWindow_H_

@@ -20,24 +20,18 @@
 
 #include "fontfactory.h"
 #include "font_pcf.h"
-#include "systemfilenames.h"
-#include "stringtool.h"
 #include "language.h"
+#include "stringtool.h"
+#include "systemfilenames.h"
 
-cFontFactory::cFontFactory() : _font( NULL )
-{
+cFontFactory::cFontFactory() : _font(NULL) {}
+
+cFontFactory::~cFontFactory() {
+    if (NULL != _font) delete _font;
 }
 
-cFontFactory::~cFontFactory()
-{
-    if( NULL != _font )
-        delete _font;
-}
-
-
-void cFontFactory::makeFont(void)
-{
-  std::string filename(SFN_FONTS_DIRECTORY+lang().GetString("font","main",SFN_DEFAULT_FONT));
-  _font=new cFontPcf();
-  _font->Load(filename.c_str());
+void cFontFactory::makeFont(void) {
+    std::string filename(SFN_FONTS_DIRECTORY + lang().GetString("font", "main", SFN_DEFAULT_FONT));
+    _font = new cFontPcf();
+    _font->Load(filename.c_str());
 }

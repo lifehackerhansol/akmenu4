@@ -24,25 +24,15 @@ THE SOFTWARE.
 
 ---------------------------------------------------------------------------------*/
 
-
-
-
-
-
-
-
-
 #ifndef _MEMTOOL_H_
 #define _MEMTOOL_H_
 
-inline void fillMemory( void * addr, u32 count, u32 value )
-{
-    swiFastCopy( (void*)(&value), addr, (count>>2) | COPY_MODE_WORD | COPY_MODE_FILL);
+inline void fillMemory(void* addr, u32 count, u32 value) {
+    swiFastCopy((void*)(&value), addr, (count >> 2) | COPY_MODE_WORD | COPY_MODE_FILL);
 }
 
-inline void zeroMemory( void * addr, u32 count )
-{
-    fillMemory( addr, count, 0 );
+inline void zeroMemory(void* addr, u32 count) {
+    fillMemory(addr, count, 0);
 }
 
-#endif//_MEMTOOL_H_
+#endif  //_MEMTOOL_H_

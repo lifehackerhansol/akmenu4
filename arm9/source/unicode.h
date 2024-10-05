@@ -24,6 +24,7 @@
 #include <nds.h>
 #include <string>
 
-std::string unicode_to_local_string( const u16 * unicode_string, size_t length, bool * defCharUsed = NULL );
+std::string unicode_to_local_string(const u16* unicode_string, size_t length,
+                                    bool* defCharUsed = NULL);
 
-#endif//_UNICODE_H_
+#endif  //_UNICODE_H_

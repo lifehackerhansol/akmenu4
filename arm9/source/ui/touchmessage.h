@@ -26,25 +26,21 @@
 namespace akui {
 
 //! Message caused by interaction with the mouse
-class cTouchMessage : public cMessage
-{
+class cTouchMessage : public cMessage {
     // ---------------------------------------------------------------------------------------------
     //  Construction / Destruction
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! construction requires the id and the mouse position
-    cTouchMessage(Id anId, const cPoint & aPosition) :  cMessage( anId ),
-        _position(aPosition)
-    {}
+    cTouchMessage(Id anId, const cPoint& aPosition) : cMessage(anId), _position(aPosition) {}
 
     //! destructor
     virtual ~cTouchMessage() {}
 
-
     // ---------------------------------------------------------------------------------------------
     //  Accessors
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! returns the position of the mouse cursor when the message occured
     cPoint position() const { return _position; }
 
@@ -54,14 +50,13 @@ public:
     //! convenience method for getting the mouse y position
     s32 y() const { return position().y; }
 
-
     // ---------------------------------------------------------------------------------------------
     //  Implementation
     // ---------------------------------------------------------------------------------------------
-protected:
+  protected:
     cPoint _position;
 };
 
-}
+}  // namespace akui
 
-#endif//_AKUI_TOUCHMESSAGE_H_
+#endif  //_AKUI_TOUCHMESSAGE_H_

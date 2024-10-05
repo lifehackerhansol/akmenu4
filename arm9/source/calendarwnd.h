@@ -25,31 +25,26 @@
 #include "form.h"
 #include "singleton.h"
 
-class cCalendarWnd : public akui::cForm
-{
-public:
-
+class cCalendarWnd : public akui::cForm {
+  public:
     cCalendarWnd();
 
     ~cCalendarWnd();
 
-public:
-
-    cWindow& loadAppearance(const std::string& aFileName );
+  public:
+    cWindow& loadAppearance(const std::string& aFileName);
 
     void init();
 
     void draw();
 
-protected:
-
+  protected:
     cBMP15 _background;
-
 };
 
+typedef t_singleton<cCalendarWnd> calendarWnd_s;
+inline cCalendarWnd& calendarWnd() {
+    return calendarWnd_s::instance();
+}
 
-typedef t_singleton< cCalendarWnd > calendarWnd_s;
-inline cCalendarWnd & calendarWnd() { return calendarWnd_s::instance(); }
-
-
-#endif//_CALENDARWND_H_
+#endif  //_CALENDARWND_H_

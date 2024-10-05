@@ -22,19 +22,16 @@
 #define _ZOOMINGICON_H_
 
 #include <nds.h>
-#include "sprite.h"
 #include "animation.h"
+#include "sprite.h"
 
-class cZoomingIcon : public cAnimation
-{
-public:
-
+class cZoomingIcon : public cAnimation {
+  public:
     cZoomingIcon();
 
     ~cZoomingIcon();
 
-public:
-
+  public:
     void update();
 
     void show();
@@ -43,26 +40,22 @@ public:
 
     void reset();
 
-    void setScale( float scale );
+    void setScale(float scale);
 
-    void setPosition( u8 x, u8 y );
+    void setPosition(u8 x, u8 y);
 
     void setBufferChanged();
 
-    u16 * buffer() { return _buffer; }
+    u16* buffer() { return _buffer; }
 
-public:
-
+  public:
     cSprite _sprite;
 
-    u16 _buffer[32*32];
+    u16 _buffer[32 * 32];
     u16 _x;
     u8 _y;
     float _scale;
     bool _needUpdateBuffer;
-
 };
 
-
-
-#endif//_ZOOMINGICON_H_
+#endif  //_ZOOMINGICON_H_

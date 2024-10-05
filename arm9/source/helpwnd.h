@@ -21,32 +21,29 @@
 #ifndef _HELPWND_H_
 #define _HELPWND_H_
 
-#include "form.h"
-#include "formdesc.h"
-#include "spinbox.h"
-#include "statictext.h"
-#include "message.h"
 #include <string>
 #include "dsrom.h"
+#include "form.h"
+#include "formdesc.h"
+#include "message.h"
+#include "spinbox.h"
+#include "statictext.h"
 
-class cHelpWnd : public akui::cForm
-{
-public:
-    cHelpWnd( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cHelpWnd : public akui::cForm {
+  public:
+    cHelpWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text);
 
     ~cHelpWnd();
 
-public:
-
+  public:
     void draw();
 
-    bool process( const akui::cMessage & msg );
+    bool process(const akui::cMessage& msg);
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-protected:
-
-    bool processKeyMessage( const akui::cKeyMessage & msg );
+  protected:
+    bool processKeyMessage(const akui::cKeyMessage& msg);
 
     void onOK();
 
@@ -59,7 +56,4 @@ protected:
     std::string _helpText;
 };
 
-
-
-
-#endif//_HELPWND_H_
+#endif  //_HELPWND_H_

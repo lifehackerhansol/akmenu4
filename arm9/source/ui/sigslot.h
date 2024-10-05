@@ -30,15 +30,10 @@
 
 namespace akui {
 
-
 class SlotHolder;
 
-
-
-
-class BasicConnection0
-{
-public:
+class BasicConnection0 {
+  public:
     virtual ~BasicConnection0() {}
     virtual SlotHolder* targetSlotHolder() const = 0;
     virtual void emit() = 0;
@@ -46,14 +41,9 @@ public:
     virtual BasicConnection0* duplicate(SlotHolder* newTarget) = 0;
 };
 
-
-
-
-
-template<class Type1>
-class BasicConnection1
-{
-public:
+template <class Type1>
+class BasicConnection1 {
+  public:
     virtual ~BasicConnection1() {}
     virtual SlotHolder* targetSlotHolder() const = 0;
     virtual void emit(Type1) = 0;
@@ -61,67 +51,43 @@ public:
     virtual BasicConnection1<Type1>* duplicate(SlotHolder* newTarget) = 0;
 };
 
-
-
-
-
-class BasicSignal
-{
-public:
+class BasicSignal {
+  public:
     virtual ~BasicSignal() {}
     virtual void disconnectSlot(SlotHolder* slot) = 0;
     virtual void duplicateSlot(const SlotHolder* oldSlot, SlotHolder* newSlot) = 0;
 };
 
-
-
-
-
-
-class SlotHolder
-{
-private:
+class SlotHolder {
+  private:
     typedef std::set<BasicSignal*> SenderSet;
     typedef SenderSet::const_iterator const_iterator;
 
-public:
+  public:
     SlotHolder() {}
 
-    SlotHolder(const SlotHolder& holder)
-    {
-        const_iterator it    = holder.senders_.begin();
+    SlotHolder(const SlotHolder& holder) {
+        const_iterator it = holder.senders_.begin();
         const_iterator itEnd = holder.senders_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->duplicateSlot(&holder, this);
             senders_.insert(*it);
             ++it;
         }
     }
 
-    void connectTo(BasicSignal* sender)
-    {
-        senders_.insert(sender);
-    }
+    void connectTo(BasicSignal* sender) { senders_.insert(sender); }
 
-    void disconnectFrom(BasicSignal* sender)
-    {
-        senders_.erase(sender);
-    }
+    void disconnectFrom(BasicSignal* sender) { senders_.erase(sender); }
 
-    virtual ~SlotHolder()
-    {
-        disconnectAll();
-    }
+    virtual ~SlotHolder() { disconnectAll(); }
 
-    void disconnectAll()
-    {
+    void disconnectAll() {
         const_iterator it = senders_.begin();
         const_iterator itEnd = senders_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->disconnectSlot(this);
             ++it;
         }
@@ -129,30 +95,21 @@ public:
         senders_.erase(senders_.begin(), senders_.end());
     }
 
-protected:
+  protected:
     SenderSet senders_;
 };
 
-
-
-
-
-
-class BasicSignal0 : public BasicSignal
-{
-public:
-    typedef std::list<BasicConnection0 *>  ConnectionList;
+class BasicSignal0 : public BasicSignal {
+  public:
+    typedef std::list<BasicConnection0*> ConnectionList;
 
     BasicSignal0() {}
 
-    BasicSignal0(const BasicSignal0& s) : BasicSignal(s)
-    {
-
+    BasicSignal0(const BasicSignal0& s) : BasicSignal(s) {
         ConnectionList::const_iterator it = s.connectedSlots_.begin();
         ConnectionList::const_iterator itEnd = s.connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->targetSlotHolder()->connectTo(this);
             connectedSlots_.push_back((*it)->clone());
 
@@ -160,19 +117,13 @@ public:
         }
     }
 
-    ~BasicSignal0()
-    {
-        disconnectAll();
-    }
+    ~BasicSignal0() { disconnectAll(); }
 
-    void disconnectAll()
-    {
-
+    void disconnectAll() {
         ConnectionList::const_iterator it = connectedSlots_.begin();
         ConnectionList::const_iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->targetSlotHolder()->disconnectFrom(this);
             delete *it;
 
@@ -182,15 +133,12 @@ public:
         connectedSlots_.erase(connectedSlots_.begin(), connectedSlots_.end());
     }
 
-    void disconnect(SlotHolder* slotHolder)
-    {
+    void disconnect(SlotHolder* slotHolder) {
         ConnectionList::iterator it = connectedSlots_.begin();
         ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
-            if((*it)->targetSlotHolder() == slotHolder)
-            {
+        while (it != itEnd) {
+            if ((*it)->targetSlotHolder() == slotHolder) {
                 delete *it;
                 connectedSlots_.erase(it);
                 slotHolder->disconnectFrom(this);
@@ -201,18 +149,15 @@ public:
         }
     }
 
-    void disconnectSlot(SlotHolder* slot)
-    {
+    void disconnectSlot(SlotHolder* slot) {
         ConnectionList::iterator it = connectedSlots_.begin();
         ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             ConnectionList::iterator itNext = it;
             ++itNext;
 
-            if((*it)->targetSlotHolder() == slot)
-            {
+            if ((*it)->targetSlotHolder() == slot) {
                 delete *it;
                 connectedSlots_.erase(it);
             }
@@ -221,15 +166,12 @@ public:
         }
     }
 
-    void duplicateSlot(const SlotHolder* oldTarget, SlotHolder* newTarget)
-    {
+    void duplicateSlot(const SlotHolder* oldTarget, SlotHolder* newTarget) {
         ConnectionList::iterator it = connectedSlots_.begin();
         ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
-            if((*it)->targetSlotHolder() == oldTarget)
-            {
+        while (it != itEnd) {
+            if ((*it)->targetSlotHolder() == oldTarget) {
                 connectedSlots_.push_back((*it)->duplicate(newTarget));
             }
 
@@ -237,32 +179,22 @@ public:
         }
     }
 
-protected:
+  protected:
     ConnectionList connectedSlots_;
 };
 
-
-
-
-
-
-
-
-template<class Type1>
-class BasicSignal1 : public BasicSignal
-{
-public:
-    typedef typename std::list<BasicConnection1<Type1> *>  ConnectionList;
+template <class Type1>
+class BasicSignal1 : public BasicSignal {
+  public:
+    typedef typename std::list<BasicConnection1<Type1>*> ConnectionList;
 
     BasicSignal1() {}
 
-    BasicSignal1(const BasicSignal1<Type1>& s) : BasicSignal(s)
-    {
+    BasicSignal1(const BasicSignal1<Type1>& s) : BasicSignal(s) {
         typename ConnectionList::const_iterator it = s.connectedSlots_.begin();
         typename ConnectionList::const_iterator itEnd = s.connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->targetSlotHolder()->connectTo(this);
             connectedSlots_.push_back((*it)->clone());
 
@@ -270,17 +202,12 @@ public:
         }
     }
 
-    void duplicateSlot(const SlotHolder* oldTarget, SlotHolder* newTarget)
-    {
-
+    void duplicateSlot(const SlotHolder* oldTarget, SlotHolder* newTarget) {
         typename ConnectionList::iterator it = connectedSlots_.begin();
         typename ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
-
-            if((*it)->targetSlotHolder() == oldTarget)
-            {
+        while (it != itEnd) {
+            if ((*it)->targetSlotHolder() == oldTarget) {
                 connectedSlots_.push_back((*it)->duplicate(newTarget));
             }
 
@@ -288,19 +215,13 @@ public:
         }
     }
 
-    ~BasicSignal1()
-    {
-        disconnectAll();
-    }
+    ~BasicSignal1() { disconnectAll(); }
 
-    void disconnectAll()
-    {
-
+    void disconnectAll() {
         typename ConnectionList::const_iterator it = connectedSlots_.begin();
         typename ConnectionList::const_iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             (*it)->targetSlotHolder()->disconnectFrom(this);
             delete *it;
 
@@ -310,16 +231,12 @@ public:
         connectedSlots_.erase(connectedSlots_.begin(), connectedSlots_.end());
     }
 
-    void disconnect(SlotHolder* slotHolder)
-    {
-
+    void disconnect(SlotHolder* slotHolder) {
         typename ConnectionList::iterator it = connectedSlots_.begin();
         typename ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
-            if((*it)->targetSlotHolder() == slotHolder)
-            {
+        while (it != itEnd) {
+            if ((*it)->targetSlotHolder() == slotHolder) {
                 delete *it;
                 connectedSlots_.erase(it);
                 slotHolder->disconnectFrom(this);
@@ -330,19 +247,15 @@ public:
         }
     }
 
-    void disconnectSlot(SlotHolder* slot)
-    {
-
+    void disconnectSlot(SlotHolder* slot) {
         typename ConnectionList::iterator it = connectedSlots_.begin();
         typename ConnectionList::iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             typename ConnectionList::iterator itNext = it;
             ++itNext;
 
-            if((*it)->targetSlotHolder() == slot)
-            {
+            if ((*it)->targetSlotHolder() == slot) {
                 delete *it;
                 connectedSlots_.erase(it);
             }
@@ -351,166 +264,121 @@ public:
         }
     }
 
-
-protected:
+  protected:
     ConnectionList connectedSlots_;
 };
 
-
-
-template<class TargetType>
-class Connection0 : public BasicConnection0
-{
-public:
-    Connection0()
-    {
+template <class TargetType>
+class Connection0 : public BasicConnection0 {
+  public:
+    Connection0() {
         object_ = 0;
         memberFunction_ = 0;
         voidMemberFunction_ = 0;
     }
 
-    Connection0(TargetType* anObject, void (TargetType::*aMemberFunction)())
-    {
+    Connection0(TargetType* anObject, void (TargetType::*aMemberFunction)()) {
         object_ = anObject;
         memberFunction_ = 0;
         voidMemberFunction_ = aMemberFunction;
     }
 
-    Connection0(TargetType* anObject, TargetType& (TargetType::*aMemberFunction)())
-    {
+    Connection0(TargetType* anObject, TargetType& (TargetType::*aMemberFunction)()) {
         object_ = anObject;
         memberFunction_ = aMemberFunction;
     }
 
-    virtual BasicConnection0* clone()
-    {
-        return new Connection0<TargetType>(*this);
+    virtual BasicConnection0* clone() { return new Connection0<TargetType>(*this); }
+
+    virtual BasicConnection0* duplicate(SlotHolder* newTarget) {
+        return new Connection0<TargetType>((TargetType*)newTarget, memberFunction_);
     }
 
-    virtual BasicConnection0* duplicate(SlotHolder* newTarget)
-    {
-        return new Connection0<TargetType>((TargetType *)newTarget, memberFunction_);
-    }
-
-    virtual void emit()
-    {
-        if(memberFunction_ != 0)
+    virtual void emit() {
+        if (memberFunction_ != 0)
             (object_->*memberFunction_)();
         else
             (object_->*voidMemberFunction_)();
     }
 
-    virtual SlotHolder* targetSlotHolder() const
-    {
-        return object_;
-    }
+    virtual SlotHolder* targetSlotHolder() const { return object_; }
 
-private:
+  private:
     TargetType* object_;
-    TargetType& (TargetType::* memberFunction_)();
-    void (TargetType::* voidMemberFunction_)();
+    TargetType& (TargetType::*memberFunction_)();
+    void (TargetType::*voidMemberFunction_)();
 };
 
-
-
-
-
-
-template<class TargetType, class Type1>
-class Connection1 : public BasicConnection1<Type1>
-{
-public:
-    Connection1()
-    {
+template <class TargetType, class Type1>
+class Connection1 : public BasicConnection1<Type1> {
+  public:
+    Connection1() {
         object_ = 0;
         memberFunction_ = 0;
         voidMemberFunction_ = 0;
     }
 
-    Connection1(TargetType* anObject, void (TargetType::*aMemberFunction)(Type1))
-    {
+    Connection1(TargetType* anObject, void (TargetType::*aMemberFunction)(Type1)) {
         object_ = anObject;
         memberFunction_ = 0;
         voidMemberFunction_ = aMemberFunction;
     }
 
-    Connection1(TargetType* anObject, TargetType& (TargetType::*aMemberFunction)(Type1))
-    {
+    Connection1(TargetType* anObject, TargetType& (TargetType::*aMemberFunction)(Type1)) {
         object_ = anObject;
         voidMemberFunction_ = 0;
         memberFunction_ = aMemberFunction;
     }
 
-    virtual BasicConnection1<Type1>* clone()
-    {
-        return new Connection1<TargetType, Type1>(*this);
+    virtual BasicConnection1<Type1>* clone() { return new Connection1<TargetType, Type1>(*this); }
+
+    virtual BasicConnection1<Type1>* duplicate(SlotHolder* newTarget) {
+        return new Connection1<TargetType, Type1>((TargetType*)newTarget, memberFunction_);
     }
 
-
-    virtual BasicConnection1<Type1>* duplicate(SlotHolder* newTarget)
-    {
-        return new Connection1<TargetType, Type1>((TargetType *)newTarget, memberFunction_);
-    }
-
-    virtual void emit(Type1 a1)
-    {
-        if(memberFunction_ != 0)
+    virtual void emit(Type1 a1) {
+        if (memberFunction_ != 0)
             (object_->*memberFunction_)(a1);
         else
             (object_->*voidMemberFunction_)(a1);
     }
 
-    virtual SlotHolder* targetSlotHolder() const
-    {
-        return object_;
-    }
+    virtual SlotHolder* targetSlotHolder() const { return object_; }
 
-private:
+  private:
     TargetType* object_;
-    void (TargetType::* voidMemberFunction_)(Type1);
-    TargetType& (TargetType::* memberFunction_)(Type1);
+    void (TargetType::*voidMemberFunction_)(Type1);
+    TargetType& (TargetType::*memberFunction_)(Type1);
 };
 
-
-
-
-
-
-class Signal0 : public BasicSignal0
-{
-public:
+class Signal0 : public BasicSignal0 {
+  public:
     typedef BasicSignal0::ConnectionList ConnectionList;
 
-public:
+  public:
     Signal0() {}
 
     Signal0(const Signal0& s) : BasicSignal0(s) {}
 
-    template<class TargetType>
-    void connect(TargetType* slotHolder, void (TargetType::*aMemberFunction)())
-    {
-        Connection0<TargetType>* conn =
-            new Connection0<TargetType>(slotHolder, aMemberFunction);
+    template <class TargetType>
+    void connect(TargetType* slotHolder, void (TargetType::*aMemberFunction)()) {
+        Connection0<TargetType>* conn = new Connection0<TargetType>(slotHolder, aMemberFunction);
         connectedSlots_.push_back(conn);
         slotHolder->connectTo(this);
     }
 
-    template<class TargetType>
-    void connect(TargetType* slotHolder, TargetType& (TargetType::*aMemberFunction)())
-    {
-        Connection0<TargetType>* conn =
-            new Connection0<TargetType>(slotHolder, aMemberFunction);
+    template <class TargetType>
+    void connect(TargetType* slotHolder, TargetType& (TargetType::*aMemberFunction)()) {
+        Connection0<TargetType>* conn = new Connection0<TargetType>(slotHolder, aMemberFunction);
         connectedSlots_.push_back(conn);
         slotHolder->connectTo(this);
     }
 
-    void emit()
-    {
+    void emit() {
         ConnectionList::const_iterator itNext, it = connectedSlots_.begin();
         ConnectionList::const_iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             itNext = it;
             ++itNext;
 
@@ -520,14 +388,11 @@ public:
         }
     }
 
-
-    void operator()()
-    {
+    void operator()() {
         ConnectionList::const_iterator itNext, it = connectedSlots_.begin();
         ConnectionList::const_iterator itEnd = connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             itNext = it;
             ++itNext;
 
@@ -536,54 +401,41 @@ public:
             it = itNext;
         }
     }
-    size_t size(void)
-    {
-        return connectedSlots_.size();
-    }
+    size_t size(void) { return connectedSlots_.size(); }
 };
 
-
-
-
-
-template<class Type1>
-class Signal1 : public BasicSignal1<Type1>
-{
-public:
+template <class Type1>
+class Signal1 : public BasicSignal1<Type1> {
+  public:
     typedef typename BasicSignal1<Type1>::ConnectionList ConnectionList;
-public:
+
+  public:
     Signal1() {}
 
     Signal1(const Signal1<Type1>& s) : BasicSignal1<Type1>(s) {}
 
-    template<class TargetType>
-    void connect(TargetType* slotHolder, void (TargetType::*aMemberFunction)(Type1))
-    {
-
+    template <class TargetType>
+    void connect(TargetType* slotHolder, void (TargetType::*aMemberFunction)(Type1)) {
         Connection1<TargetType, Type1>* conn =
-            new Connection1<TargetType, Type1>(slotHolder, aMemberFunction);
+                new Connection1<TargetType, Type1>(slotHolder, aMemberFunction);
         BasicSignal1<Type1>::connectedSlots_.push_back(conn);
         slotHolder->connectTo(this);
     }
 
-    template<class TargetType>
-    void connect(TargetType* slotHolder, TargetType& (TargetType::*aMemberFunction)(Type1))
-    {
-
+    template <class TargetType>
+    void connect(TargetType* slotHolder, TargetType& (TargetType::*aMemberFunction)(Type1)) {
         Connection1<TargetType, Type1>* conn =
-            new Connection1<TargetType, Type1>(slotHolder, aMemberFunction);
+                new Connection1<TargetType, Type1>(slotHolder, aMemberFunction);
         BasicSignal1<Type1>::connectedSlots_.push_back(conn);
         slotHolder->connectTo(this);
     }
 
-    void emit(Type1 a1)
-    {
-
-        typename ConnectionList::const_iterator itNext, it = BasicSignal1<Type1>::connectedSlots_.begin();
+    void emit(Type1 a1) {
+        typename ConnectionList::const_iterator itNext,
+                it = BasicSignal1<Type1>::connectedSlots_.begin();
         typename ConnectionList::const_iterator itEnd = BasicSignal1<Type1>::connectedSlots_.end();
 
-        while(it != itEnd)
-        {
+        while (it != itEnd) {
             itNext = it;
             ++itNext;
 
@@ -593,31 +445,25 @@ public:
         }
     }
 
-    void operator()(Type1 a1)
-    {
-
-        typename ConnectionList::const_iterator itNext, it = BasicSignal1<Type1>::connectedSlots_.begin();
+    void operator()(Type1 a1) {
+        typename ConnectionList::const_iterator itNext,
+                it = BasicSignal1<Type1>::connectedSlots_.begin();
         typename ConnectionList::const_iterator itEnd = BasicSignal1<Type1>::connectedSlots_.end();
 
-        while(it != itEnd)
+        while (it != itEnd)
 
         {
             itNext = it;
             ++itNext;
-
 
             (*it)->emit(a1);
 
             it = itNext;
         }
     }
-    size_t size(void)
-    {
-        return BasicSignal1<Type1>::connectedSlots_.size();
-    }
+    size_t size(void) { return BasicSignal1<Type1>::connectedSlots_.size(); }
 };
 
+}  // namespace akui
 
-}
-
-#endif // SIGSLOT__H
+#endif  // SIGSLOT__H

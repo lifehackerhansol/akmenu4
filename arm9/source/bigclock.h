@@ -21,34 +21,29 @@
 #ifndef _BIGCLOCK_H_
 #define _BIGCLOCK_H_
 
-#include "window.h"
 #include "bmp15.h"
 #include "datetime.h"
 #include "singleton.h"
+#include "window.h"
 
-
-//class cClockNumber : public
-class cBigClock : public akui::cWindow
-{
-public:
-
+// class cClockNumber : public
+class cBigClock : public akui::cWindow {
+  public:
     cBigClock();
 
     ~cBigClock() {}
 
-public:
-
+  public:
     void init();
 
     void draw();
 
     void blinkColon();
 
-    akui::cWindow & loadAppearance(const std::string& aFileName );
+    akui::cWindow& loadAppearance(const std::string& aFileName);
 
-protected:
-
-    void drawNumber( u8 id, u8 number );
+  protected:
+    void drawNumber(u8 id, u8 number);
 
     void drawColon();
 
@@ -62,9 +57,9 @@ protected:
     COLOR _ampmColor;
 };
 
+typedef t_singleton<cBigClock> bigClock_s;
+inline cBigClock& bigClock() {
+    return bigClock_s::instance();
+}
 
-typedef t_singleton< cBigClock > bigClock_s;
-inline cBigClock & bigClock() { return bigClock_s::instance(); }
-
-
-#endif//_BIGCLOCK_H_
+#endif  //_BIGCLOCK_H_

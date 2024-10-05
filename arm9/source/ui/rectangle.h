@@ -25,12 +25,11 @@
 
 namespace akui {
 
-class cRect
-{
+class cRect {
     // ---------------------------------------------------------------------------------------------
     //  Xstruction
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! default contructor - both points at (0, 0)
     cRect() {}
 
@@ -40,16 +39,15 @@ public:
     //! construction from components of the two corner points
     cRect(int x1, int y1, int x2, int y2);
 
-
     // ---------------------------------------------------------------------------------------------
     //  Public Interface
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! returns the position (i.e. lowest value corner) of the rectangle
     cPoint position() const { return position_; }
 
     //! returns half the rectangle's size
-    cSize halfSize() const { return cPoint( size_.x >> 1, size_.y >> 1 ); }
+    cSize halfSize() const { return cPoint(size_.x >> 1, size_.y >> 1); }
 
     //! the center point
     cPoint centerPoint() const;
@@ -91,19 +89,16 @@ public:
     cPoint size() const { return size_; }
 
     //! move to the passed in point
-    cRect& setPosition(const cPoint& p)
-    {
+    cRect& setPosition(const cPoint& p) {
         position_ = p;
         return *this;
     }
 
     //! resize to the passed in size
-    cRect& setSize(const cSize& s)
-    {
+    cRect& setSize(const cSize& s) {
         size_ = s;
         return *this;
     }
-
 
     //! translate through the passed in offset
     cRect& translateBy(const cPoint& p);
@@ -129,36 +124,31 @@ public:
     //! Snaps the size and position of the rectangle to the nearest whole number positions
     cRect& snap();
 
-
     // ---------------------------------------------------------------------------------------------
     //  Operators
     // ---------------------------------------------------------------------------------------------
-public:
+  public:
     //! equality
-    bool operator == (const cRect& rect) const;
+    bool operator==(const cRect& rect) const;
 
     //! inequality
-    bool operator != (const cRect& rect) const;
-
-
+    bool operator!=(const cRect& rect) const;
 
     // ---------------------------------------------------------------------------------------------
     //  Implementation
     // ----------------------------------------------------------------------------------------------
-private:
+  private:
     //! lowest value corner of the rectangle
     cPoint position_;
 
     //! extents of the rectangle
     cPoint size_;
-
 };
 
 ////! output operator
-//std::ostream& operator << (std::ostream& os, const cRect& rect);
+// std::ostream& operator << (std::ostream& os, const cRect& rect);
 
+// *************************************************************************************************
+}  // namespace akui
 
-    // *************************************************************************************************
-} // namespace Core
-
-#endif//_AKUI_RECTANGLE_H_
+#endif  //_AKUI_RECTANGLE_H_

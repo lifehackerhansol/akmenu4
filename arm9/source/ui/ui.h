@@ -22,9 +22,9 @@
 #define _AKUI_H_
 
 #include <nds.h>
-#include "gdi.h"
-#include "dbgtool.h"
 #include "../../share/memtool.h"
+#include "dbgtool.h"
+#include "gdi.h"
 #include "stringtool.h"
 #include "timetool.h"
 
@@ -36,13 +36,12 @@
 #include "window.h"
 #include "windowmanager.h"
 
-#include "message.h"
 #include "keymessage.h"
+#include "message.h"
 #include "touchmessage.h"
 
-
-#include "renderdesc.h"
 #include "bitmapdesc.h"
+#include "renderdesc.h"
 
 #include "button.h"
 #include "listview.h"
@@ -55,11 +54,11 @@
 //#include "progressbar.h"
 //#include "progresswnd.h"
 
-#include "popmenu.h"
 #include "msgbox.h"
+#include "popmenu.h"
 
 #include "globalsettings.h"
-#include "uisettings.h"
 #include "systemfilenames.h"
+#include "uisettings.h"
 
-#endif//_AKUI_H_
+#endif  //_AKUI_H_

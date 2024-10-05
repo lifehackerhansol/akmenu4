@@ -18,41 +18,34 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ui.h"
 #include "statictext.h"
+#include "ui.h"
 //#include "gdi.h"
 
-namespace akui
-{
+namespace akui {
 
-cStaticText::cStaticText( s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text )
-:cWindow( parent, text )
-{
+cStaticText::cStaticText(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text)
+    : cWindow(parent, text) {
     _position.x = x;
     _position.y = y;
     _size.x = w;
     _size.y = h;
-    _textColor = uiSettings().formTextColor;//(RGB15(31,31,31))
+    _textColor = uiSettings().formTextColor;  //(RGB15(31,31,31))
 }
 
-cStaticText::~cStaticText()
-{}
+cStaticText::~cStaticText() {}
 
-void cStaticText::draw()
-{
-    gdi().setPenColor( _textColor, _engine  );
-    gdi().textOutRect( _position.x, _position.y, _size.x, _size.y, _text.c_str(), selectedEngine() );
+void cStaticText::draw() {
+    gdi().setPenColor(_textColor, _engine);
+    gdi().textOutRect(_position.x, _position.y, _size.x, _size.y, _text.c_str(), selectedEngine());
 }
 
-cWindow& cStaticText::loadAppearance(const std::string& aFileName )
-{
+cWindow& cStaticText::loadAppearance(const std::string& aFileName) {
     return *this;
 }
 
-void cStaticText::setTextColor( COLOR color )
-{
+void cStaticText::setTextColor(COLOR color) {
     _textColor = color;
 }
 
-
-}
+}  // namespace akui

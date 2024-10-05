@@ -21,39 +21,32 @@
 #ifndef _PROGRESSWND_H_
 #define _PROGRESSWND_H_
 
-
-#include "ui.h"
 #include "progressbar.h"
 #include "singleton.h"
+#include "ui.h"
 
-namespace akui
-{
+namespace akui {
 
-class cProgressWnd : public cForm
-{
-
-public:
-
-    cProgressWnd();// s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
+class cProgressWnd : public cForm {
+  public:
+    cProgressWnd();  // s32 x, s32 y, u32 w, u32 h, cWindow * parent, const std::string & text );
 
     ~cProgressWnd();
 
-public:
-
+  public:
     void init();
 
     void draw();
 
-    bool process( const cMessage & msg );
+    bool process(const cMessage& msg);
 
-    cWindow& loadAppearance(const std::string& aFileName );
+    cWindow& loadAppearance(const std::string& aFileName);
 
-    void setPercent( u8 percent );
+    void setPercent(u8 percent);
 
-    void setTipText( const std::string & tipText );
+    void setTipText(const std::string& tipText);
 
-protected:
-
+  protected:
     void onShow();
 
     void onHide();
@@ -63,14 +56,13 @@ protected:
     cStaticText _tip;
 
     cBitmapDesc _renderDesc;
-
 };
 
+}  // namespace akui
 
+typedef t_singleton<akui::cProgressWnd> progressWnd_s;
+inline akui::cProgressWnd& progressWnd() {
+    return progressWnd_s::instance();
 }
 
-typedef t_singleton< akui::cProgressWnd > progressWnd_s;
-inline akui::cProgressWnd & progressWnd() { return progressWnd_s::instance(); }
-
-
-#endif//_PROGRESSWND_H_
+#endif  //_PROGRESSWND_H_

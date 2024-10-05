@@ -22,23 +22,23 @@
 #define _FONT_H_
 
 #include <string>
-#include "singleton.h"
 #include "gdi.h"
+#include "singleton.h"
 
-class cFont
-{
+class cFont {
   public:
     cFont();
     virtual ~cFont();
+
   public:
-    u32 getStringScreenWidth( const char * str, size_t len );
-    std::string breakLine( const std::string & text, u32 maxLineWidth );
+    u32 getStringScreenWidth(const char* str, size_t len);
+    std::string breakLine(const std::string& text, u32 maxLineWidth);
+
   public:
-    virtual void Info(const char* aString,u32* aWidth,u32* aSymbolCount)=0;
-    virtual void Draw(u16* mem,s16 x,s16 y,const u8* aText,u16 color)=0;
-    virtual bool Load(const char* aFileName)=0;
+    virtual void Info(const char* aString, u32* aWidth, u32* aSymbolCount) = 0;
+    virtual void Draw(u16* mem, s16 x, s16 y, const u8* aText, u16 color) = 0;
+    virtual bool Load(const char* aFileName) = 0;
     virtual u32 FontRAM(void);
 };
 
-
-#endif//_FONT_H_
+#endif  //_FONT_H_

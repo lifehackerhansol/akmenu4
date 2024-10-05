@@ -21,16 +21,15 @@
 
 #include "dsrom.h"
 
-enum TLaunchResult
-{
-  ELaunchRomOk,
-  ELaunchSDOnly,
-  ELaunchRestoreFail,
-  ELaunchSlowSD,
-  ELaunchNoFreeSpace
+enum TLaunchResult {
+    ELaunchRomOk,
+    ELaunchSDOnly,
+    ELaunchRestoreFail,
+    ELaunchSlowSD,
+    ELaunchNoFreeSpace
 };
 
-TLaunchResult launchRom(const std::string& aFullPath,DSRomInfo& aRomInfo,bool aMenu);
+TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool aMenu);
 void autoLaunchRom(const std::string& aFullPath);
 
 #endif

@@ -21,36 +21,31 @@
 #ifndef _CALENDAR_H_
 #define _CALENDAR_H_
 
-#include "window.h"
 #include "bmp15.h"
 #include "datetime.h"
-#include "singleton.h"
 #include "point.h"
+#include "singleton.h"
+#include "window.h"
 
-
-class cCalendar : public akui::cWindow
-{
-public:
-
+class cCalendar : public akui::cWindow {
+  public:
     cCalendar();
 
     ~cCalendar() {}
 
-public:
-
+  public:
     void init();
 
     void draw();
 
-    akui::cWindow & loadAppearance(const std::string& aFileName );
+    akui::cWindow& loadAppearance(const std::string& aFileName);
 
-protected:
-
+  protected:
     u8 weekDayOfFirstDay();
 
-    void drawDayNumber( u8 day );
-    void drawText( const akui::cPoint& position, u32 value, u32 factor );
-    void drawNumber( const akui::cPoint& position, u32 index, u32 value );
+    void drawDayNumber(u8 day);
+    void drawText(const akui::cPoint& position, u32 value, u32 factor);
+    void drawNumber(const akui::cPoint& position, u32 index, u32 value);
 
     akui::cPoint _dayPosition;
     akui::cSize _daySize;
@@ -58,7 +53,7 @@ protected:
     akui::cPoint _monthPosition;
     akui::cPoint _yearPosition;
     COLOR _dayHighlightColor;
-    cBMP15 _dayNumbers;       // index 10 means colon
+    cBMP15 _dayNumbers;  // index 10 means colon
     cBMP15 _yearNumbers;
 
     bool _showYear;
@@ -69,9 +64,9 @@ protected:
     bool _colonShow;
 };
 
+typedef t_singleton<cCalendar> calendar_s;
+inline cCalendar& calendar() {
+    return calendar_s::instance();
+}
 
-typedef t_singleton< cCalendar > calendar_s;
-inline cCalendar & calendar() { return calendar_s::instance(); }
-
-
-#endif//_CALENDAR_H_
+#endif  //_CALENDAR_H_

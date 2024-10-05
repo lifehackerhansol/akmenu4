@@ -2,4 +2,6 @@ This program is originally based on the akmenu project by the Acekard team, who 
 
 This program is further developed by yellow wood goblin, who released the source under the GPL-3.0-or-later license. See GPL3.txt for more info.
 
-This provided source is licensed under the GPL-3.0-or-later license.
+This provided source integrates devkitPro's bootloader, which is licensed under the GPL-2.0-or-later license. See GPL2.txt for more info.
+
+This provided source is collectively licensed under the GPL-3.0-or-later license.

@@ -35,6 +35,8 @@
 #include <fat.h>
 #include <sys/iosupport.h>
 
+#include "launcher/HomebrewLauncher.h"
+
 using namespace akui;
 
 cMainWnd::cMainWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::string& text)
@@ -582,7 +584,7 @@ void cMainWnd::setParam(void) {
             gs().uiName = uiNames[uiIndexAfter];
             gs().langDirectory = langNames[langIndexAfter];
             gs().saveSettings();
-            loadRom("fat:/akmenu4.nds", "", 0, 0, 0);
+            HomebrewLauncher().launchRom("fat:/akmenu4.nds", "", 0, 0, 0);
         }
     }
 
@@ -592,7 +594,7 @@ void cMainWnd::setParam(void) {
         if (ID_YES == ret) {
             gs().langDirectory = langNames[langIndexAfter];
             gs().saveSettings();
-            loadRom("fat:/akmenu4.nds", "", 0, 0, 0);
+            HomebrewLauncher().launchRom("fat:/akmenu4.nds", "", 0, 0, 0);
         }
     }
 

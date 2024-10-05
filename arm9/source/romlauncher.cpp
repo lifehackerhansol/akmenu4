@@ -10,7 +10,9 @@
 #include "exptools.h"
 #include "flags.h"
 #include "language.h"
-#include "romloader.h"
+
+#include "launcher/HomebrewLauncher.h"
+#include "launcher/ILauncher.h"
 
 static SAVE_TYPE PrefillGame(u32 aGameCode) {
     if (0x45444759 == aGameCode)  // YGDE: 2209 - Diary Girl (USA)
@@ -132,6 +134,8 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
     long cheatOffset = 0;
     size_t cheatSize = 0;
     std::string saveName;
+    ILauncher* launcher = nullptr;
+#if 0
     if (!aRomInfo.isHomebrew()) {
         u32 gameCode;
         memcpy(&gameCode, aRomInfo.saveInfo().gameCode, sizeof(gameCode));  // because alignment
@@ -146,17 +150,6 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
             if (protection) speed = 0x1fff;
             dma = aRomInfo.saveInfo().isDMA();
             flags |= PATCH_DMA;
-            /*
-                  if((gameCode&0xffffff)==0x425841) //2385 - Daigassou! Band-Brothers DX (Japan)
-                  {
-                    isBigSave=true;
-                  }
-                  if((gameCode&0xffffff)==0x414156) //5054 - Eigokoro Kyoushitsu DS (Japan) (NDSi
-               Enhanced)
-                  {
-                    isBigSave=true;
-                  }
-            */
             if ((gameCode & 0xffffff) ==
                 0x425855)  // 4950 - Jam with the Band (Europe) (En,Fr,De,Es,It)
             {
@@ -202,16 +195,21 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
             }
         }
         __NDSHeader->cardControl13 = 0x00406000 | speed;
+
         // 3in1 support
-        if (gameCode == 0x4a524255 || gameCode == 0x50524255) {
-            expansion().SoftReset();
-            cExpansion::SetRompage(0x300);
-            cExpansion::OpenNorWrite();
-            cExpansion::EnableBrowser();
-        }
-        if (aRomInfo.saveInfo().getRumble()) {
-            expansion().SoftReset();
-            cExpansion::SetShake(0xEF + aRomInfo.saveInfo().getRumble());
+        fifoSendValue32(FIFO_USER_01, MENU_MSG_SYSTEM);
+        fifoWaitValue32(FIFO_USER_02);
+        if (2 != fifoGetValue32(FIFO_USER_02)) {  // not dsi
+            if (gameCode == 0x4a524255 || gameCode == 0x50524255) {
+                expansion().SoftReset();
+                cExpansion::SetRompage(0x300);
+                cExpansion::OpenNorWrite();
+                cExpansion::EnableBrowser();
+            }
+            if (aRomInfo.saveInfo().getRumble()) {
+                expansion().SoftReset();
+                cExpansion::SetShake(0xEF + aRomInfo.saveInfo().getRumble());
+            }
         }
         if (aRomInfo.saveInfo().isDownloadPlay()) flags |= PATCH_DOWNLOAD_PLAY;
         if (aRomInfo.saveInfo().isCheat()) {
@@ -231,16 +229,16 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
         if (aRomInfo.saveInfo().isLinkage()) flags |= PATCH_LINKAGE;
         u8 language = aRomInfo.saveInfo().getLanguage();
         if (language) flags |= (language << PATCH_LANGUAGE_SHIFT) & PATCH_LANGUAGE_MASK;
+
+        launcher = new NdsBootstrapLauncher();
     } else {
-        if (!aMenu) saveManager().saveLastInfo(aFullPath);
-        const u16 lameboy[] = {'L', 'a', 'm', 'e', 'b', 'o', 'y'};
-        if (memcmp(aRomInfo.banner().titles[0], lameboy, sizeof(lameboy)) == 0) {
-            expansion().SoftReset();
-            cExpansion::SetShake(0xF0);
-        }
-        if (gs().homebrewreset) flags |= PATCH_SOFT_RESET;
+#endif
+    if (!aMenu) saveManager().saveLastInfo(aFullPath);
+    launcher = new HomebrewLauncher();
+#if 0
     }
-    loadRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
+#endif
+    launcher->launchRom(aFullPath, saveName, flags, cheatOffset, cheatSize);
     return ELaunchRomOk;
 }
 

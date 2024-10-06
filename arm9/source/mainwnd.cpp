@@ -17,7 +17,6 @@
 #include "windowmanager.h"
 
 #include "datetime.h"
-#include "testcases.h"
 
 #include "expwnd.h"
 #include "favorites.h"
@@ -29,7 +28,6 @@
 #include "rominfownd.h"
 #include "romlauncher.h"
 #include "romloader.h"
-#include "testcases.h"
 
 #include <dirent.h>
 #include <fat.h>

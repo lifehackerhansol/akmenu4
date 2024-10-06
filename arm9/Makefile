@@ -7,6 +7,8 @@ endif
 
 include $(DEVKITARM)/ds_rules
 
+DSI	?= 0
+
 #---------------------------------------------------------------------------------
 # BUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
@@ -28,6 +30,10 @@ ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 
 CFLAGS   := -g -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9 -D_NO_BOOTSTUB_
+ifeq ($(DSI),1)
+	CFLAGS += -D__DSIMODE__
+endif
+
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS  := -g $(ARCH)
 LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)

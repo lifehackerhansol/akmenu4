@@ -17,7 +17,11 @@
 #include "touchmessage.h"
 #include "zoomingicon.h"
 
+#ifndef __DSIMODE__
 #define SD_ROOT_0 "fat:"
+#else
+#define SD_ROOT_0 "sd:"
+#endif
 #define SD_ROOT SD_ROOT_0 "/"
 
 // 显示游戏列表，文件列表等等

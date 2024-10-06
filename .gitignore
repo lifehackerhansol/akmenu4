@@ -1,6 +1,7 @@
 build
-arm9/data/load.bin
+data/load.bin
 *.elf
 *.nds
+*.dsi
 *.pcf
 *.dldi

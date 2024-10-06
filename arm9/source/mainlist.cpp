@@ -321,7 +321,8 @@ void cMainList::backParentDir() {
     if ("..." == _currentDir) return;
 
     bool fat1 = (SD_ROOT == _currentDir), favorites = ("favorites:/" == _currentDir);
-    if ("fat:/" == _currentDir || fat1 || favorites || "/" == _currentDir) {
+    if ("fat:/" == _currentDir || "sd:/" == _currentDir || fat1 || favorites ||
+        "/" == _currentDir) {
         enterDir("...");
         if (fat1) selectRow(_topuSD);
         if (favorites) selectRow(_topFavorites);

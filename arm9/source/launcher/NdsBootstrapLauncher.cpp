@@ -17,6 +17,7 @@
 #include "../dsrom.h"
 #include "../flags.h"
 #include "../inifile.h"
+#include "../mainlist.h"
 #include "ILauncher.h"
 #include "NdsBootstrapLauncher.h"
 #include "nds_loader_arm9.h"
@@ -71,20 +72,12 @@ bool NdsBootstrapLauncher::prepareIni() {
 
 bool NdsBootstrapLauncher::launchRom(std::string romPath, std::string savePath, u32 flags,
                                      u32 cheatOffset, u32 cheatSize) {
-    std::string ndsBootstrapPath = "/_nds/nds-bootstrap-release.nds";
+    const char ndsBootstrapPath[] = SD_ROOT_0 "/_nds/nds-bootstrap-release.nds";
     std::vector<const char*> argv;
 
     mRomPath = romPath;
     mSavePath = savePath;
     mFlags = flags;
-
-    // mRomPath *should* have the drive name set
-    // If it doesn't for some reason, default to `fat:/`, because most people are probably using
-    // this on flashcart
-    if (mRomPath.find("sd:/", 0) == std::string::npos)
-        ndsBootstrapPath = "fat:" + ndsBootstrapPath;
-    else
-        ndsBootstrapPath = "sd:" + ndsBootstrapPath;
 
     // Create the nds-bootstrap directory if it doesn't exist
     if (access("/_nds/nds-bootstrap/", F_OK) != 0) {
@@ -92,7 +85,7 @@ bool NdsBootstrapLauncher::launchRom(std::string romPath, std::string savePath, 
     }
 
     // Setup argv to launch nds-bootstrap
-    argv.push_back(ndsBootstrapPath.c_str());
+    argv.push_back(ndsBootstrapPath);
 
     // Prepare cheat codes if enabled
     if (flags & PATCH_CHEATS) {

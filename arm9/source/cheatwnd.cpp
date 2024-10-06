@@ -395,11 +395,8 @@ bool cCheatWnd::parseInternal(FILE* aDat, u32 gamecode, u32 crc32) {
                                             flagItem | ((*ccode & 0xff000000) ? selectValue : 0),
                                             dataPos + (((char*)ccode + 3) - buffer)));
                 if ((*ccode & 0xff000000) && (flagItem & cParsedItem::EOne)) selectValue = 0;
-                for (size_t jj = 0; jj < cheatDataLen; ++jj) {
-                    _data.back()._cheat += formatString("%08X", *(cheatData + jj));
-                    _data.back()._cheat += ((jj + 1) % 2) ? " " : "\n";
-                }
-                if (cheatDataLen % 2) _data.back()._cheat += "\n";
+                _data.back()._cheat.resize(cheatDataLen);
+                memcpy(_data.back()._cheat.data(), cheatData, cheatDataLen * 4);
             }
             cc++;
             ccode = (u32*)((u32)ccode + (((*ccode & 0x00ffffff) + 1) * 4));
@@ -440,5 +437,25 @@ void cCheatWnd::deselectFolder(size_t anIndex) {
     while (((*itr)._flags & cParsedItem::EInFolder) && itr != _data.end()) {
         (*itr)._flags &= ~cParsedItem::ESelected;
         ++itr;
+    }
+}
+
+std::vector<u32> cCheatWnd::getCheats() {
+    std::vector<u32> cheats;
+    for (uint i = 0; i < _data.size(); i++) {
+        if (_data[i]._flags & cParsedItem::ESelected) {
+            cheats.insert(cheats.end(), _data[i]._cheat.begin(), _data[i]._cheat.end());
+        }
+    }
+    return cheats;
+}
+
+void cCheatWnd::writeCheatsToFile(const char* path) {
+    FILE* file = fopen(path, "wb");
+    if (file) {
+        std::vector<u32> cheats(getCheats());
+        fwrite(cheats.data(), 4, cheats.size(), file);
+        fwrite("\0\0\0\xCF", 4, 1, file);
+        fclose(file);
     }
 }

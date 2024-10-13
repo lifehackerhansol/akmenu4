@@ -42,6 +42,11 @@ cGlobalSettings::cGlobalSettings() {
     show12hrClock = false;
     autorunWithLastRom = false;
     homebrewreset = false;
+#ifndef __KERNEL_LAUNCHER_SUPPORT__
+    romLauncher = EKernelLauncher;
+#else
+    romLauncher = ENdsBootstrapLauncher;
+#endif
 }
 
 void cGlobalSettings::loadSettings() {
@@ -80,6 +85,11 @@ void cGlobalSettings::loadSettings() {
 
     temp = ini.GetString("system", "saveext", ".sav");
     saveExt = (temp == ".sav");
+
+#ifdef __KERNEL_LAUNCHER_SUPPORT__
+    temp = ini.GetString("system", "nds-bootstrap", "false");
+    romLauncher = (temp != "false") ? ENdsBootstrapLauncher : EKernelLauncher;
+#endif
 
     struct stat st;
     if (0 == stat(SFN_CHEATS, &st)) cheatDB = true;

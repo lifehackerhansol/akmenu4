@@ -22,7 +22,6 @@
 #include "nand_banner_bin.h"
 #include "nds_save_banner_bin.h"
 #include "progresswnd.h"
-#include "romloader.h"
 #include "startmenu.h"
 #include "systemfilenames.h"
 #include "timetool.h"

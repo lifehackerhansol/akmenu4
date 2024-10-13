@@ -11,6 +11,7 @@
 #include "flags.h"
 #include "language.h"
 
+#include "launcher/AcekardLauncher.h"
 #include "launcher/HomebrewLauncher.h"
 #include "launcher/ILauncher.h"
 #include "launcher/NdsBootstrapLauncher.h"
@@ -231,7 +232,14 @@ TLaunchResult launchRom(const std::string& aFullPath, DSRomInfo& aRomInfo, bool 
         u8 language = aRomInfo.saveInfo().getLanguage();
         if (language) flags |= (language << PATCH_LANGUAGE_SHIFT) & PATCH_LANGUAGE_MASK;
 
+#ifndef __KERNEL_LAUNCHER_SUPPORT__
         launcher = new NdsBootstrapLauncher();
+#else   // __KERNEL_LAUNCHER_SUPPORT__
+        if (aRomInfo.saveInfo().isNdsBootstrap())
+            launcher = new NdsBootstrapLauncher();
+        else
+            launcher = new AcekardLauncher();
+#endif  // __KERNEL_LAUNCHER_SUPPORT__
     } else {
         if (!aMenu) saveManager().saveLastInfo(aFullPath);
         launcher = new HomebrewLauncher();

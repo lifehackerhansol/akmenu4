@@ -275,7 +275,7 @@ microsd card = microSD Card
 slot2 card = Slot2 Card
 favorites = Favorites
 
-[hbloader]
-load failed = Failed to load homebrew app.
+[loader]
+text = Use ROM loader
 
 [end]

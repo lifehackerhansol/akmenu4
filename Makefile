@@ -22,12 +22,12 @@ GAME_SUBTITLE2 := www.acekard.com
 
 include $(DEVKITARM)/ds_rules
 
-.PHONY: checkarm7 checkarm9 checkarm9_dsi clean
+.PHONY: checkarm7 checkarm9 checkarm9_ak2 checkarm9_dsi clean
 
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-all: checkarm7 checkarm9 checkarm9_dsi $(TARGET).nds $(TARGET).dsi
+all: checkarm7 checkarm9 checkarm9_ak2 checkarm9_dsi $(TARGET).nds $(TARGET)_ak2.nds $(TARGET).dsi
 
 #---------------------------------------------------------------------------------
 checkarm7:
@@ -38,12 +38,22 @@ checkarm9:
 	$(MAKE) -C arm9
 
 #---------------------------------------------------------------------------------
+checkarm9_ak2:
+	$(MAKE) -C arm9_ak2
+
+#---------------------------------------------------------------------------------
 checkarm9_dsi:
 	$(MAKE) -C arm9_dsi
 
 #---------------------------------------------------------------------------------
 $(TARGET).nds : $(NITRO_FILES) arm7/$(TARGET).elf arm9/$(TARGET).elf
 	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf \
+	-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
+	$(_ADDFILES)
+
+#---------------------------------------------------------------------------------
+$(TARGET)_ak2.nds : $(NITRO_FILES) arm7/$(TARGET).elf arm9_ak2/$(TARGET).elf
+	ndstool	-c $@ -7 arm7/$(TARGET).elf -9 arm9_ak2/$(TARGET).elf \
 	-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
 	$(_ADDFILES)
 
@@ -62,12 +72,17 @@ arm9/$(TARGET).elf:
 	$(MAKE) -C arm9
 
 #---------------------------------------------------------------------------------
+arm9_ak2/$(TARGET).elf:
+	$(MAKE) -C arm9_ak2
+
+#---------------------------------------------------------------------------------
 arm9_dsi/$(TARGET).elf:
 	$(MAKE) -C arm9_dsi
 
 #---------------------------------------------------------------------------------
 clean:
 	$(MAKE) -C arm9 clean
+	$(MAKE) -C arm9_ak2 clean
 	$(MAKE) -C arm9_dsi clean
 	$(MAKE) -C arm7 clean
 	rm -f *.nds *.dsi

@@ -19,6 +19,7 @@ class cGlobalSettings {
     enum TScrollSpeed { EScrollFast = 4, EScrollMedium = 10, EScrollSlow = 16 };
     enum TViewMode { EViewList = 0, EViewIcon = 1, EViewInternal = 2 };
     enum TSlot2Mode { ESlot2Ask = 0, ESlot2Gba = 1, ESlot2Nds = 2 };
+    enum TROMLauncher { EKernelLauncher = 0, ENdsBootstrapLauncher = 1 };
 
   public:
     cGlobalSettings();
@@ -61,6 +62,7 @@ class cGlobalSettings {
     bool show12hrClock;
     bool autorunWithLastRom;
     bool homebrewreset;
+    int romLauncher;
 };
 
 typedef t_singleton<cGlobalSettings> globalSettings_s;

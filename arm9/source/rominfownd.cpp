@@ -286,6 +286,7 @@ void cRomInfoWnd::onShow() {
 #define ITEM_SAVETYPE 0, 0
 #define ITEM_LINKAGE 0, 1
 #define ITEM_RUMBLE 0, 2
+#define ITEM_NDSBOOTSTRAP 0, 3
 
 #define ITEM_CHEATS 1, 0
 #define ITEM_SOFTRESET 1, 1
@@ -327,6 +328,15 @@ void cRomInfoWnd::pressSaveType(void) {
     }
     settingWnd.addSettingItem(LANG("exp window", "strength"), _values,
                               _romInfo.saveInfo().getRumble());
+
+#ifdef __KERNEL_LAUNCHER_SUPPORT__
+    _values.clear();
+    _values.push_back("nds-bootstrap");
+    _values.push_back("kernel");
+    _values.push_back(LANG("save type", "default"));
+    settingWnd.addSettingItem(LANG("loader", "text"), _values,
+                              _romInfo.saveInfo().getNdsBootstrap());
+#endif  // __KERNEL_LAUNCHER_SUPPORT__
 
     settingWnd.addSettingTab(LANG("save type", "tab2"));
 
@@ -399,7 +409,8 @@ void cRomInfoWnd::pressSaveType(void) {
             settingWnd.getItemSelection(ITEM_SOFTRESET), settingWnd.getItemSelection(ITEM_CHEATS),
             settingWnd.getItemSelection(ITEM_SAVESLOT), 2, 0,
             settingWnd.getItemSelection(ITEM_LINKAGE), settingWnd.getItemSelection(ITEM_ICON), 2,
-            settingWnd.getItemSelection(ITEM_LANGUAGE));
+            settingWnd.getItemSelection(ITEM_LANGUAGE),
+            settingWnd.getItemSelection(ITEM_NDSBOOTSTRAP));
 
     saveManager().updateCustomSaveList(_romInfo.saveInfo());
 }

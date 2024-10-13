@@ -27,7 +27,6 @@
 #include "progresswnd.h"
 #include "rominfownd.h"
 #include "romlauncher.h"
-#include "romloader.h"
 
 #include <dirent.h>
 #include <fat.h>
@@ -670,7 +669,7 @@ void cMainWnd::onFolderChanged() {
             }
         }
         if (mode == cGlobalSettings::ESlot2Nds) {
-            loadRom("slot2:/", "", 0, 0, 0);
+            // loadRom("slot2:/", "", 0, 0, 0);
         } else {
             CGbaLoader::StartGBA();
         }

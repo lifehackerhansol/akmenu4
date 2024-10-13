@@ -37,7 +37,7 @@ cGlobalSettings::cGlobalSettings() {
     sdsave = true;
     cheatDB = false;
     slot2mode = ESlot2Ask;
-    saveExt = false;
+    saveExt = true;
     safeMode = false;
     show12hrClock = false;
     autorunWithLastRom = false;
@@ -78,7 +78,7 @@ void cGlobalSettings::loadSettings() {
     temp = ini.GetString("system", "slot2mode", "ask");
     slot2mode = (temp == "gba") ? ESlot2Gba : ((temp == "nds") ? ESlot2Nds : ESlot2Ask);
 
-    temp = ini.GetString("system", "saveext", ".nds.sav");
+    temp = ini.GetString("system", "saveext", ".sav");
     saveExt = (temp == ".sav");
 
     struct stat st;

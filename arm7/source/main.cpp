@@ -61,7 +61,8 @@ static void prepairReset() {
     REG_IE = 0;
     REG_IF = ~0;
 
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_ARM7_READY_BOOT);
+    // instruct arm9 to reset
+    *((vu32*)0x02FFFE04) = MENU_MSG_ARM7_READY_BOOT;
     swiDelay(1);
 }
 

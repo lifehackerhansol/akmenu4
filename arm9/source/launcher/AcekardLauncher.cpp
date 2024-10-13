@@ -21,35 +21,21 @@
 // 256 UCS-2 characters encoded into UTF-8 can use up to 768 UTF-8 chars
 #define MAX_FILENAME_LENGTH 768
 
-// FIFO_CHANNEL_BITS - number of bits used to specify the channel in a packet - default=4
-#define FIFO_CHANNEL_BITS 4
-#define FIFO_CHANNEL_SHIFT (32 - FIFO_CHANNEL_BITS)
-#define FIFO_IMMEDIATEBIT_SHIFT (FIFO_CHANNEL_SHIFT - 2)
-#define FIFO_IMMEDIATEBIT (1 << FIFO_IMMEDIATEBIT_SHIFT)
-#define FIFO_EXTRABIT_SHIFT (FIFO_CHANNEL_SHIFT - 3)
-#define FIFO_EXTRABIT (1 << FIFO_EXTRABIT_SHIFT)
-#define FIFO_VALUE32_MASK (FIFO_EXTRABIT - 1)
-
-#define FIFO_PACK_VALUE32(channel, value32) \
-    (((channel) << FIFO_CHANNEL_SHIFT) | FIFO_IMMEDIATEBIT | (((value32)) & FIFO_VALUE32_MASK))
-
 static void resetAndLoop() {
+    DC_FlushAll();
+    DC_InvalidateAll();
+
+    fifoSendValue32(FIFO_USER_01, MENU_MSG_ARM7_REBOOT);
+    *((vu32*)0x02FFFE04) = 0;
+
     // Interrupt
     REG_IME = 0;
     REG_IE = 0;
     REG_IF = ~0;
 
-    DC_FlushAll();
-    DC_InvalidateAll();
-
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_ARM7_REBOOT);
-    while (true) {
-        while (REG_IPC_FIFO_CR & IPC_FIFO_RECV_EMPTY)
-            ;
-        u32 res = REG_IPC_FIFO_RX;
-        if (FIFO_PACK_VALUE32(FIFO_USER_01, MENU_MSG_ARM7_READY_BOOT) == res) break;
-    }
-
+    // wait for arm7
+    while (*((vu32*)0x02FFFE04) == 0)
+        ;
     swiSoftReset();
 }
 

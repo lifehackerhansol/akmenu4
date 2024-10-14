@@ -34,6 +34,7 @@
 
 #include "launcher/HomebrewLauncher.h"
 #include "launcher/NdsBootstrapLauncher.h"
+#include "launcher/PassMeLauncher.h"
 
 using namespace akui;
 
@@ -669,7 +670,7 @@ void cMainWnd::onFolderChanged() {
             }
         }
         if (mode == cGlobalSettings::ESlot2Nds) {
-            // loadRom("slot2:/", "", 0, 0, 0);
+            PassMeLauncher().launchRom("slot2:/", "", 0, 0, 0);
         } else {
             CGbaLoader::StartGBA();
         }

@@ -47,8 +47,8 @@ cHelpWnd::cHelpWnd(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::strin
 
     // u8 nandDriverVer = getNandDriverVer();
     _helpText += '\n';
-    _helpText += formatString("wood akmenu %s.%s ", AKMENU_VERSION_MAIN, AKMENU_VERSION_SUB);
-    _helpText += formatString("\nfont: %dk", font().FontRAM() / 1024);
+    _helpText += formatString("LHS akmenu %s.%s ", AKMENU_VERSION_MAIN, AKMENU_VERSION_SUB);
+    _helpText += formatString("\n%s %s ", AKMENU_LOADER_NAME, AKMENU_LOADER_VERSION);
 }
 
 cHelpWnd::~cHelpWnd() {}

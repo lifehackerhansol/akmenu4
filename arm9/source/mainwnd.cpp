@@ -642,9 +642,7 @@ void cMainWnd::showFileInfo() {
 void cMainWnd::onFolderChanged() {
     resetInputIdle();
     std::string dirShowName = _mainList->getCurrentDir();
-    if (dirShowName.substr(0, 5) == SD_ROOT_0)
-        dirShowName.replace(0, 4, "SD");
-    else if ("favorites:/" != dirShowName && "slot2:/" == _mainList->getSelectedFullPath()) {
+    if ("favorites:/" != dirShowName && "slot2:/" == _mainList->getSelectedFullPath()) {
         u8 chk = 0;
         for (u32 i = 0xA0; i < 0xBD; ++i) {
             chk = chk - *(u8*)(0x8000000 + i);

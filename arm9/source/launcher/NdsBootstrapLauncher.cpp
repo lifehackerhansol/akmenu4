@@ -73,6 +73,12 @@ bool NdsBootstrapLauncher::prepareIni() {
 bool NdsBootstrapLauncher::launchRom(std::string romPath, std::string savePath, u32 flags,
                                      u32 cheatOffset, u32 cheatSize) {
     const char ndsBootstrapPath[] = SD_ROOT_0 "/_nds/nds-bootstrap-release.nds";
+
+    if (access(ndsBootstrapPath, F_OK) != 0) {
+        printLoaderNotFound(ndsBootstrapPath);
+        return false;
+    }
+
     std::vector<const char*> argv;
 
     mRomPath = romPath;

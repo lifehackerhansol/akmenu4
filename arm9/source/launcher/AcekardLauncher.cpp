@@ -46,6 +46,11 @@ bool AcekardLauncher::launchRom(std::string romPath, std::string savePath, u32 f
 
     dbg_printf("load %s\n", romPath.c_str());
 
+    if (access("fat:/__rpg/akloader.nds", F_OK) != 0) {
+        printLoaderNotFound("fat:/__rpg/akloader.nds");
+        return false;
+    }
+
     // akloaders are very old and expect the old-style libfat mount points
     romPath.replace(0, 3, "fat0");
     savePath.replace(0, 3, "fat0");

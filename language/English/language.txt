@@ -275,5 +275,6 @@ favorites = Favorites
 
 [loader]
 text = Use ROM loader
+not found = Loader not found
 
 [end]

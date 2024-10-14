@@ -16,6 +16,11 @@ bool PassMeLauncher::launchRom(std::string romPath, std::string savePath, u32 fl
                                u32 cheatOffset, u32 cheatSize) {
     const char passMeLoaderPath[] = "fat:/__rpg/PassMeLoader.nds";
 
+    if (access(passMeLoaderPath, F_OK) != 0) {
+        printLoaderNotFound(passMeLoaderPath);
+        return false;
+    }
+
     std::vector<const char*> argv;
     argv.push_back(passMeLoaderPath);
     eRunNdsRetCode rc = runNdsFile(argv[0], argv.size(), &argv[0]);

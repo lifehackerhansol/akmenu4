@@ -7,6 +7,12 @@
 #pragma once
 
 #include <nds/ndstypes.h>
+#include "../language.h"
+#include "../ui/msgbox.h"
+
+static inline void printLoaderNotFound(std::string loaderPath) {
+    akui::messageBox(NULL, LANG("loader", "not found"), loaderPath, MB_OK);
+}
 
 class ILauncher {
   public:

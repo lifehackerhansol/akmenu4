@@ -109,7 +109,7 @@ static bool extnameFilter(const std::vector<std::string>& extNames, std::string 
 
 bool cMainList::enterDir(const std::string& dirName) {
     _saves.clear();
-    if ("..." == dirName)  // select RPG or SD card
+    if (memcmp(dirName.c_str(), "...", 3) == 0 || dirName.empty())  // select RPG or SD card
     {
         removeAllRows();
         _romInfoList.clear();

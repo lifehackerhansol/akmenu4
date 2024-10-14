@@ -183,7 +183,19 @@ void cMainWnd::startMenuItemClicked(s16 i) {
     dbg_printf("start menu item %d\n", i);
     // messageBox( this, "Power Off", "Are you sure you want to turn off ds?", MB_YES | MB_NO );
 
-    if (START_MENU_ITEM_SETTING == i) {
+    if (START_MENU_ITEM_FAVORITES_ADD == i) {
+        bool ret = cFavorites::AddToFavorites(_mainList->getSelectedFullPath());
+        if (ret)  // refresh current directory
+            _mainList->enterDir(_mainList->getCurrentDir());
+    }
+
+    else if (START_MENU_ITEM_FAVORITES_DELETE == i) {
+        bool ret = cFavorites::RemoveFromFavorites(_mainList->getSelectedFullPath());
+        if (ret && _mainList->IsFavorites())  // refresh current directory
+            _mainList->enterDir(_mainList->getCurrentDir());
+    }
+
+    else if (START_MENU_ITEM_SETTING == i) {
         showSettings();
     }
 

@@ -5,11 +5,9 @@ main = liberation.pcf
 language = 1
 
 [start menu]
-Copy = Copy
-Cut = Cut
-Paste = Paste
-Delete = Delete
 Setting = Settings
+Set favorite = Set favorite
+Unset favorite = Unset favorite
 Info = File Info
 Help = Help
 Tools = Tools

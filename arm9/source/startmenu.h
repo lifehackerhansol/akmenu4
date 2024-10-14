@@ -11,10 +11,12 @@
 
 #include "popmenu.h"
 
-#define START_MENU_ITEM_SETTING 0
-#define START_MENU_ITEM_INFO 1
-#define START_MENU_ITEM_HELP 2
-#define START_MENU_ITEM_TOOLS 3
+#define START_MENU_ITEM_FAVORITES_ADD 0
+#define START_MENU_ITEM_FAVORITES_DELETE 1
+#define START_MENU_ITEM_SETTING 2
+#define START_MENU_ITEM_INFO 3
+#define START_MENU_ITEM_HELP 4
+#define START_MENU_ITEM_TOOLS 5
 
 class cStartMenu : public akui::cPopMenu {
   public:

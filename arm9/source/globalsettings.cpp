@@ -131,6 +131,11 @@ void cGlobalSettings::saveSettings() {
                   (slot2mode == ESlot2Gba) ? "gba" : ((slot2mode == ESlot2Nds) ? "nds" : "ask"));
     ini.SetString("system", "saveext", saveExt ? ".sav" : ".nds.sav");
 
+#ifdef __KERNEL_LAUNCHER_SUPPORT__
+    ini.SetString("system", "nds-bootstrap",
+                  romLauncher == ENdsBootstrapLauncher ? "true" : "false");
+#endif
+
     ini.SaveIniFile(SFN_GLOBAL_SETTINGS);
     updateSafeMode();
 }

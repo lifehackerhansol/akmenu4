@@ -534,6 +534,12 @@ void cMainWnd::setParam(void) {
     settingWnd.addSettingItem(LANG("patches", "cheating system"), _values, gs().cheats);
     settingWnd.addSettingItem(LANG("patches", "reset in game"), _values, gs().softreset);
     settingWnd.addSettingItem(LANG("patches", "homebrew reset"), _values, gs().homebrewreset);
+#ifdef __KERNEL_LAUNCHER_SUPPORT__
+    _values.clear();
+    _values.push_back("Kernel");
+    _values.push_back("nds-bootstrap");
+    settingWnd.addSettingItem(LANG("loader", "text"), _values, gs().romLauncher);
+#endif
 
     // page 5: gba
     settingWnd.addSettingTab(LANG("gba settings", "title"));
@@ -582,6 +588,7 @@ void cMainWnd::setParam(void) {
     gs().cheats = settingWnd.getItemSelection(3, 0);
     gs().softreset = settingWnd.getItemSelection(3, 1);
     gs().homebrewreset = settingWnd.getItemSelection(3, 2);
+    gs().romLauncher = settingWnd.getItemSelection(3, 3);
 
     // page 5: gba
     gs().gbaSleepHack = settingWnd.getItemSelection(4, 0);

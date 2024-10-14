@@ -224,8 +224,7 @@ bool cMainList::enterDir(const std::string& dirName) {
                                                              strcmp(entry->d_name, ".."))
                                                           : extnameFilter(extNames, extName);
                 showThis = showThis && (_showAllFiles || gs().showHiddenFiles ||
-                                        !(FAT_getAttr(entry->d_name) & ATTR_HIDDEN));
-
+                                        !(FAT_getAttr((dirName + lfn).c_str()) & ATTR_HIDDEN));
                 // 如果有后缀名，或者是个目录，就push进去
                 if (showThis) {
                     u32 row_count = getRowCount();

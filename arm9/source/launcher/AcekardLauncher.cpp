@@ -15,6 +15,7 @@
 #include <nds.h>
 
 #include "../../../share/fifotool.h"
+#include "../ui/progresswnd.h"
 #include "AcekardLauncher.h"
 #include "dbgtool.h"
 
@@ -48,6 +49,23 @@ bool AcekardLauncher::launchRom(std::string romPath, std::string savePath, u32 f
     // akloaders are very old and expect the old-style libfat mount points
     romPath.replace(0, 3, "fat0");
     savePath.replace(0, 3, "fat0");
+
+#ifdef __AKLOADER_AK2__
+    // Create TTMENU.SYS if it don't exist
+    if (access("fat:/__rpg/system.sys", F_OK) != 0) {
+        progressWnd().setTipText("Generating SYSTEM.SYS...");
+        progressWnd().show();
+        progressWnd().setPercent(0);
+        FILE* TTSYSFile = fopen("fat:/__rpg/system.sys", "wb");
+        fseek(TTSYSFile, 0, SEEK_SET);
+        // memdump. Actually just expanding the file seems to crash, but this works totally fine...
+        fwrite((void*)0x02400000, 1, 0x400000, TTSYSFile);
+        fflush(TTSYSFile);
+        fclose(TTSYSFile);
+        progressWnd().setPercent(100);
+        progressWnd().hide();
+    }
+#endif
 
     FILE* loader = fopen("fat:/__rpg/akloader.nds", "rb");
     if (loader == NULL) return false;

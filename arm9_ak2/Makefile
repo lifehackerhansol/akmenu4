@@ -30,7 +30,7 @@ ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 CFLAGS   := -g -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9
 
-CFLAGS   += -D_NO_BOOTSTUB_ -D__KERNEL_LAUNCHER_SUPPORT__
+CFLAGS   += -D_NO_BOOTSTUB_ -D__KERNEL_LAUNCHER_SUPPORT__ -D__AKLOADER_AK2__
 
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS  := -g $(ARCH)

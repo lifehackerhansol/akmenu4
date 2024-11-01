@@ -18,6 +18,7 @@
 #include "../flags.h"
 #include "../inifile.h"
 #include "../mainlist.h"
+#include "../systemfilenames.h"
 #include "ILauncher.h"
 #include "NdsBootstrapLauncher.h"
 #include "nds_loader_arm9.h"
@@ -26,7 +27,7 @@ bool NdsBootstrapLauncher::prepareCheats() {
     u32 gameCode, crc32;
 
     if (cCheatWnd::romData(mRomPath, gameCode, crc32)) {
-        FILE* cheatDb = fopen("/__rpg/cheats/usrcheat.dat", "rb");
+        FILE* cheatDb = fopen(SFN_CHEATS, "rb");
         if (!cheatDb) goto cheat_failed;
         long cheatOffset;
         size_t cheatSize;

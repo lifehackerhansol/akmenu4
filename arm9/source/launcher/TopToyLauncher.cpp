@@ -17,6 +17,7 @@
 #include "../dsrom.h"
 #include "../flags.h"
 #include "../mainlist.h"
+#include "../systemfilenames.h"
 #include "../ui/progresswnd.h"
 #include "ILauncher.h"
 #include "TopToyLauncher.h"
@@ -59,7 +60,7 @@ bool TopToyLauncher::prepareCheats() {
     u32 gameCode, crc32;
 
     if (cCheatWnd::romData(mRomPath, gameCode, crc32)) {
-        FILE* cheatDb = fopen("/__rpg/cheats/usrcheat.dat", "rb");
+        FILE* cheatDb = fopen(SFN_CHEATS, "rb");
         if (!cheatDb) goto cheat_failed;
         long cheatOffset;
         size_t cheatSize;

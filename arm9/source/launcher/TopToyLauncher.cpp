@@ -22,6 +22,11 @@
 #include "TopToyLauncher.h"
 #include "libfat_ext/fat_ext.h"
 
+#ifdef __TTLAUNCHER_DSTT__
+#include "ttio/scdssdhc.h"
+extern u32 SCDS_isSDHC;
+#endif
+
 static void resetAndLoop() {
     DC_FlushAll();
     DC_InvalidateAll();
@@ -213,8 +218,13 @@ bool TopToyLauncher::launchRom(std::string romPath, std::string savePath, u32 fl
     // ttpatch checks this for some reason
     *((vu32*)0x02FFFC20) = 0x5555AAAA;
 
-    // set SD/SDHC flag to SDHC, right now our DLDI only does SDHC
-    *((vu32*)0x02FFFC24) = ~0;
+#ifdef __TTLAUNCHER_DSTT__
+    // set SD/SDHC flag
+    // Needs a SDIO reinitialization to retrieve HCS bit
+    if (!SCDS_SDInitialize()) return false;
+
+    *((vu32*)0x02FFFC24) = SCDS_isSDHC ? ~0 : 0;
+#endif
 
     // this int seems to be a flag to reinitialize the SD card in ttpatch
     // if this is *not* -1, ttpatch sends an SDIO CMD12 (STOP_TRANSMISSION)

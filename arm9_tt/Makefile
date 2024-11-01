@@ -17,7 +17,7 @@ SOURCE_PATH := ../arm9
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
 BUILD    := build
-SOURCES  := $(SOURCE_PATH)/source $(SOURCE_PATH)/source/ui $(SOURCE_PATH)/source/font $(SOURCE_PATH)/source/launcher $(SOURCE_PATH)/source/launcher/libfat_ext $(SOURCE_PATH)/source/saves
+SOURCES  := $(SOURCE_PATH)/source $(SOURCE_PATH)/source/ui $(SOURCE_PATH)/source/font $(SOURCE_PATH)/source/launcher $(SOURCE_PATH)/source/launcher/libfat_ext $(SOURCE_PATH)/source/launcher/ttio $(SOURCE_PATH)/source/saves
 INCLUDES := $(SOURCE_PATH)/include ../share $(SOURCES)
 DATA     := $(SOURCE_PATH)/data ../data
 GRAPHICS :=
@@ -30,10 +30,10 @@ ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
 CFLAGS   := -g -Wall -O3\
             $(ARCH) $(INCLUDE) -DARM9
 
-CFLAGS   += -D_NO_BOOTSTUB_ -D__KERNEL_LAUNCHER_SUPPORT__ -D__TTLAUNCHER__
+CFLAGS   += -D_NO_BOOTSTUB_ -D__KERNEL_LAUNCHER_SUPPORT__ -D__TTLAUNCHER__ -D__TTLAUNCHER_DSTT__
 
 CXXFLAGS := $(CFLAGS) -fno-rtti -fno-exceptions
-ASFLAGS  := -g $(ARCH)
+ASFLAGS  := -g $(ARCH) $(INCLUDE)
 LDFLAGS   = -specs=ds_arm9.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------

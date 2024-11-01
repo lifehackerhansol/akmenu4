@@ -331,8 +331,8 @@ void cRomInfoWnd::pressSaveType(void) {
 
 #ifdef __KERNEL_LAUNCHER_SUPPORT__
     _values.clear();
-    _values.push_back("nds-bootstrap");
     _values.push_back("kernel");
+    _values.push_back("nds-bootstrap");
     _values.push_back(LANG("save type", "default"));
     settingWnd.addSettingItem(LANG("loader", "text"), _values,
                               _romInfo.saveInfo().getNdsBootstrap());

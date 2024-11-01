@@ -20,6 +20,7 @@
 #include "../ui/progresswnd.h"
 #include "ILauncher.h"
 #include "TopToyLauncher.h"
+#include "libfat_ext/fat_ext.h"
 
 static void resetAndLoop() {
     DC_FlushAll();
@@ -117,6 +118,7 @@ typedef struct {
 
 // TTMENU.SYS file creation. Sets up parameters for ttpatch.dat
 bool TopToyLauncher::prepareTTSYS(void) {
+    char fname[0x1004] = {};
     TTSYSHeader* ttsys_header = (TTSYSHeader*)malloc(sizeof(TTSYSHeader));
     ttsys_header->TTSYSMagic[0] = 't';
     ttsys_header->TTSYSMagic[1] = 't';
@@ -132,10 +134,12 @@ bool TopToyLauncher::prepareTTSYS(void) {
     fseek(TTSYSFile, 0, SEEK_SET);
     fwrite(ttsys_header, sizeof(TTSYSHeader), 1, TTSYSFile);
     free(ttsys_header);
+    fatGetAliasPath("fat:/", mRomPath.c_str(), fname);
     fseek(TTSYSFile, 0x100, SEEK_SET);
-    fwrite(mRomPath.c_str() + 4, 1, 0x1000, TTSYSFile);
+    fwrite(fname + 4, 1, 0x1000, TTSYSFile);
+    fatGetAliasPath("fat:/", mSavePath.c_str(), fname);
     fseek(TTSYSFile, 0x1100, SEEK_SET);
-    fwrite(mSavePath.c_str() + 4, 1, 0x1000, TTSYSFile);
+    fwrite(fname + 4, 1, 0x1000, TTSYSFile);
     if (mFlags & PATCH_CHEATS) {
         fseek(TTSYSFile, 0x2100, SEEK_SET);
         fwrite("/YSMENU.ARP", 1, 0x12, TTSYSFile);

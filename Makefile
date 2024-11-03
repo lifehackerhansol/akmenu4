@@ -65,18 +65,21 @@ $(TARGET)_ak2.nds : $(NITRO_FILES) arm7/$(TARGET).elf arm9_ak2/$(TARGET).elf
 	ndstool	-c $@ -7 arm7/$(TARGET).elf -9 arm9_ak2/$(TARGET).elf \
 	-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
 	$(_ADDFILES)
+	dlditool DLDI/ak2_sd.dldi $@
 
 #---------------------------------------------------------------------------------
 $(TARGET)_m3.nds : $(NITRO_FILES) arm7/$(TARGET).elf arm9_m3/$(TARGET).elf
 	ndstool	-c $@ -7 arm7/$(TARGET).elf -9 arm9_m3/$(TARGET).elf \
 	-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
 	$(_ADDFILES)
+	dlditool DLDI/m3ds.dldi $@
 
 #---------------------------------------------------------------------------------
 $(TARGET)_tt.nds : $(NITRO_FILES) arm7/$(TARGET).elf arm9_tt/$(TARGET).elf
 	ndstool	-c $@ -7 arm7/$(TARGET).elf -9 arm9_tt/$(TARGET).elf \
 	-b $(GAME_ICON) "$(GAME_TITLE);$(GAME_SUBTITLE1);$(GAME_SUBTITLE2)" \
 	$(_ADDFILES)
+	dlditool DLDI/ttio.dldi $@
 
 #---------------------------------------------------------------------------------
 $(TARGET).dsi : $(NITRO_FILES) arm7/$(TARGET).elf arm9_dsi/$(TARGET).elf

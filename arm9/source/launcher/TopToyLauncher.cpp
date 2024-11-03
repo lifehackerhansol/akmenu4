@@ -158,12 +158,18 @@ bool TopToyLauncher::prepareTTSYS(void) {
 
 bool TopToyLauncher::launchRom(std::string romPath, std::string savePath, u32 flags,
                                u32 cheatOffset, u32 cheatSize) {
+    std::string loaderPath =
 #ifdef __TTLAUNCHER_M3__
-    if (access("fat:/TTMenu/m3patch.dat", F_OK) != 0)
-#else
-    if (access("fat:/TTMenu/ttpatch.dat", F_OK) != 0)
-#endif
+            "fat:/TTMenu/m3patch.dat"
+#else   // __TTLAUNCHER_M3__
+            "fat:/TTMenu/ttpatch.dat"
+#endif  // __TTLAUNCHER_M3__
+            ;
+
+    if (access(loaderPath.c_str(), F_OK) != 0) {
+        printLoaderNotFound(loaderPath);
         return false;
+    }
 
     mRomPath = romPath;
     mSavePath = savePath;
@@ -192,11 +198,7 @@ bool TopToyLauncher::launchRom(std::string romPath, std::string savePath, u32 fl
     // Setup TTMenu system parameters
     if (!prepareTTSYS()) return false;
 
-#ifdef __TTLAUNCHER_M3__
-    FILE* loader = fopen("fat:/TTMenu/m3patch.dat", "rb");
-#else
-    FILE* loader = fopen("fat:/TTMenu/ttpatch.dat", "rb");
-#endif
+    FILE* loader = fopen(loaderPath.c_str(), "rb");
     tNDSHeader* header = (tNDSHeader*)malloc(sizeof(tNDSHeader));
     u8* loader_arm7 = NULL;
     fseek(loader, 0, SEEK_SET);

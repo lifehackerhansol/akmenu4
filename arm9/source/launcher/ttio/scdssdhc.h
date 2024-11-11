@@ -1,3 +1,5 @@
+// clang-format off
+
 /*
 	SuperCard DSONE
 	Card IO routines

@@ -314,7 +314,7 @@ void cGdi::fillRect(u16 color1, u16 color2, s16 x, s16 y, u16 w, u16 h, GRAPHICS
     else
         pDest = _bufferSub2 + (y << 8) + x;
 
-    u16 destInc = 256 - w;
+    u16 destInc = 256;
 
     for (u32 i = 0; i < h; ++i) {
         toncset16(pDest, *pSrc, w);
@@ -391,10 +391,12 @@ void cGdi::bitBlt(const void* src, s16 destX, s16 destY, u16 destW, u16 destH,
     else
         pDest = _bufferSub2 + (destY)*256 + destX;
 
+    u16 destInc = 256;
+
     for (u16 i = 0; i < destH; ++i) {
-        toncset16(pDest, *pSrc, destW);
-        pDest += destW;
+        tonccpy(pDest, pSrc, destW << 1);
         pSrc += destW;
+        pDest += destInc;
     }
 }
 

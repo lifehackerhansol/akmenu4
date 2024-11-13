@@ -124,21 +124,5 @@ bool processInput(INPUT& inputs) {
     if (inputs.touchMoved)
         ret = ret || windowManager().onTouchMove(inputs.movedPt.px, inputs.movedPt.py);
 
-    if (inputs.keysDown & KEY_LID) {
-        dbg_printf("lid closed\n");
-        fifoSendValue32(FIFO_PM, PM_REQ_SLEEP);
-        swiDelay(8380000);  // 500ms
-        /*
-        powerOff(0x3f);
-        powerOn(0x10);
-        */
-    } else if (inputs.keysUp & KEY_LID) {
-        dbg_printf("lid opened\n");
-        /*
-        powerOff(0x3f);
-        powerOn(0x0f);
-        */
-    }
-
     return ret;
 }

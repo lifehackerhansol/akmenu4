@@ -16,8 +16,9 @@
 #include "globalsettings.h"
 #include "sprite.h"
 #include "userinput.h"
+#include "tonccpy.h"
 
-static inline void dmaCopyWordsGdi(uint8 channel, const void* src, void* dest, uint32 size) {
+static inline void dmaCopyWordsGdi(u8 channel, const void* src, void* dest, u32 size) {
     DC_FlushRange(src, size);
     dmaCopyWords(channel, src, dest, size);
     DC_InvalidateRange(dest, size);
@@ -313,26 +314,12 @@ void cGdi::fillRect(u16 color1, u16 color2, s16 x, s16 y, u16 w, u16 h, GRAPHICS
     else
         pDest = _bufferSub2 + (y << 8) + x;
 
-    bool destAligned = !(x & 1);
-
     u16 destInc = 256 - w;
-    u16 halfWidth = w >> 1;
-    u16 remain = w & 1;
 
-    if (destAligned)
-        for (u32 i = 0; i < h; ++i) {
-            swiFastCopy(pSrc, pDest, COPY_MODE_WORD | COPY_MODE_FILL | halfWidth);
-            pDest += halfWidth << 1;
-            if (remain) *pDest++ = *pSrc;
-            pDest += destInc;
-        }
-    else
-        for (u32 i = 0; i < h; ++i) {
-            for (u32 j = 0; j < w; ++j) {
-                *pDest++ = pSrc[j & 1];
-            }
-            pDest += destInc;
-        }
+    for (u32 i = 0; i < h; ++i) {
+        toncset16(pDest, *pSrc, w);
+        pDest += destInc;
+    }
 }
 
 void cGdi::fillRectBlend(u16 color1, u16 color2, s16 x, s16 y, u16 w, u16 h, GRAPHICS_ENGINE engine,
@@ -404,17 +391,10 @@ void cGdi::bitBlt(const void* src, s16 destX, s16 destY, u16 destW, u16 destH,
     else
         pDest = _bufferSub2 + (destY)*256 + destX;
 
-    u16 pitchPixel = (destW + (destW & 1));
-    u16 destInc = 256 - pitchPixel;
-    u16 halfPitch = pitchPixel >> 1;
-    u16 remain = pitchPixel & 1;
-
     for (u16 i = 0; i < destH; ++i) {
-        swiFastCopy(pSrc, pDest, COPY_MODE_WORD | COPY_MODE_COPY | halfPitch);
-        pDest += halfPitch << 1;
-        pSrc += halfPitch << 1;
-        if (remain) *pDest++ = *pSrc++;
-        pDest += destInc;
+        toncset16(pDest, *pSrc, destW);
+        pDest += destW;
+        pSrc += destW;
     }
 }
 

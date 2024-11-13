@@ -21,7 +21,6 @@
 #include "../ui/progresswnd.h"
 #include "ILauncher.h"
 #include "TopToyLauncher.h"
-#include "libfat_ext/fat_ext.h"
 
 #ifdef __TTLAUNCHER_DSTT__
 #include "ttio/scdssdhc.h"
@@ -29,21 +28,8 @@ extern u32 SCDS_isSDHC;
 #endif
 
 static void resetAndLoop() {
-    DC_FlushAll();
-    DC_InvalidateAll();
-
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_ARM7_REBOOT_TT);
-    *((vu32*)0x02FFFE04) = 0;
-
-    // Interrupt
-    REG_IME = 0;
-    REG_IE = 0;
-    REG_IF = ~0;
-
-    // wait for arm7
-    while (*((vu32*)0x02FFFE04) == 0)
-        ;
-    swiSoftReset();
+    g_envExtraInfo->pm_chainload_flag = 1;
+    exit(0);
 }
 
 typedef struct {
@@ -124,7 +110,6 @@ typedef struct {
 
 // TTMENU.SYS file creation. Sets up parameters for ttpatch.dat
 bool TopToyLauncher::prepareTTSYS(void) {
-    char fname[0x1004] = {};
     TTSYSHeader* ttsys_header = (TTSYSHeader*)malloc(sizeof(TTSYSHeader));
     ttsys_header->TTSYSMagic[0] = 't';
     ttsys_header->TTSYSMagic[1] = 't';
@@ -140,12 +125,10 @@ bool TopToyLauncher::prepareTTSYS(void) {
     fseek(TTSYSFile, 0, SEEK_SET);
     fwrite(ttsys_header, sizeof(TTSYSHeader), 1, TTSYSFile);
     free(ttsys_header);
-    fatGetAliasPath("fat:/", mRomPath.c_str(), fname);
     fseek(TTSYSFile, 0x100, SEEK_SET);
-    fwrite(fname + 4, 1, 0x1000, TTSYSFile);
-    fatGetAliasPath("fat:/", mSavePath.c_str(), fname);
+    fwrite(mRomPath.c_str() + 4, 1, 0x1000, TTSYSFile);
     fseek(TTSYSFile, 0x1100, SEEK_SET);
-    fwrite(fname + 4, 1, 0x1000, TTSYSFile);
+    fwrite(mSavePath.c_str() + 4, 1, 0x1000, TTSYSFile);
     if (mFlags & PATCH_CHEATS) {
         fseek(TTSYSFile, 0x2100, SEEK_SET);
         fwrite("/YSMENU.ARP", 1, 0x12, TTSYSFile);
@@ -200,18 +183,15 @@ bool TopToyLauncher::launchRom(std::string romPath, std::string savePath, u32 fl
 
     FILE* loader = fopen(loaderPath.c_str(), "rb");
     tNDSHeader* header = (tNDSHeader*)malloc(sizeof(tNDSHeader));
-    u8* loader_arm7 = NULL;
     fseek(loader, 0, SEEK_SET);
     fread(header, 1, sizeof(tNDSHeader), loader);
     fseek(loader, header->arm9romOffset, SEEK_SET);
     fread((void*)header->arm9destination, 1, header->arm9binarySize, loader);
     fseek(loader, header->arm7romOffset, SEEK_SET);
-    loader_arm7 = (u8*)memalign(32, header->arm7binarySize);
-    fread(loader_arm7, 1, header->arm7binarySize, loader);
+    fread((void*)0x02380000, 1, header->arm7binarySize, loader);
     fclose(loader);
     memcpy((void*)__NDSHeader, header, sizeof(tNDSHeader));
     free(header);
-    *(u32*)0x02FFFE00 = (u32)loader_arm7;
 
     // patch a loop in ARM9
     // not sure why it's there. Some sort of obfuscation mechanism?
@@ -235,8 +215,6 @@ bool TopToyLauncher::launchRom(std::string romPath, std::string savePath, u32 fl
     *((vu32*)0x02FFFC28) = ~0;
 
     resetAndLoop();
-
-    free(loader_arm7);
 
     return false;
 }

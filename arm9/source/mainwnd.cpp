@@ -8,7 +8,6 @@
 */
 
 #include "mainwnd.h"
-#include "../../share/fifotool.h"
 #include "dbgtool.h"
 #include "msgbox.h"
 #include "systemfilenames.h"
@@ -18,9 +17,7 @@
 
 #include "datetime.h"
 
-#include "expwnd.h"
 #include "favorites.h"
-#include "gbaloader.h"
 #include "helpwnd.h"
 #include "inifile.h"
 #include "language.h"
@@ -213,11 +210,6 @@ void cMainWnd::startMenuItemClicked(s16 i) {
                                          LANG("help window", "title"));
         helpWnd->doModal();
         delete helpWnd;
-    } else if (START_MENU_ITEM_TOOLS == i) {
-        u32 w = 250;
-        u32 h = 130;
-        cExpWnd expWnd((256 - w) / 2, (192 - h) / 2, w, h, NULL, LANG("exp window", "title"));
-        expWnd.doModal();
     }
 }
 
@@ -390,11 +382,6 @@ void cMainWnd::launchSelected() {
     if (!_mainList->getRomInfo(_mainList->selectedRowId(), rominfo)) return;
 
     // rominfo.loadDSRomInfo( fullPath, false );
-
-    if (rominfo.isGbaRom()) {
-        CGbaLoader(fullPath).Load(false, false);
-        return;
-    }
 
     if (!rominfo.isDSRom()) return;
 
@@ -689,7 +676,7 @@ void cMainWnd::onFolderChanged() {
         if (mode == cGlobalSettings::ESlot2Nds) {
             PassMeLauncher().launchRom("slot2:/", "", 0, 0, 0);
         } else {
-            CGbaLoader::StartGBA();
+            //CGbaLoader::StartGBA();
         }
     }
 

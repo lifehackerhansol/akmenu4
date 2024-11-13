@@ -64,10 +64,6 @@ class cRomInfoWnd : public akui::cForm {
 
     akui::cButton _buttonSaveType;
 
-    akui::cButton _buttonFlash;
-
-    akui::cButton _buttonCopy;
-
     akui::cButton _buttonCheats;
 
     akui::cFormDesc _renderDesc;

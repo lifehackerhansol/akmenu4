@@ -2,8 +2,8 @@
 
 /*-----------------------------------------------------------------
  Copyright (C) 2005 - 2010
-    Michael "Chishm" Chisholm
-    Dave "WinterMute" Murphy
+	Michael "Chishm" Chisholm
+	Dave "WinterMute" Murphy
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,28 +24,27 @@
 #ifndef NDS_LOADER_ARM9_H
 #define NDS_LOADER_ARM9_H
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef enum {
-    RUN_NDS_OK = 0,
-    RUN_NDS_STAT_FAILED,
-    RUN_NDS_GETCWD_FAILED,
-    RUN_NDS_PATCH_DLDI_FAILED,
+	RUN_NDS_OK = 0,
+	RUN_NDS_STAT_FAILED,
+	RUN_NDS_GETCWD_FAILED,
+	RUN_NDS_PATCH_DLDI_FAILED,
 } eRunNdsRetCode;
 
 #define LOAD_DEFAULT_NDS 0
 
-eRunNdsRetCode runNds(const void* loader, u32 loaderSize, u32 cluster, bool initDisc,
-                      bool dldiPatchNds, int argc, const char** argv);
-
-eRunNdsRetCode runNdsFile(const char* filename, int argc, const char** argv);
+eRunNdsRetCode runNdsFile (const char* filename, int argc, const char** argv);
 
 bool installBootStub(bool havedsiSD);
+void installExcptStub(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // NDS_LOADER_ARM7_H
+#endif // NDS_LOADER_ARM7_H

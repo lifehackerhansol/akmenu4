@@ -11,7 +11,7 @@
 
 #include <nds.h>
 #include <string>
-#include "../../share/fifotool.h"
+#include "../../share/pxitool.h"
 #include "singleton.h"
 
 class cGlobalSettings {

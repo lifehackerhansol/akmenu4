@@ -14,7 +14,6 @@
 
 #include <nds.h>
 
-#include "../../../share/fifotool.h"
 #include "../ui/progresswnd.h"
 #include "AcekardLauncher.h"
 #include "dbgtool.h"
@@ -23,21 +22,8 @@
 #define MAX_FILENAME_LENGTH 768
 
 static void resetAndLoop() {
-    DC_FlushAll();
-    DC_InvalidateAll();
-
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_ARM7_REBOOT);
-    *((vu32*)0x02FFFE04) = 0;
-
-    // Interrupt
-    REG_IME = 0;
-    REG_IE = 0;
-    REG_IF = ~0;
-
-    // wait for arm7
-    while (*((vu32*)0x02FFFE04) == 0)
-        ;
-    swiSoftReset();
+    g_envExtraInfo->pm_chainload_flag = 1;
+    exit(0);
 }
 
 bool AcekardLauncher::launchRom(std::string romPath, std::string savePath, u32 flags,

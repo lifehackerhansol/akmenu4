@@ -1,5 +1,5 @@
 /*
-    fifotool.h
+    pxitool.h
     Copyright (C) 2009 yellow wood goblin
 
     SPDX-License-Identifier: GPL-3.0-or-later

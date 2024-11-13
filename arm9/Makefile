@@ -24,9 +24,9 @@ GRAPHICS :=
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s
+ARCH := -march=armv5te -mtune=arm946e-s
 
-CFLAGS   := -g -Wall -O3\
+CFLAGS   := -g -Wall -O2 -ffunction-sections -fdata-sections\
             $(ARCH) $(INCLUDE) -DARM9
 
 CFLAGS   += -D_NO_BOOTSTUB_
@@ -114,8 +114,6 @@ else
 # main targets
 #---------------------------------------------------------------------------------
 $(ARM9ELF) : $(OFILES)
-	@echo linking $(notdir $@)
-	@$(LD)  $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
 
 #---------------------------------------------------------------------------------
 %.bin.o %_bin.h : %.bin

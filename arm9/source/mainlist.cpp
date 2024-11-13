@@ -44,11 +44,7 @@ cMainList::cMainList(s32 x, s32 y, u32 w, u32 h, cWindow* parent, const std::str
     _activeIcon.update();
     animationManager().addAnimation(&_activeIcon);
     dbg_printf("_activeIcon.init\n");
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_SYSTEM);
-    while (!fifoCheckValue32(FIFO_USER_02))
-        ;
-    u32 system = fifoGetValue32(FIFO_USER_02);
-    if (2 == system)  // dsi
+    if (g_envExtraInfo->nvram_console_type == EnvConsoleType_DSi)  // dsi
     {
         _topCount = 2;
         _topSlot2 = 2;

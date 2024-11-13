@@ -7,6 +7,7 @@
     SPDX-License-Identifier: GPL-3.0-or-later
 */
 
+#include <calico.h>
 #include <nds.h>
 #include <cstdio>
 #include <list>
@@ -38,9 +39,7 @@
 #include "language.h"
 #include "progresswnd.h"
 
-#include "exptools.h"
 #include "romlauncher.h"
-#include "sram.h"
 #include "userwnd.h"
 
 using namespace akui;
@@ -58,9 +57,6 @@ int main(void) {
 
     windowManager();
 
-    // init basic system
-    sysSetBusOwners(BUS_OWNER_ARM9, BUS_OWNER_ARM9);
-
     // init tick timer/fps counter
     timer().initTimer();
 
@@ -68,7 +64,7 @@ int main(void) {
     initInput();
 
     // turn led on
-    ledBlink(PM_LED_ON);
+    pmSetPowerLed(PmLedMode_Steady);
 
     // init graphics
     gdi().init();
@@ -149,46 +145,6 @@ int main(void) {
         }
     }
 
-    {  // backup save data from chip to flash. pressing LShift+Up aborts backup.
-        saveManager().clearLastInfo();
-        // backup gba sram save date to flash.
-        if (gs().gbaAutoSave && expansion().IsValid()) {
-            CIniFile f;
-            if (f.LoadIniFile(SFN_LAST_GBA_SAVEINFO)) {
-                std::string psramFile = f.GetString("Save Info", "lastLoaded", "");
-                if (psramFile != "") {
-                    cSram::SaveSramToFile(psramFile.c_str(), cExpansion::EPsramPage);
-                    f.SetString("Save Info", "lastLoaded", "");
-                    f.SaveIniFile(SFN_LAST_GBA_SAVEINFO);
-                }
-                std::string norFile = f.GetString("Save Info", "lastLoadedNOR", "");
-                if (norFile != "") {
-                    std::string norFileSave = norFile + ".sav";
-                    FILE* saveFile = fopen(norFileSave.c_str(), "rb");
-                    if (saveFile) {
-                        cSram::sSaveInfo saveInfo;
-                        cSram::ProcessRAW(saveFile, saveInfo);
-                        u8* bufFile = (u8*)malloc(saveInfo.size);
-                        if (bufFile) {
-                            memset(bufFile, 0, saveInfo.size);
-                            fread(bufFile, saveInfo.size, 1, saveFile);
-                            u8* bufData =
-                                    cSram::SaveSramToMemory(cExpansion::ENorPage, saveInfo, false);
-                            if (bufData) {
-                                if (memcmp(bufFile, bufData, saveInfo.size) != 0) {
-                                    cSram::SaveSramToFile(norFile.c_str(), cExpansion::ENorPage);
-                                }
-                                free(bufData);
-                            }
-                            free(bufFile);
-                        }
-                        fclose(saveFile);
-                    }
-                }
-            }
-        }
-    }
-
     if (gs().autorunWithLastRom && "..." != lastFile) {
         INPUT& inputs = updateInput();
         if (!(inputs.keysHeld & KEY_B)) autoLaunchRom(lastFile);
@@ -198,9 +154,9 @@ int main(void) {
     if (!wnd->_mainList->enterDir("..." != lastDirectory ? lastDirectory : gs().startupFolder))
         wnd->_mainList->enterDir("...");
 
-    if (*(u32*)0x04000604) fifoSendValue32(FIFO_USER_01, MENU_MSG_SHUTDOWN);
+    if (*(u32*)0x04000604) goto shutdown;
 
-    while (true) {
+    while (pmMainLoop()) {
         timer().updateFps();
 
         INPUT& inputs = updateInput();
@@ -214,5 +170,6 @@ int main(void) {
         gdi().present(GE_MAIN);
     }
 
+shutdown:
     return 0;
 }

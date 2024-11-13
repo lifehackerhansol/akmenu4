@@ -154,10 +154,7 @@ u32 cGlobalSettings::CopyBufferSize(void) {
 }
 
 void cGlobalSettings::nextBrightness(void) {
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_BRIGHTNESS_GET);
-    while (!fifoCheckValue32(FIFO_USER_01))
-        ;
-    u32 currentLevel = fifoGetValue32(FIFO_USER_01);
+    u32 currentLevel = pxiSendAndReceive(PxiChannel_User0, MENU_MSG_BRIGHTNESS_GET);
     brightness = (currentLevel + 1) & 3;
 
     setBrightness(brightness);
@@ -167,5 +164,5 @@ void cGlobalSettings::nextBrightness(void) {
 }
 
 void cGlobalSettings::setBrightness(u32 level) {
-    fifoSendValue32(FIFO_USER_01, MENU_MSG_BRIGHTNESS_SET0 + (brightness & 3));
+    pxiSendAndReceive(PxiChannel_User0, MENU_MSG_BRIGHTNESS_SET0 + (brightness & 3));
 }
